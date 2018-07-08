@@ -6,11 +6,10 @@ const Region = 'ap-guangzhou'
 
 module.exports = async ctx => {
     var res = ctx.res
-    console.log(res)
     res.writeHead(200, {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Headers": "X-Requested-With",
-        "Access-Control-Allow-Methods": "POST,GET,",
+        "Access-Control-Allow-Methods": "POST,GET",
         "X-Powered-By": "3.2.1",
         'Content-Type': 'application/json;charset=utf-8'
     });

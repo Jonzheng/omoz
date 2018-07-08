@@ -38,8 +38,6 @@ router.post('/uplist', controllers.uplist)
 router.post('/upVideo', controllers.upVideo)
 router.post('/upAudio', controllers.upAudio)
 
-router.post('/uAudio', controllers.uAudio)
-
 router.post('/inList', controllers.inList)
 
 router.post('/qList', controllers.qList)
@@ -54,5 +52,10 @@ router.post('/updateHeart', controllers.updateHeart)
 router.post('/cancelHeart', controllers.cancelHeart)
 router.post('/uploadRecord', controllers.uploadRecord)
 router.post('/queryDetail', controllers.queryDetail)
+
+//--跨域--
+router.post('/queryAudio', controllers.queryAudio)
+router.post('/publishAudio', controllers.publishAudio)
+
 
 module.exports = router
