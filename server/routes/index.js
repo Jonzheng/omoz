@@ -54,8 +54,13 @@ router.post('/uploadRecord', controllers.uploadRecord)
 router.post('/queryDetail', controllers.queryDetail)
 
 //--跨域--
+router.post('/blackLogin', controllers.blackLogin)
 router.post('/queryAudio', controllers.queryAudio)
 router.post('/publishAudio', controllers.publishAudio)
+router.post('/queryPaper', controllers.queryPaper)
+router.post('/queryQuestion', controllers.queryQuestion)
+router.post('/savePaper', controllers.savePaper)
+router.post('/saveQuestion', controllers.saveQuestion)
 
 
 module.exports = router
