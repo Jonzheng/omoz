@@ -11,9 +11,8 @@ module.exports = async ctx => {
     });
     var body = ctx.request.body
     var paper_id = body.paper_id
-    var type = body.type
     //查询
-    var t_question = await mysql('t_question').select('*').where('paper_id', paper_id).andWhere('type', type)
+    var t_question = await mysql('t_question').select('*').where('paper_id', paper_id)
 
     ctx.state.data = t_question
 }
