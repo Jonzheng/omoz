@@ -32,18 +32,18 @@ module.exports = async ctx => {
     var ski = flst[2]
     var ver = flst[3]
     var cate = "y"
-    var file = body.files.file
+    var file_audio = body.files.file_audio
     var fileName = file_id + '.png'
-    file.name = fileName
+    file_audio.name = fileName
     var src_audio = PreAudio + file_id + SufAudio
     var src_video = PreVideo + file_id + SufVideo
 
     var params = {
         Bucket: Bucket,
         Region: Region,
-        ContentLength: file.size,
-        Key: file.name,
-        Body: fs.createReadStream(file.path)
+        ContentLength: file_audio.size,
+        Key: file_audio.name,
+        Body: fs.createReadStream(file_audio.path)
     }
 
     var params_get = {
