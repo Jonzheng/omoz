@@ -38,22 +38,11 @@ module.exports = async ctx => {
 
     var file_image = body.files.file_image
     var file_sound = body.files.file_sound
-    console.log(file_image)
-    console.log(file_sound)
-    //图片素材
-    if (file_image.size > 0){
-        console.log("up_image...")
-    }
-
-    if (file_sound.size > 0){
-        console.log("up_sound...")
-    }
 
     //上传图片
     var src_image = ""
     function upload_image() {
         //接收图片文件
-        var file_image = body.files.file_image
         var image_name = question_id + ".png"
         //file_image.name = image_name
         var params_image = {
@@ -76,7 +65,6 @@ module.exports = async ctx => {
     var src_sound = ""
     function upload_sound() {
         //接收音频文件
-        var file_sound = body.files.file_sound
         var sound_name = question_id + ".mp3"
         var params_sound = {
             Bucket: que_sound,
@@ -94,12 +82,14 @@ module.exports = async ctx => {
         })
     }
 
-    if (type == "3"){
-        //图片+声音
+    console.log(file_image)
+    console.log(file_sound)
+    //图片素材
+    if (file_image.size > 0){
         await upload_image()
-        await upload_sound()
-    }else if (type == "4" || type == "5"){
-        //只有声音
+    }
+
+    if (file_sound.size > 0){
         await upload_sound()
     }
 
