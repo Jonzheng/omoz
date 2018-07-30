@@ -15,9 +15,13 @@ module.exports = async ctx => {
     var paper_id = body.paper_id
     var title = body.title
     var description = body.description
+    var attention = body.attention
     var level = body.level
     var difficulty = body.difficulty
     var uploader = body.uploader
-    result = await mysql.raw('insert t_paper (paper_id,title,description,level,difficulty,uploader) values(?,?,?,?,?,?)on duplicate key update title=?,description=?,level=?,difficulty=?', [paper_id,title,description,level,difficulty,uploader,title,description,level,difficulty]);
+    console.log(body)
+    var ex_sql = mysql.raw('insert t_paper (paper_id,title,description,attention,level,difficulty,uploader) values(?,?,?,?,?,?,?)on duplicate key update title=?,description=?,attention=?,level=?,difficulty=?', [paper_id,title,description,attention,level,difficulty,uploader,title,description,attention,level,difficulty]).toString()
+    console.log(ex_sql)
+    result = await mysql.raw('insert t_paper (paper_id,title,description,attention,level,difficulty,uploader) values(?,?,?,?,?,?,?)on duplicate key update title=?,description=?,attention=?,level=?,difficulty=?', [paper_id,title,description,attention,level,difficulty,uploader,title,description,attention,level,difficulty])
     ctx.state.data = result
 }
