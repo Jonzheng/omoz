@@ -3,6 +3,7 @@
     "page/index/index",
     "page/detail/detail",
     "page/paper/paper",
+    "page/attention/attention",
     "page/lab/lab",
     "page/50/50",
     "page/mine/mine",

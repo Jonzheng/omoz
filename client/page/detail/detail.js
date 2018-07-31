@@ -1,4 +1,4 @@
-const Conf = require('../../config')
+const urls = require('../../config')
 const App = new getApp()
 const recorderManager = wx.getRecorderManager()
 const options = {
@@ -187,7 +187,7 @@ Page({
         var avatarUrl = App.globalData.avatarUrl
         var gender = App.globalData.gender
         wx.request({
-            url: Conf.updateUserUrl,
+            url: urls.updateUser,
             method: 'POST',
             data: {
                 openid,
@@ -212,7 +212,7 @@ Page({
         var user_id = openid
         //查询阴阳师list
         wx.request({
-            url: Conf.queryDetailUrl,
+            url: urls.queryDetail,
             method: 'POST',
             data: { cate: 'y', file_id, user_id},
             success: function (res) {
@@ -409,7 +409,7 @@ Page({
 
     delMine: function (record_id){
         wx.request({
-            url: Conf.updateRecordUrl,
+            url: urls.updateRecord,
             method: 'POST',
             data: {
                 record_id,
@@ -490,12 +490,12 @@ Page({
         var list_master = this.data.list_master
         var curr_master = list_master[index]
         if (status == 0) {
-            url = Conf.updateHeartUrl
+            url = urls.updateHeart
             curr_master["heartShape"] = src_heart_full
             curr_master["heartStatus"] = 1
             curr_master["heart"] += 1
         } else {
-            url = Conf.cancelHeartUrl
+            url = urls.cancelHeart
             curr_master["heartShape"] = src_heart
             curr_master["heartStatus"] = 0
             curr_master["heart"] -= 1
@@ -569,7 +569,7 @@ Page({
             list_master: old_lst
         })
         wx.uploadFile({
-            url: Conf.uploadRecordUrl,
+            url: urls.uploadRecord,
             filePath: recordFile,
             name: 'file',
             formData: {

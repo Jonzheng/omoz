@@ -1,4 +1,4 @@
-const Conf = require('../../config')
+const urls = require('../../config')
 var sliderWidth = 48; // 需要设置slider的宽度，用于计算中间位置
 const App = new getApp()
 Page({
@@ -15,7 +15,7 @@ Page({
         if (App.globalData.userInfo) avatarUrl = App.globalData.userInfo.avatarUrl
 
         wx.request({
-            url: Conf.updateLoginUrl,
+            url: urls.updateLogin,
             method: 'POST',
             data: {
                 js_code,
@@ -89,7 +89,7 @@ Page({
 
         //查询阴阳师list
         wx.request({
-            url: Conf.qListUrl,
+            url: urls.qListUrl,
             method: 'POST',
             data: { cate: 'y' },
             success: function (res) {

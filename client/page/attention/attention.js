@@ -3,17 +3,17 @@ const urls = require('../../config')
 Page({
 
   data: {
-
+    
   },
 
-  initPageData: function () {
+  initPageData: function (paper_id) {
     var that = this
     wx.request({
-        url: urls.queryPaper,
+        url: urls.queryQuestion,
         method: 'POST',
-        data: {},
+        data: {paper_id},
         success: function (res) {
-            console.log("queryPaper:")
+            console.log("queryQuestion:")
             var _list = res.data.data
             console.log(_list)
             that.setData({
@@ -23,9 +23,11 @@ Page({
     })
   },
 
-  onLoad: function () {
+  onLoad: function (data) {
     //页面初始参数
-    this.initPageData()
+    var paper_id = data.paper_id
+    console.log(paper_id)
+    this.initPageData(paper_id)
   },
 
 })

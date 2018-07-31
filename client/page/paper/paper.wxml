@@ -1,3 +1,29 @@
+
 <view class="page">
-    hello
+
+    <view class="content-paper">
+        <block wx:for="{{_list}}" wx:key="mid">
+            <template is="ele-list" data="{{...item}}"/>
+        </block>
+    </view>
+
 </view>
+
+
+
+<template name="ele-list">
+    <view class="weui-panel__bd border-paper">
+        <navigator url="../attention/attention?paper_id={{paper_id}}"
+        class="weui-media-box weui-media-box_appmsg" hover-class="weui-cell_active">
+
+            <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
+                <view class="weui-media-box__title">{{title}}</view>
+                <view class="weui-media-box__desc">{{description}}</view>
+            </view>
+
+            <view class="weui-media-box__hd paper-image">
+                <image class="weui-media-box__thumb" src="https://systems-1256378396.cos.ap-guangzhou.myqcloud.com/gchi0.png" />
+            </view>
+        </navigator>
+    </view>
+</template>
