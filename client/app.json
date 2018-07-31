@@ -2,6 +2,7 @@
   "pages":[
     "page/index/index",
     "page/detail/detail",
+    "page/paper/paper",
     "page/lab/lab",
     "page/50/50",
     "page/mine/mine",
@@ -20,16 +21,22 @@
     "backgroundColor": "#ffffff",
     "list": [
         {
+        "pagePath": "page/paper/paper",
+        "iconPath": "image/icon_component.png",
+        "selectedIconPath": "image/icon_component_HL.png",
+        "text": "日语试题"
+        },
+        {
         "pagePath": "page/index/index",
         "iconPath": "image/icon_component.png",
         "selectedIconPath": "image/icon_component_HL.png",
-        "text": "阴阳师"
+        "text": "式神语录"
         },
         {
         "pagePath": "page/mine/mine",
         "iconPath": "image/icon_API.png",
         "selectedIconPath": "image/icon_API_HL.png",
-        "text": "Mine"
+        "text": "我的"
         }
     ]
   },

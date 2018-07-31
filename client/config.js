@@ -23,6 +23,7 @@ var Conf = {
     updateRecordUrl: `${host}/weapp/updateRecord`,
     updateHeartUrl: `${host}/weapp/updateHeart`,
     cancelHeartUrl: `${host}/weapp/cancelHeart`,
+    queryPaper: `${host}/weapp/queryPaper`,
 };
 
 module.exports = Conf;
