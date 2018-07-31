@@ -14,11 +14,11 @@
 <template name="ele-list">
     <view class="weui-panel__bd border-paper">
         <navigator url="../attention/attention?paper_id={{paper_id}}"
-        class="weui-media-box weui-media-box_appmsg" hover-class="weui-cell_active">
+          class="box-paper" hover-class="weui-cell_active">
 
             <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
-                <view class="weui-media-box__title">{{title}}</view>
-                <view class="weui-media-box__desc">{{description}}</view>
+                <view class="box-title">{{title}}</view>
+                <view class="box-desc">{{description}}</view>
             </view>
 
             <view class="weui-media-box__hd paper-image">

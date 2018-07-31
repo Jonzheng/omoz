@@ -6,8 +6,31 @@
     margin-right:.2em;
     width:192rpx;
     height:120rpx;
-    line-height:120rpx;
     text-align:center;
+}
+
+.box-paper{
+    display:flex;
+    padding:15px;
+}
+
+.box-title{
+  font-weight:400;
+  font-size:16px;
+  width:auto;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  word-wrap:normal;
+  word-wrap:break-word;
+  word-break:break-all;
+}
+
+.box-desc{
+  color:#999;
+  font-size:14px;
+  overflow:hidden;
+  text-overflow:ellipsis;
 }
 
 .border-paper{
