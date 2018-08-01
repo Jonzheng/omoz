@@ -60,6 +60,7 @@ router.post('/publishAudio', controllers.publishAudio)
 router.post('/queryPaper', controllers.queryPaper)
 router.post('/queryQuestion', controllers.queryQuestion)
 router.post('/savePaper', controllers.savePaper)
+router.post('/updatePaper', controllers.updatePaper)
 router.post('/saveQuestion', controllers.saveQuestion)
 
 

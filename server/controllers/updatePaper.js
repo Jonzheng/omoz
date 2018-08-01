@@ -13,15 +13,14 @@ module.exports = async ctx => {
     var body = ctx.request.body
     console.log(body)
     var paper_id = body.paper_id
+    //int?
+    var time_limit = body.time_limit
+    var type1_count = body.type1_count
+    var type2_count = body.type2_count
+    var type3_count = body.type3_count
+    var que_count = type1_count + type2_count + type3_count
     var status = body.status
 
-    if (paper_id){ //单个查询--attention
-        var t_paper = await mysql('t_paper').select('*').where('paper_id', paper_id)
-    }else if(status){ //查询发布状态的所有--list show
-        var t_paper = await mysql('t_paper').select('*').where('status', status)
-    }else{ //查询所有--数据管理
-        var t_paper = await mysql('t_paper').select('*')
-    }
-
-    ctx.state.data = t_paper
+    await mysql("t_paper").where("paper_id", paper_id).update({ type1_count:type1_count,type2_count:type2_count,type3_count:type3_count, time_limit:time_limit, que_count:que_count, status:status})
+    ctx.state.data = que_count
 }
