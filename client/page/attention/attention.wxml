@@ -2,7 +2,12 @@
 <view class="page">
 
     <view class="content-paper">
-        {{paper_id}}
+
+        <view class="box-title border-paper">{{paper.title}}</view>
+
+        <view class="box-level">难度: {{paper.level}}</view>
+        <view class="box-desc">交卷: {{paper.hand_count}}</view>
+
     </view>
 
 </view>

@@ -9,15 +9,15 @@ Page({
   initPageData: function (paper_id) {
     var that = this
     wx.request({
-        url: urls.queryQuestion,
+        url: urls.queryPaper,
         method: 'POST',
         data: {paper_id},
         success: function (res) {
             console.log("queryQuestion:")
-            var _list = res.data.data
-            console.log(_list)
+            var paper = res.data.data[0]
+            console.log(paper)
             that.setData({
-              _list: _list
+              paper: paper
             })
         }
     })

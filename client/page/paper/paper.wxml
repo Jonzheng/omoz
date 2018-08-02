@@ -16,9 +16,10 @@
         <navigator url="../attention/attention?paper_id={{paper_id}}"
           class="box-paper" hover-class="weui-cell_active">
 
-            <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
+            <view class="box-paper-info">
                 <view class="box-title">{{title}}</view>
-                <view class="box-desc">{{description}}</view>
+                <view class="box-level">难度: {{level}}</view>
+                <view class="box-desc">交卷: {{hand_count}}</view>
             </view>
 
             <view class="weui-media-box__hd paper-image">
