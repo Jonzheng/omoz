@@ -15,9 +15,10 @@ module.exports = async ctx => {
     var paper_id = body.paper_id
     //int?
     var time_limit = body.time_limit
-    var type1_count = body.type1_count
-    var type2_count = body.type2_count
-    var type3_count = body.type3_count
+    var type1_count = parseInt(body.type1_count)
+    var type2_count = parseInt(body.type2_count)
+    var type3_count = parseInt(body.type3_count)
+    //虽然可以入库但是这里会str+
     var que_count = type1_count + type2_count + type3_count
     var status = body.status
 

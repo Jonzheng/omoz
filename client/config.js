@@ -11,7 +11,7 @@ var appSecret = '258ce2e03d8dd6f330d6d6f3423411da';
 
 var urls = {
     host,
-    qListUrl: `${host}/weapp/qList`,
+    queryList: `${host}/weapp/queryList`,
     queryDetail: `${host}/weapp/queryDetail`,
     inList: `${host}/weapp/inList`,
     upVideo: `${host}/weapp/upVideo`,

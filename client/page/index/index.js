@@ -89,9 +89,8 @@ Page({
 
         //查询阴阳师list
         wx.request({
-            url: urls.qListUrl,
+            url: urls.queryList,
             method: 'POST',
-            data: { cate: 'y' },
             success: function (res) {
                 var _list = res.data.data
                 _list.sort((a,b) => {return b.stars - a.stars})
