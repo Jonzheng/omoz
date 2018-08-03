@@ -52,6 +52,10 @@ router.post('/updateHeart', controllers.updateHeart)
 router.post('/cancelHeart', controllers.cancelHeart)
 router.post('/uploadRecord', controllers.uploadRecord)
 router.post('/queryDetail', controllers.queryDetail)
+router.post('/queryAnswer', controllers.queryAnswer)
+router.post('/queryAnswerHis', controllers.queryAnswerHis)
+router.post('/saveAnswer', controllers.saveAnswer)
+router.post('/saveAnswerHis', controllers.saveAnswerHis)
 
 //--跨域--
 router.post('/blackLogin', controllers.blackLogin)
