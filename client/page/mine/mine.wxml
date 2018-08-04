@@ -20,10 +20,6 @@
                     <view class="cube-view front-pane">实验室简介</view>
                 </navigator>
 
-                <navigator url="../50/50" hover-class="cube-view">
-                    <view class="cube-view back-pane">五十音图</view>
-                </navigator>
-
                 <view class="cube-view top-pane">卍</view>
                 <view class="cube-view bottom-pane">卍</view>
                 <view class="cube-view left-pane">卍</view>

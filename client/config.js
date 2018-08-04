@@ -24,6 +24,7 @@ var urls = {
     cancelHeart: `${host}/weapp/cancelHeart`,
     queryPaper: `${host}/weapp/queryPaper`,
     queryQuestion: `${host}/weapp/queryQuestion`,
+    queryAnswerHis: `${host}/weapp/queryAnswerHis`,
 };
 
 module.exports = urls;

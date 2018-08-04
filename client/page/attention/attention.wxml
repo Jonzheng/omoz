@@ -3,10 +3,63 @@
 
     <view class="content-paper">
 
-        <view class="box-title border-paper">{{paper.title}}</view>
+        <view class="box-title border-title">{{paper.title}}</view>
 
-        <view class="box-level">难度: {{paper.level}}</view>
-        <view class="box-desc">交卷: {{paper.hand_count}}</view>
+        
+            <view class="box-cate">
+                <view class="paper-label">试卷结构: </view>
+                <view class="content-cate">
+                    <view class="content-">选择题: {{paper.type1_count}} 问</view>
+                    <view class="content-">阅读题: {{paper.type2_count}} 问</view>
+                    <view class="content-">聴解题: {{paper.type3_count}} 问</view>
+                </view>
+            </view>
+
+            <view class="box-cate">
+                <view class="paper-label">注意事项: </view>
+                <view class="content-cate">
+                    <view class="box-label">※等级: </view>
+                    <view class="box-value">{{paper.level}}</view>
+                    <view class="box-label">※难度: </view>
+                    <view class="box-value">{{paper.difficulty}}</view>
+                </view>
+                <view class="content-cate">
+                    <view class="box-label">※时间: </view>
+                    <view class="box-value">{{paper.time_limit}} 分钟</view>
+                    <view class="box-label">※满分: </view>
+                    <view class="box-value">{{paper.point}}</view>
+                </view>
+            </view>
+
+            <view class="box-cate">
+                <view class="paper-label">其他说明: </view>
+
+                <textarea class="content-cate content-text" value="{{paper.attention}}difgjaerorasdfhaseirsdkfhjds啊所发生的 第三方俺都快放假啊两款发动机浪费卡" disabled/>
+            
+            </view>
+
+
+            <view class="fixed-bottom">
+                
+                <view class="button-sp-area">
+
+                    <button class="weui-btn btn-start-paper" type="primary" plain="true" bindtap="openConfirm">开始答题</button>
+
+                </view>
+
+                    <view class="box-switch">
+                        <view class="god-label">神の一點</view>
+                        <view class="god-value" hidden="{{!god_on}}">选择的同时显示正解,且不可重选</view>
+                        <view class="god-value" hidden="{{god_on}}"></view>
+                        <switch bindchange="modelChange"/>
+                    </view>
+            
+                <navigator class="box-history" url="">
+                    <view class="weui-cell__bd">考试记录</view>
+                    <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+                </navigator>
+
+            </view>
 
     </view>
 

@@ -3,12 +3,99 @@
 }
 
 .box-title{
-    color: #999;
-    margin: 6rpx auto;
-    padding:3rpx;
-    border-left:6rpx solid #999;
+    text-align: center;
+    color: #666;
+    padding:24rpx;
     margin-bottom: 6rpx;
     font-weight: bold;
-    font-size:16px;
+    font-size:18px;
     overflow:hidden;
+}
+
+.border-title{
+    border-bottom:1rpx solid #ccc;
+    margin-left:10rpx;
+    margin-right:10rpx;
+}
+
+.box-label{
+    margin-left: 6rpx;
+    display: inline-block;
+    width: 122rpx;
+    color: #bbb;
+}
+
+.paper-label{
+    margin-left: 6rpx;
+    color: #bbb;
+}
+
+.box-value{
+    display: inline-block;
+    width: 160rpx;
+    color: #999;
+}
+
+.box-cate{
+    margin-bottom: 16rpx;
+}
+
+.content-cate{
+    color: #999;
+    border-left:6rpx solid #ddd;
+    margin-left: 70rpx;
+    padding-left: 12rpx;
+}
+
+.content-text{
+    height: 6em;
+}
+
+.btn-start-paper{
+    width:98%;
+}
+
+.fixed-bottom{
+    font-weight: bold;
+    position:fixed;
+    left:0;
+    right:0;
+    bottom:0;
+}
+
+.box-switch{
+    border-top:1rpx solid #ccc;
+    padding:16rpx 30rpx;
+    position:relative;
+    display:flex;
+}
+
+.box-history{
+    border-top:1rpx solid #ccc;
+    border-bottom:3rpx solid #ccc;
+    padding:24rpx 30rpx;
+    position:relative;
+    display:flex;
+    color: #999;
+    font-size:16px;
+}
+
+.god-switch{
+    width: 120rpx;
+}
+
+.god-label{
+    display: inline-block;
+    width: 180rpx;
+    color: #999;
+    font-size:16px;
+}
+
+.god-value{
+    padding-left: 6rpx;
+    padding-top: 6rpx;
+    display: inline-block;
+    width: 70%;
+    color: #bbb;
+    font-size:14px;
 }

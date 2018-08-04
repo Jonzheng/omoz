@@ -1,0 +1,49 @@
+<view class="page">
+
+    <view class="content-paper">
+
+
+        <textarea class="que-title" value="z第一题:z第一题z第一题z第一题z第一题z第一题z第一题z第一题: " disabled/>
+        <view class="weui-cells weui-cells_after-title">
+            <radio-group bindchange="radioChange">
+                <label class="weui-cell weui-check__label" wx:for="{{radioItems}}" wx:key="value">
+
+                    <view class="my-radio-checked" wx:if="{{item.checked}}">
+                        <view class="my-radio-center"></view>
+                    </view>
+                    <view class="my-radio" wx:else></view>
+
+                    <radio class="weui-check" value="{{item.value}}" checked="{{item.checked}}"/>
+
+                    <view class="weui-cell__bd">{{item.value}}. {{item.name}}</view>
+                    <view class="weui-cell__ft weui-cell__ft_in-radio" wx:if="{{item.checked}}">
+                        <icon class="weui-icon-radio" type="success_no_circle" size="16"></icon>
+                    </view>
+                </label>
+            </radio-group>
+        </view>
+
+        <textarea class="que-title" value="zheshi这是第二题:" disabled/>
+        <view class="weui-cells weui-cells_after-title">
+            <radio-group bindchange="radioChange">
+                <label class="weui-cell weui-check__label" wx:for="{{radioItems}}" wx:key="value">
+
+                    <view class="my-radio-checked" wx:if="{{item.checked}}">
+                        <view class="my-radio-center"></view>
+                    </view>
+                    <view class="my-radio" wx:else></view>
+
+                    <radio class="weui-check" value="{{item.value}}" checked="{{item.checked}}"/>
+
+                    <view class="weui-cell__bd">{{item.value}}. {{item.name}}</view>
+                    <view class="weui-cell__ft weui-cell__ft_in-radio" wx:if="{{item.checked}}">
+                        <icon class="weui-icon-radio" type="success_no_circle" size="16"></icon>
+                    </view>
+                </label>
+            </radio-group>
+        </view>
+
+
+    </view>
+
+</view>
