@@ -34,7 +34,7 @@
             <view class="box-cate">
                 <view class="paper-label">其他说明: </view>
 
-                <textarea class="content-cate content-text" value="{{paper.attention}}difgjaerorasdfhaseirsdkfhjds啊所发生的 第三方俺都快放假啊两款发动机浪费卡" disabled/>
+                <textarea class="content-cate content-text" value="{{paper.attention}}" disabled/>
             
             </view>
 

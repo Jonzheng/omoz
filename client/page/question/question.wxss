@@ -11,6 +11,19 @@
     height: 3.2em;
 }
 
+.que-article{
+    margin-top: 36rpx;
+    border-top: 1rpx solid #bbb;
+    padding:15rpx 15rpx;
+    width: 100%;
+    height: 6.2em;
+    font-size:13px;
+}
+
+.title-iamge{
+    height: 180rpx;
+}
+
 .my-radio{
     margin: 10rpx 10rpx;
     display: flex;
@@ -21,6 +34,12 @@
     border: 1rpx solid #bbb;
     box-shadow: 0 0px 20rpx #eee inset;
     border-radius: 40rpx;
+}
+
+.god-on-radio{
+    border: 1rpx solid #fff;
+    box-shadow: 0 0px 20rpx #eee inset;
+    box-shadow: 0 0px 20rpx red;
 }
 
 .my-radio-checked{
@@ -41,4 +60,30 @@
     background-color:#3498db;
     box-shadow: 0 0px 20rpx #fff;
     border-radius: 20rpx;
+}
+
+.type-desc{
+    margin-top: 160rpx;
+    padding: 15rpx 30rpx;
+    border-top:1rpx solid #5bc0de;
+    font-weight: bold;
+    color: #337ab7;
+}
+
+.my-full-label{
+    padding:6px 15px;
+    position:relative;
+    display:flex;
+    align-items:center;
+    z-index:1;
+}
+
+.label-cover{
+    pointer-events: initial;
+    height: 360rpx;
+    width: 88%;
+    position: absolute;
+    left: 12%;
+    opacity: 0;
+    z-index:99;
 }

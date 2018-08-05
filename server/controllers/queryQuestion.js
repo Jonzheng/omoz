@@ -13,7 +13,7 @@ module.exports = async ctx => {
     console.log(body)
     var paper_id = body.paper_id
     //查询
-    var t_question = await mysql('t_question').select('*').where('paper_id', paper_id)
+    var t_question = await mysql('t_question').select('*').where('paper_id', paper_id).orderBy('question_no')
 
     ctx.state.data = t_question
 }

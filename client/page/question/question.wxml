@@ -2,48 +2,77 @@
 
     <view class="content-paper">
 
+        <!-- 根据题型显示题目 -->
 
-        <textarea class="que-title" value="z第一题:z第一题z第一题z第一题z第一题z第一题z第一题z第一题: " disabled/>
-        <view class="weui-cells weui-cells_after-title">
-            <radio-group bindchange="radioChange">
-                <label class="weui-cell weui-check__label" wx:for="{{radioItems}}" wx:key="value">
+        <block wx:for="{{que_type1}}" wx:key="mkey" wx:for-index="idx">
+            <template is="ele-question" data="{{...item,idx,god_on}}"/>
+        </block>
+        <block wx:for="{{que_type2}}" wx:key="mkey" wx:for-index="idx">
+            <template is="ele-question" data="{{...item,idx,god_on}}"/>
+        </block>
+        <block wx:for="{{que_type3}}" wx:key="mkey" wx:for-index="idx">
+            <template is="ele-question" data="{{...item,idx,god_on}}"/>
+        </block>
+        <block wx:for="{{que_type4}}" wx:key="mkey" wx:for-index="idx">
+            <template is="ele-question" data="{{...item,idx,god_on}}"/>
+        </block>
 
-                    <view class="my-radio-checked" wx:if="{{item.checked}}">
-                        <view class="my-radio-center"></view>
-                    </view>
-                    <view class="my-radio" wx:else></view>
+        <block wx:for="{{que_type11}}" wx:key="mkey" wx:for-index="idx">
+            <template is="ele-question" data="{{...item,idx,god_on}}"/>
+        </block>
+        <block wx:for="{{que_type12}}" wx:key="mkey" wx:for-index="idx">
+            <template is="ele-question" data="{{...item,idx,god_on}}"/>
+        </block>
+        <block wx:for="{{que_type13}}" wx:key="mkey" wx:for-index="idx">
+            <template is="ele-question" data="{{...item,idx,god_on}}"/>
+        </block>
+        <block wx:for="{{que_type14}}" wx:key="mkey" wx:for-index="idx">
+            <template is="ele-question" data="{{...item,idx,god_on}}"/>
+        </block>
 
-                    <radio class="weui-check" value="{{item.value}}" checked="{{item.checked}}"/>
-
-                    <view class="weui-cell__bd">{{item.value}}. {{item.name}}</view>
-                    <view class="weui-cell__ft weui-cell__ft_in-radio" wx:if="{{item.checked}}">
-                        <icon class="weui-icon-radio" type="success_no_circle" size="16"></icon>
-                    </view>
-                </label>
-            </radio-group>
-        </view>
-
-        <textarea class="que-title" value="zheshi这是第二题:" disabled/>
-        <view class="weui-cells weui-cells_after-title">
-            <radio-group bindchange="radioChange">
-                <label class="weui-cell weui-check__label" wx:for="{{radioItems}}" wx:key="value">
-
-                    <view class="my-radio-checked" wx:if="{{item.checked}}">
-                        <view class="my-radio-center"></view>
-                    </view>
-                    <view class="my-radio" wx:else></view>
-
-                    <radio class="weui-check" value="{{item.value}}" checked="{{item.checked}}"/>
-
-                    <view class="weui-cell__bd">{{item.value}}. {{item.name}}</view>
-                    <view class="weui-cell__ft weui-cell__ft_in-radio" wx:if="{{item.checked}}">
-                        <icon class="weui-icon-radio" type="success_no_circle" size="16"></icon>
-                    </view>
-                </label>
-            </radio-group>
-        </view>
-
+        <block wx:for="{{que_type21}}" wx:key="mkey" wx:for-index="idx">
+            <template is="ele-question" data="{{...item,idx,god_on}}"/>
+        </block>
+        <block wx:for="{{que_type22}}" wx:key="mkey" wx:for-index="idx">
+            <template is="ele-question" data="{{...item,idx,god_on}}"/>
+        </block>
+        <block wx:for="{{que_type23}}" wx:key="mkey" wx:for-index="idx">
+            <template is="ele-question" data="{{...item,idx,god_on}}"/>
+        </block>
+        <block wx:for="{{que_type24}}" wx:key="mkey" wx:for-index="idx">
+            <template is="ele-question" data="{{...item,idx,god_on}}"/>
+        </block>
 
     </view>
 
 </view>
+
+
+<template name="ele-question">
+    <view class="type-desc" hidden="{{question_no != 1}}">{{type_desc}}</view>
+    <textarea class="que-article" value="{{article}}" hidden='{{article == ""}}' disabled/>
+    <textarea class="que-title" value="{{title}}" disabled/>
+    <image class="title-iamge" src="{{title_image}}" hidden='{{title_image == ""}}' mode="aspectFit"/>
+    <view class="weui-cells weui-cells_after-title">
+        <radio-group bindchange="radioChange" data-index="{{idx}}" data-type="{{type}}">
+
+            <view class="label-cover" hidden="{{god_on != 1}}"></view>
+            <label class="weui-cell my-full-label" wx:for="{{radioItems}}" wx:key="value">
+
+                <view class="my-radio-checked" wx:if="{{item.checked}}">
+                    <view class="my-radio-center"></view>
+                </view>
+                <view class="my-radio {{god_on == 1 && !item.abled ? 'god-on-radio' : ''}}" wx:else></view>
+
+                <radio class="weui-check" value="{{item.value}}" checked="{{item.checked}}" disabled="{{item.abled}}"/>
+
+                <view class="weui-cell__bd">{{item.value}}. {{item.name}}</view>
+
+                <view class="weui-cell__ft weui-cell__ft_in-radio" wx:if="{{item.right}}">
+                    <icon class="weui-icon-radio" type="success_no_circle" size="16"></icon>
+                </view>
+            </label>
+            
+        </radio-group>
+    </view>
+</template>

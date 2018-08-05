@@ -4,7 +4,7 @@ const App = new getApp()
 Page({
 
   data: {
-    
+    god_on: 0
   },
 
   initPageData: function (paper_id) {
@@ -33,14 +33,17 @@ Page({
   },
 
   modelChange: function (e){
-    var god_on = e.detail.value
-
+    var god_on = 0
+    if (e.detail.value){
+      god_on = 1
+    }
     this.setData({
       god_on: god_on
     })
   },
 
   openConfirm: function () {
+    var god_on = this.data.god_on
     var paper_id = this.data.paper.paper_id
     var openid = App.globalData.openid
     //查询答题记录
@@ -52,7 +55,7 @@ Page({
           console.log("queryAnswerHis:")
           var result = res.data.data
           console.log(result)
-          var _url = '../question/question?paper_id=' + paper_id
+          var _url = '../question/question?paper_id=' + paper_id + "&god_on=" + god_on
           if (result.length > 0){
             var answer_his = result[0]
             var answer_count = answer_his.answer.split(";").length
