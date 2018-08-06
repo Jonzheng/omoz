@@ -44,7 +44,7 @@ Page({
         }else if (v.type == 2){
           v["type_desc"] = "选择题2--选择合适的单词/单词正确用法"
           que_type2.push(v)
-        }else if (v.type == 2){
+        }else if (v.type == 3){
           v["type_desc"] = "选择题3--选择意思相近的句子"
           que_type3.push(v)
         }else if (v.type == 4){
@@ -57,13 +57,16 @@ Page({
         cate2_count += 1
         console.log(v)
         if (v.type == 11){
-          v["type_desc"] = "阅读理解--短篇/长篇/公告"
+          v["type_desc"] = "阅读理解--短篇1问/篇"
           que_type11.push(v)
         }else if (v.type == 12){
+          v["type_desc"] = "阅读理解--中/长篇2-6问"
           que_type12.push(v)
         }else if (v.type == 13){
+          v["type_desc"] = "阅读理解--中/长篇2-6问"
           que_type13.push(v)
         }else if (v.type == 14){
+          v["type_desc"] = "阅读理解--中/长篇2-6问"
           que_type14.push(v)
         }
 

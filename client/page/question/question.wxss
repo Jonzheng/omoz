@@ -15,14 +15,30 @@
     word-wrap: break-word;
 }
 
+.listen-title{
+    font-size:14px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
 .que-article{
     font-size:14px;
     white-space: pre-wrap;
     word-wrap: break-word;
 }
 
-.title-iamge{
+.title-image{
     height: 180rpx;
+}
+
+.article-image{
+    width: 100%;
+    height: 680rpx;
+}
+
+.listen-image{
+    width: 100%;
+    height: 460rpx;
 }
 
 .box-radio{
@@ -33,8 +49,8 @@
     height: 50rpx;
     width: 50rpx;
     background-color:#eee;
-    border: 1rpx solid #bbb;
-    box-shadow: 0 0 20rpx #aaa;
+    border: 1rpx solid #999;
+    box-shadow: 0 0 20rpx #bbb;
     border-radius: 50rpx;
     transition: all 0.6s;
 }
@@ -48,16 +64,16 @@
 .radio-checked{
     box-shadow: 0 0 20rpx #3498db;
     border: 1rpx solid #fff;
-    transition: all 0.3s ease-in;
+    transition: all 0.2s ease-in;
 }
 
 .center-checked{
-    height: 20rpx;
-    width: 20rpx;
+    height: 25rpx;
+    width: 25rpx;
     background-color: #3498db;
     box-shadow: 0 0 20rpx #fff;
-    border-radius: 20rpx;
-    transition: all 0.3s ease-in;
+    border-radius: 50rpx;
+    transition: all 0.1s;
 }
 
 .type-desc{
@@ -69,7 +85,7 @@
 }
 
 .my-full-label{
-    padding:6px 15px;
+    padding:20rpx 3rpx;
     position:relative;
     display:flex;
     align-items:center;
@@ -78,17 +94,16 @@
 
 .label-cover{
     pointer-events: initial;
-    height: 360rpx;
-    width: 88%;
+    height: 460rpx;
+    width: 55%;
     position: absolute;
-    left: 12%;
+    left: 45%;
     opacity: 0;
     z-index:99;
 }
 
-.my-option-label{
+.my-label{
     display: inline-block;
-    font-size: 14px;
     font-weight: bold;
     color: #3498db;
 }
