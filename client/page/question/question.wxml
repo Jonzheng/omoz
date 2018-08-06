@@ -50,26 +50,27 @@
 
 <template name="ele-question">
     <view class="type-desc" hidden="{{question_no != 1}}">{{type_desc}}</view>
-    <textarea class="que-article" value="{{article}}" hidden='{{article == ""}}' disabled/>
-    <textarea class="que-title" value="{{title}}" disabled/>
+    <view class="box-text que-article" hidden='{{article == ""}}'>{{article}}</view>
+    <view class="box-text que-title">{{title}}</view>
     <image class="title-iamge" src="{{title_image}}" hidden='{{title_image == ""}}' mode="aspectFit"/>
     <view class="weui-cells weui-cells_after-title">
         <radio-group bindchange="radioChange" data-index="{{idx}}" data-type="{{type}}">
 
             <view class="label-cover" hidden="{{god_on != 1}}"></view>
-            <label class="weui-cell my-full-label" wx:for="{{radioItems}}" wx:key="value">
+            <label class="weui-cell my-full-label" wx:for="{{radioItems}}" wx:key="value" hover-class="my-option-hover">
 
-                <view class="my-radio-checked" wx:if="{{item.checked}}">
-                    <view class="my-radio-center"></view>
+                <view class='box-radio {{item.checked ? "radio-checked" : ""}} {{god_on == 1 && !item.abled ? "god-on-radio" : ""}}'>
+                    <view class='{{item.checked ? "center-checked" : ""}}'></view>
                 </view>
-                <view class="my-radio {{god_on == 1 && !item.abled ? 'god-on-radio' : ''}}" wx:else></view>
 
                 <radio class="weui-check" value="{{item.value}}" checked="{{item.checked}}" disabled="{{item.abled}}"/>
 
-                <view class="weui-cell__bd">{{item.value}}. {{item.name}}</view>
+                <view class="weui-cell__bd my-option">
+                    <view class="my-option-label">{{item.value}}.</view>{{item.name}}
+                </view>
 
                 <view class="weui-cell__ft weui-cell__ft_in-radio" wx:if="{{item.right}}">
-                    <icon class="weui-icon-radio" type="success_no_circle" size="16"></icon>
+                    <icon class="weui-icon-radio" type="success_no_circle" size="20"></icon>
                 </view>
             </label>
             

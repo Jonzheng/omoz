@@ -16,7 +16,6 @@ module.exports = async ctx => {
         'Content-Type': 'application/json;charset=utf-8'
     });
 
-    var result = {}
     var body = ctx.request.body
     var fields = body.fields
     console.log(body)
@@ -110,12 +109,12 @@ module.exports = async ctx => {
     console.log(file_title_image)
     console.log(file_sound)
     //题目中图片
-    if (title_image == "" && file_title_image && file_title_image.size > 0){
+    if (file_title_image && file_title_image.size > 0){
         console.log("up_title_image...")
         await upload_title_image()
     }
     //阅读图片
-    if (src_image == "" && file_src_image && file_src_image.size > 0){
+    if (file_src_image && file_src_image.size > 0){
         console.log("up_src_image...")
         await upload_src_image()
     }
@@ -124,9 +123,6 @@ module.exports = async ctx => {
         await upload_sound()
     }
 
-    result["src_sound"] = src_sound
-    result["src_image"] = src_image
-    result["title_image"] = title_image
     //数据库参数
     var insert_values = [question_id,paper_id,question_no,title,title_image,option_a,option_b,option_c,option_d,right_option,an_explain,point,type,article,src_sound,src_image,uploader]
     var update_values = [title,title_image,option_a,option_b,option_c,option_d,right_option,an_explain,article,src_sound,src_image]
@@ -149,5 +145,6 @@ module.exports = async ctx => {
     var sql = mysql.raw(str_sql, params_lst).toString()
     console.log(sql)
     await mysql.raw(str_sql, params_lst)
-    ctx.state.data = result
+    var qeustion = {question_id,paper_id,question_no,title,title_image,option_a,option_b,option_c,option_d,right_option,an_explain,point,type,article,src_sound,src_image,uploader}
+    ctx.state.data = qeustion
 }

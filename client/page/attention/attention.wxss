@@ -48,7 +48,8 @@
 }
 
 .content-text{
-    height: 6em;
+    white-space: pre-wrap;
+    word-wrap: break-word;
 }
 
 .btn-start-paper{

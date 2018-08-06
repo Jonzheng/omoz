@@ -33,8 +33,7 @@
 
             <view class="box-cate">
                 <view class="paper-label">其他说明: </view>
-
-                <textarea class="content-cate content-text" value="{{paper.attention}}" disabled/>
+                <view class="content-cate content-text">{{paper.attention}}</view>
             
             </view>
 
