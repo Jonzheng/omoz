@@ -53,24 +53,20 @@ Page({
     data: {
         loged: false,
         slider: 'bar-ori',
-        recordBar: 'record-bar',
-        barWidth: -2,
-        anRecord: '',
         oriPlaying: false,
-        _style: 'width:0rpx;',
         isWifi: false,
         canIUse: wx.canIUse('button.open-type.getUserInfo'),
         list_master:[],
         record_map:{},
         icon_play: "../../image/play.png",
         icon_stop: "../../image/stop.png",
+        icon_trash: "../../image/trash.png",
         icon_upload: "../../image/upload.png",
         icon_record: "../../image/record.png",
         icon_comment: "../../image/comment.png",
         icon_more: "../../image/more.png",
         progress_record: 0,
         hasTmp: false,
-        myFalse: false,
         isRecording: false,
         isPlaying: false,
         tempFile: ''
@@ -114,34 +110,20 @@ Page({
         //----监听录音------------
         recorderManager.onStart(() => {
             console.log('start,dura:' + dura)
-            var anRecord = 'transition: all '+dura+'s linear;'
             this.setData({
                 isRecording: true,
-                progress_record: 0,
                 dura: dura,
-                barWidth: 0,
-                _style: '',
-                recordBar: 'record-bar-end',
-                anRecord: anRecord,
-                isPlayed: false
+                isPlayed: false,
             })
             _next.call(this);
         })
 
         recorderManager.onStop((res) => {
             console.log(res)
-
-            var barWidth = res.duration / options.duration * 100
-            var anRecord = ''
-            
-            var _style= `width:${barWidth}rpx;`
-            console.log(barWidth)
+            var progress_record = res.duration / options.duration * 100
             this.setData({
+                progress_record,
                 tempFile: res,
-                barWidth,
-                recordBar: 'record-bar',
-                _style,
-                anRecord,
                 isRecording: false,
                 hasTmp: true
             })
@@ -268,23 +250,6 @@ Page({
         })
     },
 
-    videoWaiting: function () {
-        var that = this
-        console.log("waiting...")
-        that.videoContext.pause()
-        that.setData({ videoWait: false })
-        setTimeout(function () {
-            that.videoContext.play()
-            that.setData({ videoWait: false })
-        },200)
-    },
-    videoPlay: function () {
-        console.log("Play...")
-        if (this.data.videoWait){
-            this.videoContext.pause()
-        }
-    },
-
     setOriStop: function(){
         this.setData({
             slider: 'bar-ori',
@@ -378,17 +343,25 @@ Page({
         if (this.data.isPlaying) {
             this.stopMyVoice()
         }
+        if (this.data.hasTmp){
+            this.data.tempFile = undefined
+            this.setData({
+                hasTmp: false,
+                progress_record: 0
+            })
+            return
+        }
         this.stopOri()
-        recorderManager.start(options)
-    },
-
-    stopRecord: function (e) {
-        console.log('stop r')
-        console.log(recorderManager)
-        recorderManager.stop()
-        this.setData({
-            isRecording: false,
-        })
+        if (!this.data.isRecording){
+            recorderManager.start(options)
+        }else{
+            recorderManager.stop()
+            this.setData({
+                isRecording: false,
+                hasTmp: true,
+            })
+        }
+        
     },
 
     playMyVoice: function (e) {
@@ -399,16 +372,17 @@ Page({
         if (tempFile != undefined) {
             console.log(tempFile.tempFilePath)
             audioContextMine.src = tempFile.tempFilePath
-            audioContextMine.play()
-            this.setData({
-                isPlaying: true,
-                recordFile: tempFile.tempFilePath
-            })
-        }
-    },
+            if (!this.data.isPlaying){
+                audioContextMine.play()
+                this.setData({
+                    isPlaying: true,
+                    recordFile: tempFile.tempFilePath
+                })
+            }else{
+                audioContextMine.stop()
+            }
 
-    stopMyVoice: function (e) {
-        audioContextMine.stop()
+        }
     },
 
     delMine: function (record_id){

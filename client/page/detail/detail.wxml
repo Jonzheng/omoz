@@ -8,34 +8,36 @@
   <view class="page-body">
 
         <view class="page-section box-video">
+
             <video wx:if='{{isWifi}}' id="myVideo" src="{{list_element.src_video}}"
-            show-fullscreen-btn='{{myFalse}}'
-            show-center-play-btn='{{true}}'
-            custom-cache="{{myFalse}}"
-            bindwaiting="videoWaiting"
-            bindplay="videoPlay"
-            controls></video>
+                show-fullscreen-btn='{{false}}'
+                custom-cache="{{false}}"
+                enable-progress-gesture="{{false}}"
+                autoplay
+                controls>
+            </video>
+
             <view wx:else class='warning-black'>
 
-            <view class='video-size'>
-                <view class=''>{{video_size}}MB</view>
+                <view class='video-size'>
+                    <view class=''>{{video_size}}MB</view>
+                </view>
+
+                <view class='fuin-unlock' bindtap="unlock">
+                    <view class=''>卍解</view>
+                </view>
+
+                <view class='fuin-2'>
+                    <view class='spin-2'>卍卍卍卍卍卍卍卍卍卍最強の封印卍卍卍卍卍卍卍卍卍</view>
+                </view>
+
+                <view class='fuin-1'>
+                    <!--<view class='spin-1'>keep out  keep out  keep out keep out</view> -->
+                    <view class='spin-1'>立入禁止 立入禁止 立入禁止 立入禁止 立入禁止 立入禁止</view>
+                </view>
+
             </view>
 
-            <view class='fuin-unlock' bindtap="unlock">
-                <view class=''>卍解</view>
-            </view>
-
-            <view class='fuin-2'>
-                <view class='spin-2'>卍卍卍卍卍卍卍卍卍卍最強の封印卍卍卍卍卍卍卍卍卍</view>
-            </view>
-
-            <view class='fuin-1'>
-                <!--<view class='spin-1'>keep out  keep out  keep out keep out</view> -->
-                <view class='spin-1'>立入禁止 立入禁止 立入禁止 立入禁止 立入禁止 立入禁止</view>
-            </view>
-
-
-            </view>
         </view>
 
         <view class="box-serifu">
@@ -50,8 +52,8 @@
             <view class="box-ori">
                 <button hidden="{{loged}}" open-type="getUserInfo" class="get-user" bindgetuserinfo="toLogin">卍</button>
                 
-                <view class="btn-ori">
-                    <view bindtap="playOri" class='{{oriPlaying ? "ori-stop" : "ori-play"}} '></view>
+                <view class="btn-circle" bindtap="playOri">
+                    <view class='{{oriPlaying ? "sound-stop" : "sound-play"}} '></view>
                 </view>
                 <view class='{{slider}}'></view>
                 <view class="shadow-ori">
@@ -71,27 +73,29 @@
             </block>
 
         </view>
-
+        
         <view class="fixed-bottom">
+            <view class="my-progress-box">
+                <view class='{{progress_record == 0 ? "" : "my-progress"}} {{isRecording ? "an-totop": ""}}' style='width:{{isRecording ? "" : progress_record}}%;'></view>
+            </view>
             <view class="record-box">
-            <button hidden="{{loged}}" open-type="getUserInfo" class="get-user" bindgetuserinfo="toLogin">卍</button>
-                <view class="my-progress-box">
-                    <view wx:if="{{isRecording}}" class="my-progress" style="animation: totop {{dura}}s linear"></view>
-                    <view wx:else class="my-progress" style="width:{{progress_record}}%;"></view>
+                <button hidden="{{loged}}" open-type="getUserInfo" class="get-user" bindgetuserinfo="toLogin">卍</button>
 
-                    <view wx:if="{{isPlaying}}" class="my-progress-play" style="width:{{progress_record}}%;animation: totop {{dura+0.3}}s linear"></view>
-                    <view wx:else></view>
+                <view class='btn-circle {{!isRecording && hasTmp ? "" : "btn-hidden"}}' bindtap="playMyVoice">
+                    <view class='{{isPlaying ? "sound-stop" : "sound-play"}} '></view>
                 </view>
 
-                <image wx:if='{{isPlaying}}' src="{{icon_stop}}" bindtap="stopMyVoice" class="btn-record an-breath"></image>
-                <image wx:elif='{{hasTmp}}' src="{{icon_play}}" bindtap="playMyVoice" class="btn-record"></image>
-                <image wx:else src="" class="btn-record"></image>
+                <view class="btn-circle btn-center" bindtap="startRecord">
+                    <view class='{{isRecording ? "sound-stop" : "btn-empty"}}'></view>
+                    <image wx:if="{{hasTmp}}" src='{{icon_trash}}' class='btn-record'></image>
+                    <image wx:elif="{{!isRecording}}" src='{{icon_record}}' class='btn-record'></image>
 
-                <image wx:if="{{isRecording}}" src="{{icon_stop}}" bindtap="stopRecord" class="btn-record btn-center an-breath"></image>
-                <image wx:else src="{{icon_record}}" bindtap="startRecord" class="btn-record btn-center"></image>
+                </view>
 
-                <image wx:if='{{isPlayed}}' src="{{icon_upload}}" bindtap="uploadRecord" class="btn-record"></image>
-                <image wx:else src="" class="btn-record"></image>
+                <view class='btn-circle {{isPlayed && hasTmp ? "" : "btn-hidden"}}' bindtap="uploadRecord">
+                    <image src='{{isPlayed && hasTmp ? icon_upload : ""}}' class="btn-record"></image>
+                </view>
+
             </view>
         </view>
   </view>
