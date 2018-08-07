@@ -318,7 +318,11 @@ Page({
     playOri: function(e) {
         var audio_element = this.data.audio_element
         audioContextOri.src = audio_element.src_audio
-        audioContextOri.play()
+        if (!this.data.oriPlaying){
+            audioContextOri.play()
+        }else{
+            this.stopOri()
+        }
     },
 
     stopOri: function (e) {

@@ -49,15 +49,16 @@
             </view>
             <view class="box-ori">
                 <button hidden="{{loged}}" open-type="getUserInfo" class="get-user" bindgetuserinfo="toLogin">卍</button>
-
-                <view class='{{slider}}'></view>
-
-                <image wx:if="{{oriPlaying}}" src="{{icon_stop}}" bindtap="stopOri" class="btn-ori"></image>
-                <image wx:else src="{{icon_play}}" bindtap="playOri" class="btn-ori"></image>
                 
-                <block wx:for="{{shadow}}" wx:key="mkey">
-                    <view class="ele-ori" style="height:{{item}}"></view>
-                </block>
+                <view class="btn-ori">
+                    <view bindtap="playOri" class='{{oriPlaying ? "ori-stop" : "ori-play"}} '></view>
+                </view>
+                <view class='{{slider}}'></view>
+                <view class="shadow-ori">
+                    <block wx:for="{{shadow}}" wx:key="mkey">
+                        <view class="ele-ori" style="height:{{item}};transition: height 0.6s ease-in;"></view>
+                    </block>
+                </view>
             </view>
 
         </view>

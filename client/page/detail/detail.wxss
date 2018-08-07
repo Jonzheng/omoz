@@ -308,11 +308,11 @@ video {
 
 .bar-ori{
     position: absolute;
-    left:110rpx;
+    left:116rpx;
     background-color: #ccc;
 
     width:3rpx;
-    height:106rpx;
+    height:108rpx;
     opacity: 0.6;
     z-index: 1px;
 
@@ -333,11 +333,38 @@ video {
 }
 
 .btn-ori{
+    display: flex;
     flex-shrink: 0; /*固定大小*/
-    border-right: 3rpx #ccc solid;
+    background-color: #fff;
     width:110rpx;
     height:110rpx;
     z-index: -1px;
+    border: 1px solid #fff;
+    box-shadow: 0px 0px 10rpx #ccc;
+    border-radius: 100rpx;
+    justify-content: center;
+    align-items: center;
+}
+
+.ori-play{
+    position: relative;
+    left: 6rpx;
+    width: 0;
+    height: 0;
+    border-left: 40rpx solid #777;
+    border-top: 30rpx solid transparent;
+    border-bottom: 30rpx solid transparent;
+    transition: all 0.2s ease-in;
+}
+
+.ori-stop{
+    position: relative;
+    left:0;
+    width: 0;
+    height: 0;
+    border: 20rpx solid #bbb;
+    border-radius: 6rpx;
+    transition: all 0.3s ease-out;
 }
 
 .ele-ori {
@@ -352,6 +379,15 @@ video {
     display:flex; /*无敌布局*/
     align-items:center; /*中轴对齐*/
     overflow: hidden;
+}
+
+.shadow-ori{
+    height: 110rpx;
+    display:flex; /*无敌布局*/
+    align-items:center; /*中轴对齐*/
+    overflow: hidden;
+
+    border-left: 3rpx solid #ccc;
 }
 
 .btn-record{
