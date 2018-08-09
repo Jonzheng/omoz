@@ -243,3 +243,40 @@ form{
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+/** my css **/
+
+.btn-circle{
+  display: flex;
+  flex-shrink: 0; /*固定大小*/
+  background-color: #fff;
+  width:105rpx;
+  height:105rpx;
+  z-index: -1px;
+  border: 1px solid #fff;
+  box-shadow: 0px 0px 10rpx #eee;
+  border-radius: 50%;
+  justify-content: center;
+  align-items: center;
+}
+
+.sound-play{
+  position: relative;
+  left: 6rpx;
+  width: 0;
+  height: 0;
+  border-left: 40rpx solid #999;
+  border-top: 30rpx solid transparent;
+  border-bottom: 30rpx solid transparent;
+  transition: all 0.2s ease-in;
+}
+
+.sound-stop{
+  position: relative;
+  left:0;
+  width: 0;
+  height: 0;
+  border: 20rpx solid #999;
+  border-radius: 6rpx;
+  transition: all 0.3s ease-out;
+}

@@ -2,6 +2,32 @@
 
     <view class="content-paper">
 
+        <view class="fixed-top">
+            <view class="box-line">
+                <view class="field">
+                    <view class="top-label">选择题:</view>
+                    <view class="top-value">1</view>
+                    <view class="top-value value-total">56</view>
+                </view>
+                <view class="field">
+                    <view class="top-label">阅读题:</view>
+                    <view class="top-value">1</view>
+                    <view class="top-value value-total">26</view>
+                </view>
+                <view class="field">
+                    <view class="top-label">听解题:</view>
+                    <view class="top-value">1</view>
+                    <view class="top-value value-total">12</view>
+                </view>
+            </view>
+            <view class="box-line">
+                <view class="top-label">时间:</view>
+                <view class="top-value">00</view>
+                <view class="top-value value-time">03</view>
+                <view class="top-value value-time">35</view>
+            </view>
+
+        </view>
         <!-- 根据题型显示题目 -->
 
         <!-- 选择题 -->
@@ -117,6 +143,14 @@
 
 <template name="question-cate3">
     <view class="type-desc" hidden="{{question_no != 1}}">{{type_desc}}</view>
+    <view class="box-listen">
+        <view class="btn-circle" bindtap="listen" data-src="{{src_sound}}">
+            <view class='{{listen1 ? "sound-stop" : "sound-play"}} '></view>
+        </view>
+        <view class="listen-desc" bindtap="">
+            只能播放一次
+        </view>
+    </view>
     <view class="src-sound" hidden="{{question_no != 1}}">{{question_no}}</view>
     <view class="box-text">
         <view class="my-label">{{question_no}}.ばん</view>

@@ -1,5 +1,5 @@
 .content-paper{
-    border-top:5rpx solid #5bc0de;
+    border-top:1rpx solid #fff;
     color: #666;
 }
 
@@ -49,7 +49,7 @@
     height: 50rpx;
     width: 50rpx;
     background-color:#eee;
-    border: 1rpx solid #999;
+    border: 1rpx solid #ccc;
     box-shadow: 0 0 20rpx #bbb;
     border-radius: 50rpx;
     transition: all 0.6s;
@@ -99,7 +99,7 @@
     position: absolute;
     left: 45%;
     opacity: 0;
-    z-index:99;
+    z-index:9;
 }
 
 .my-label{
@@ -119,3 +119,61 @@
     background-color: #eee;
     opacity: 0.5;
 }
+
+.box-listen{
+    height: 110rpx;
+    display:flex;
+    align-items:center;
+    border: 1rpx solid #ccc;
+}
+
+.listen-desc{
+    height: 110rpx;
+    display:flex;
+    align-items:center;
+}
+
+.fixed-top{
+    position:fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    border-top: 5rpx solid #5bc0de;
+    border-bottom: 3rpx solid #5bc0de;
+    box-shadow: 0 0 20rpx #5bc0de;
+    background-color: #fefefe;
+    z-index: 99;
+}
+
+.top-label{
+    font-weight: bold;
+    color: #999;
+    margin: 0 10rpx;
+}
+
+.top-value{
+    font-weight: bold;
+    color: #3498db;
+}
+
+.value-total::before{
+    content: "/";
+    color: #999;
+}
+
+.value-time::before{
+    content: ":";
+    color: #999;
+}
+
+.box-line{
+    display: flex;
+    padding: 8rpx 10rpx;
+    border-bottom: 1rpx solid #eee;
+}
+
+.field{
+    display: flex;
+    margin-right: 20rpx;
+}
+
