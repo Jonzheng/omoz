@@ -42,7 +42,7 @@
                 
                 <view class="button-sp-area">
 
-                    <button class="weui-btn btn-start-paper" type="primary" plain="true" bindtap="openConfirm">开始答题</button>
+                    <button style="border:1px solid #7ed5f0;color: #3498db;width: 98%;" type="default" plain="true" bindtap="openConfirm" hover-class="btn-start-hover">开始答题</button>
 
                 </view>
 

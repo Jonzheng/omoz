@@ -50,7 +50,7 @@ Page({
     wx.request({
       url: urls.queryAnswerHis,
       method: 'POST',
-      data: {paper_id, openid},
+      data: {paper_id, openid, god_on},
       success: function (res) {
           console.log("queryAnswerHis:")
           var result = res.data.data
@@ -59,8 +59,16 @@ Page({
           if (result.length > 0){
             var answer_his = result[0]
             var answer_count = answer_his.answer.split(";").length
-            var spend = answer_his.spend
-            var content = "已答题: " + answer_count + " ,已用时: " + spend + " 分钟"
+
+            var spend = parseInt(answer_his.spend)
+            var spend_hh = parseInt(spend / 3600)
+            var spend_mm = parseInt(spend / 60)
+            var spend_ss = parseInt(spend % 60)
+            if (spend_hh < 10) spend_hh = "0"+spend_hh
+            if (spend_mm < 10) spend_mm = "0"+spend_mm
+            if (spend_ss < 10) spend_ss = "0"+spend_ss
+
+            var content = "已答题: " + answer_count + " ,已用时: " + spend_hh+":"+spend_mm+":"+spend_ss
             wx.showModal({
               title: "是否继续上次答题?",
               content: content,
@@ -68,7 +76,7 @@ Page({
               cancelText: "重新答题",
               success: function (res) {
                   if (res.confirm) {
-                    _url = _url + "&spend=" + spend + "&answer_his=" + answer_his.answer
+                    _url = _url + "&spend=" + spend
                     wx.navigateTo({
                       url: _url
                     })

@@ -25,6 +25,8 @@ var urls = {
     queryPaper: `${host}/weapp/queryPaper`,
     queryQuestion: `${host}/weapp/queryQuestion`,
     queryAnswerHis: `${host}/weapp/queryAnswerHis`,
+    saveAnswerHis: `${host}/weapp/saveAnswerHis`,
+    updateAnswerHis: `${host}/weapp/updateAnswerHis`,
 };
 
 module.exports = urls;

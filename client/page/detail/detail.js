@@ -11,15 +11,6 @@ const options = {
 }
 const dura = options.duration / 1000
 
-const audioContextOri = wx.createInnerAudioContext()
-audioContextOri.autoplay = false
-
-const audioContextMaster = wx.createInnerAudioContext()
-audioContextMaster.autoplay = false
-
-const audioContextMine = wx.createInnerAudioContext()
-audioContextMine.autoplay = false
-
 const load_list = [0.5, 0.7, 0.9, 1.1, 1.3, 1.5, 1.7, 1.9, 2.1, 2.3, 2.5, 2.7, 2.9, 3.1, 3.3, 3.5, 3.7, 3.9, 4.1, 4.3]
 //const downloadTask = wx.downloadFile({
 //    url: src_sound,
@@ -73,6 +64,9 @@ Page({
     },
     onUnload: function () {
         console.log("onUnload")
+        var audioContextOri = this.data.audioContextOri
+        var audioContextMaster = this.data.audioContextMaster
+        var audioContextMine = this.data.audioContextMine
         audioContextOri.stop()
         audioContextMine.stop()
         audioContextMaster.stop()
@@ -80,7 +74,18 @@ Page({
     onReady: function (res) {
         this.videoContext = wx.createVideoContext('myVideo')
 
+        const audioContextOri = wx.createInnerAudioContext()
+        const audioContextMaster = wx.createInnerAudioContext()
+        const audioContextMine = wx.createInnerAudioContext()
+
+        this.setData({
+            audioContextOri,
+            audioContextMaster,
+            audioContextMine,
+        })
+
         audioContextOri.onPlay(() => {
+            console.log("audioContextOri...")
             this.setData({
                 slider: 'bar-end',
                 oriPlaying: true,
@@ -259,6 +264,7 @@ Page({
 
     setMasterStop: function () {
         var index = this.data.listenIndex
+        var audioContextMaster = this.data.audioContextMaster
         //console.log("setMasterStop:", index)
         var list_master = this.data.list_master
         if (index != null && list_master[index]["isListen"]) {
@@ -281,6 +287,7 @@ Page({
     },
 
     playOri: function(e) {
+        var audioContextOri = this.data.audioContextOri
         var audio_element = this.data.audio_element
         audioContextOri.src = audio_element.src_audio
         if (!this.data.oriPlaying){
@@ -291,6 +298,7 @@ Page({
     },
 
     stopOri: function (e) {
+        var audioContextOri = this.data.audioContextOri
         audioContextOri.stop()
     },
 
@@ -368,6 +376,7 @@ Page({
         if (this.data.isRecording) {
             return false
         }
+        var audioContextMine = this.data.audioContextMine
         var tempFile = this.data.tempFile
         if (tempFile != undefined) {
             console.log(tempFile.tempFilePath)
@@ -435,6 +444,7 @@ Page({
         var index = currData.idx
         var list_master = this.data.list_master
         var src_record = list_master[index]["src_record"]
+        var audioContextMaster = this.data.audioContextMaster
         if (!src_record) return
         if (list_master[index]["isListen"]){
             list_master[index]["isListen"] = false

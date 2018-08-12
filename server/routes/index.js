@@ -56,6 +56,7 @@ router.post('/queryAnswer', controllers.queryAnswer)
 router.post('/queryAnswerHis', controllers.queryAnswerHis)
 router.post('/saveAnswer', controllers.saveAnswer)
 router.post('/saveAnswerHis', controllers.saveAnswerHis)
+router.post('/updateAnswerHis', controllers.updateAnswerHis)
 
 //--跨域--
 router.post('/blackLogin', controllers.blackLogin)

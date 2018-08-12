@@ -4,9 +4,10 @@ module.exports = async ctx => {
 
     var body = ctx.request.body
     var paper_id = body.paper_id
-    var openid = body.paper_id
+    var openid = body.openid
     var answer = body.answer
     var spend = body.spend
+    var god_on = body.god_on
     var listen_1 = body.listen_1
     var listen_2 = body.listen_2
     var listen_3 = body.listen_3
@@ -14,7 +15,7 @@ module.exports = async ctx => {
     
     console.log(body)
 
-    await mysql("t_answer_his").where("paper_id", paper_id).andWhere("openid", openid).update({
+    await mysql("t_answer_his").where("paper_id", paper_id).andWhere("openid", openid).andWhere("god_on", god_on).update({
         answer: answer,
         spend: spend,
         listen_1: listen_1,

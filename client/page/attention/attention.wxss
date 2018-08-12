@@ -54,6 +54,13 @@
 
 .btn-start-paper{
     width:98%;
+    border:1px solid #7ed5f0;
+    color: #7ed5f0;
+}
+
+.btn-start-hover{
+    transform:scale(0.98, 0.98);
+    box-shadow: 0 0 10rpx #7ed5f0;
 }
 
 .fixed-bottom{

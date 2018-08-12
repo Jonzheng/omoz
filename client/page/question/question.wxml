@@ -3,28 +3,56 @@
     <view class="content-paper">
 
         <view class="fixed-top">
-            <view class="box-line">
+            <view class='{{top_show ? "box-line" : "box-line-hidden"}}'>
                 <view class="field">
-                    <view class="top-label">选择题:</view>
-                    <view class="top-value">1</view>
-                    <view class="top-value value-total">56</view>
+                    <view class="top-label" bindtap="jumpCate" data-type="cate1">选择题:</view>
+                    <view class="top-value">{{cate1_done}}</view>
+                    <view class="top-value value-total">{{cate1_total}}</view>
                 </view>
                 <view class="field">
-                    <view class="top-label">阅读题:</view>
-                    <view class="top-value">1</view>
-                    <view class="top-value value-total">26</view>
+                    <view class="top-label" bindtap="jumpCate" data-type="cate2">阅读题:</view>
+                    <view class="top-value">{{cate2_done}}</view>
+                    <view class="top-value value-total">{{cate2_total}}</view>
                 </view>
                 <view class="field">
-                    <view class="top-label">听解题:</view>
-                    <view class="top-value">1</view>
-                    <view class="top-value value-total">12</view>
+                    <view class="top-label" bindtap="jumpCate" data-type="cate3">听解题:</view>
+                    <view class="top-value">{{cate3_done}}</view>
+                    <view class="top-value value-total">{{cate3_total}}</view>
                 </view>
             </view>
-            <view class="box-line">
+            <view class='{{top_show ? "box-line" : "box-line-hidden"}}'>
                 <view class="top-label">时间:</view>
-                <view class="top-value">00</view>
-                <view class="top-value value-time">03</view>
-                <view class="top-value value-time">35</view>
+                <view class="top-value">{{spend_hh}}</view>
+                <view class="top-value value-time">{{spend_mm}}</view>
+                <view class="top-value value-time">{{spend_ss}}</view>
+            </view>
+
+            <view class="box-listen-top" hidden="{{!listening}}">
+                    <view class="canvas">
+                        <view class="spinner1 spinnerMax">
+                        <view class="spinner1 spinnerMid">
+                            <view class="spinner1 spinnerMin"></view>
+                        </view>
+                        </view>
+                    </view>
+                    
+                <view class="box-listen-control">
+                    <view class="box-cont">
+                        <view class="listen-curr">{{curr_mm}}:{{curr_ss}}</view>
+                        <view class="listen-bar">
+                            <view class="curr-bar" style="width: {{curr_width}}rpx;"></view>
+                        </view>
+                        <view class="listen-end">{{dura_mm}}:{{dura_ss}}</view>
+                    </view>
+                    <view class="box-cont">
+                        <view class="curr-play-desc">正在播放:聴解题2--重点理解</view>
+                        <view class="skip-play" hover-class="skip-play-hover" bindtap="seekTo" data-sec="{{back_ss}}"> - {{back_ss}}" </view>
+                        <view class="skip-play" hover-class="skip-play-hover" bindtap="seekTo" data-type="+"> + {{seek_ss}}" </view>
+                    </view>
+                </view>
+            </view>
+            <view class="box-btn-more">
+                <image src="{{icon_more}}" class='sm-icon {{top_show ? "":"rt-90"}}' bindtap='showMore'></image>
             </view>
 
         </view>
@@ -58,7 +86,7 @@
         </block>
         <!-- 听解题 -->
         <block wx:for="{{que_type21}}" wx:key="mkey" wx:for-index="idx">
-            <template is="question-cate3" data="{{...item,idx,god_on}}"/>
+            <template is="question-cate3" data="{{...item,idx,god_on,size21}}"/>
         </block>
         <block wx:for="{{que_type22}}" wx:key="mkey" wx:for-index="idx">
             <template is="question-cate3" data="{{...item,idx,god_on}}"/>
@@ -76,7 +104,7 @@
 
 
 <template name="question-cate1">
-    <view class="type-desc" hidden="{{question_no != 1}}">{{type_desc}}</view>
+    <view id='{{question_no == 1 ? "cate1" : ""}}' class="type-desc" hidden="{{question_no != 1}}">{{type_desc}}</view>
     <view class="box-text">
         <view class="my-label">{{type}}.{{question_no}}</view>
         <view class="que-title">{{title}}</view>
@@ -108,7 +136,7 @@
 </template>
 
 <template name="question-cate2">
-    <view class="type-desc" hidden="{{question_no != 1}}">{{type_desc}}</view>
+    <view id='{{question_no == 1 ? "cate2" : ""}}' class="type-desc" hidden="{{question_no != 1}}">{{type_desc}}</view>
     <view class="box-text que-article" hidden='{{article == "" || src_image != ""}}'>{{article}}</view>
     <image class="article-image" src="{{src_image}}" hidden='{{src_image == ""}}' mode="aspectFit"/>
     <view class="box-text">
@@ -120,7 +148,7 @@
         <radio-group bindchange="radioChange" data-index="{{idx}}" data-type="{{type}}">
 
             <view class="label-cover" hidden="{{god_on != 1}}"></view>
-            <label class="weui-cell weui-check__label my-full-label" wx:for="{{radioItems}}" wx:key="value" hover-class="my-option-hover">
+            <label class="weui-cell weui-check__label my-full-label" wx:for="{{radioItems}}" wx:key="value">
 
                 <view class='box-radio {{item.checked ? "radio-checked" : ""}} {{god_on == 1 && !item.abled ? "god-on-radio" : ""}}'>
                     <view class='{{item.checked ? "center-checked" : ""}}'></view>
@@ -142,16 +170,17 @@
 </template>
 
 <template name="question-cate3">
-    <view class="type-desc" hidden="{{question_no != 1}}">{{type_desc}}</view>
-    <view class="box-listen">
+    <view id='{{question_no == 1 ? "cate3" : ""}}' class="type-desc" hidden="{{question_no != 1}}">{{type_desc}}</view>
+    <view class="box-listen" hidden="{{question_no != 1}}">
         <view class="btn-circle" bindtap="listen" data-src="{{src_sound}}">
             <view class='{{listen1 ? "sound-stop" : "sound-play"}} '></view>
         </view>
-        <view class="listen-desc" bindtap="">
-            只能播放一次
+        <view class="box-listen-desc">
+            <view class="que-desc">{{que_desc}}</view>
+            <view class="que-desc">本段材料共{{size21}}问</view>
+            <view class="listen-desc">{{listen_desc}}</view>
         </view>
     </view>
-    <view class="src-sound" hidden="{{question_no != 1}}">{{question_no}}</view>
     <view class="box-text">
         <view class="my-label">{{question_no}}.ばん</view>
         <view class="listen-title">{{title}}</view>
