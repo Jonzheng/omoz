@@ -54,7 +54,9 @@
             <view class="box-btn-more">
                 <image src="{{icon_more}}" class='sm-icon {{top_show ? "":"rt-90"}}' bindtap='showMore'></image>
             </view>
-
+            <view class="box-save-info">
+                <view class='save-text {{show_save ? "":"text-hidden"}}'>已保存 <icon type="success_no_circle" size="20" color="#ccc"/></view>
+            </view>
         </view>
         <!-- 根据题型显示题目 -->
 

@@ -8,8 +8,10 @@ Page({
     listening: false,
     isFirst: false,
     top_show: true,
+    show_save: false,
     icon_more: "../../image/more.png",
     answer_map: {},
+    spend_save: 0,
     cate1_done: 0,
     cate2_done: 0,
     cate3_done: 0,
@@ -266,6 +268,7 @@ Page({
     var spend = data.spend
     if (spend){
       spend = parseInt(spend)
+      this.setData({spend_save:spend})
       //t_answer_his
       wx.request({
           url: urls.queryAnswerHis,
@@ -313,7 +316,12 @@ Page({
     var count_it = setInterval(function(){
       spend += 1
       if (spend % 50 == 0){
-        console.log(spend, "save....")
+        console.log(spend, "save_time")
+        if (!that.data.isFirst && spend - that.data.spend_save > 30){
+          var answer_map = that.data.answer_map
+          console.log("save_ex...")
+          that.saveAnswerHis(answer_map)
+        }
       }
       var spend_hh = parseInt(spend / 3600)
       var spend_mm = parseInt(spend / 60)
@@ -358,11 +366,11 @@ Page({
     }
   },
 
-  saveAnswer: function(answer_map){
+  saveAnswerHis: function(answer_map){
     var that = this
     var god_on = this.data.god_on
     var paper_id = this.data.paper_id
-    var spend = this.data.spend
+    var spend = this.data.spend + 1
     var openid = App.globalData.openid
 
     var listen_1 = this.data.listen_1
@@ -388,8 +396,11 @@ Page({
         success: function (res) {
             console.log("saveAnswerHis:")
             that.setData({
-              isFirst: false
+              isFirst: false,
+              show_save: true,
+              spend_save: spend,
             })
+            setTimeout(function(){that.setData({show_save:false})},1000)
         }
       })
 
@@ -401,8 +412,11 @@ Page({
         success: function (res) {
             console.log("updateAnswerHis:",answer)
             that.setData({
-              isFirst: false
+              isFirst: false,
+              show_save: true,
+              spend_save: spend,
             })
+            setTimeout(function(){that.setData({show_save:false})},1000)
         }
       })
 
@@ -432,13 +446,12 @@ Page({
       var question = _list[currData.index]
       var question_id = question.question_id
       var answer_map = this.data.answer_map
+      //更新显示已做的题目数
+      if (!answer_map[question_id]) this.initCate(question_id)
       answer_map[question_id] = e.detail.value
 
-      //更新显示已做的题目数
-      this.initCate(question_id)
-
       this.setQueList(currData.type, _list)
-      this.saveAnswer(answer_map)
+      this.saveAnswerHis(answer_map)
   },
 
   listen: function(e){
@@ -464,7 +477,7 @@ Page({
 
       wx.pageScrollTo({
         scrollTop: scrollTop+top-200,
-        duration: 300
+        duration: 0
       })
     })
   },

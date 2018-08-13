@@ -247,6 +247,23 @@
     right: 10rpx;
 }
 
+.box-save-info{
+    position: absolute;
+    top: 80rpx;
+    left: 42%;
+}
+
+.save-text{
+    color: #ccc;
+    opacity: 1;
+    transition: opacity 0.5s ease-out;
+}
+
+.text-hidden{
+    opacity: 0;
+    transition: opacity 0.8s ease-in;
+}
+
 .listen-curr,.listen-end{
     font-weight: bold;
 }
