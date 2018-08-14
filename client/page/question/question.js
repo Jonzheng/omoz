@@ -308,7 +308,7 @@ Page({
       })
     }else{
       spend = 0
-      this.setData({isFirst:true})
+      if (!data.cover) this.setData({isFirst:true})
       that.loadQuestion(paper_id)
     }
 

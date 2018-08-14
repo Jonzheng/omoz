@@ -1,0 +1,73 @@
+<view class="page">
+    <view class='title-line'></view>
+    <view class='title-1'>「50_Game」</view>
+    <view class='title-line'></view>
+
+    <view class='box-body'>
+        <view class="box-link">
+
+            <view class="box-row">
+                <view class="step-out"><view class="step" hover-class="step-hover"></view></view>
+                <view class="step-out"><view class="step" hover-class="step-hover"></view></view>
+                <view class="step-out"><view class="step" hover-class="step-hover"></view></view>
+                <view class="step-out"><view class="step" hover-class="step-hover"></view></view>
+                <view class="step-out"><view class="step" hover-class="step-hover"></view></view>
+                <view class="step-out"><view class="step" hover-class="step-hover"></view></view>
+                <view class="step-out"><view class="step" hover-class="step-hover"></view></view>
+                <view class="step-out"><view class="step" hover-class="step-hover"></view></view>
+            </view>
+            <view class="box-row">
+                <view class="step-out"><view class="step" hover-class="step-hover"></view></view>
+                <view class="step-out"><view class="step" hover-class="step-hover"></view></view>
+                <view class="step-out"><view class="step" hover-class="step-hover"></view></view>
+                <view class="step-out"><view class="step" hover-class="step-hover"></view></view>
+                <view class="step-out"><view class="step" hover-class="step-hover"></view></view>
+                <view class="step-out"><view class="step" hover-class="step-hover"></view></view>
+                <view class="step-out"><view class="step" hover-class="step-hover"></view></view>
+                <view class="step-out"><view class="step" hover-class="step-hover"></view></view>
+            </view>
+            <view class="box-row">
+                <view class="step-out"><view class="step" hover-class="step-hover"></view></view>
+                <view class="step-out"><view class="step" hover-class="step-hover"></view></view>
+                <view class="step-out"><view class="step" hover-class="step-hover"></view></view>
+                <view class="step-out"><view class="step" hover-class="step-hover"></view></view>
+                <view class="step-out"><view class="step" hover-class="step-hover"></view></view>
+                <view class="step-out"><view class="step" hover-class="step-hover"></view></view>
+                <view class="step-out"><view class="step" hover-class="step-hover"></view></view>
+                <view class="step-out"><view class="step" hover-class="step-hover"></view></view>
+            </view>
+            <view class="box-row">
+                <view class="step-out"><view class="step" hover-class="step-hover"></view></view>
+                <view class="step-out"><view class="step" hover-class="step-hover"></view></view>
+                <view class="step-out"><view class="step" hover-class="step-hover"></view></view>
+                <view class="step-out"><view class="step" hover-class="step-hover"></view></view>
+                <view class="step-out"><view class="step" hover-class="step-hover"></view></view>
+                <view class="step-out"><view class="step" hover-class="step-hover"></view></view>
+                <view class="step-out"><view class="step" hover-class="step-hover"></view></view>
+                <view class="step-out"><view class="step" hover-class="step-hover"></view></view>
+            </view>
+            <view class="box-row">
+                <view class="step-out"><view class="step" hover-class="step-hover"></view></view>
+                <view class="step-out"><view class="step" hover-class="step-hover"></view></view>
+                <view class="step-out"><view class="step" hover-class="step-hover"></view></view>
+                <view class="step-out"><view class="step" hover-class="step-hover"></view></view>
+                <view class="step-out"><view class="step" hover-class="step-hover"></view></view>
+                <view class="step-out"><view class="step" hover-class="step-hover"></view></view>
+                <view class="step-out"><view class="step" hover-class="step-hover"></view></view>
+                <view class="step-out"><view class="step" hover-class="step-hover"></view></view>
+            </view>
+            <view class="box-row">
+                <view class="step-out"><view class="step" hover-class="step-hover"></view></view>
+                <view class="step-out"><view class="step" hover-class="step-hover"></view></view>
+                <view class="step-out"><view class="step" hover-class="step-hover"></view></view>
+                <view class="step-out"><view class="step" hover-class="step-hover"></view></view>
+                <view class="step-out"><view class="step" hover-class="step-hover"></view></view>
+                <view class="step-out"><view class="step" hover-class="step-hover"></view></view>
+                <view class="step-out"><view class="step" hover-class="step-hover"></view></view>
+                <view class="step-out"><view class="step" hover-class="step-hover"></view></view>
+            </view>
+
+
+        </view>
+    </view>
+</view>

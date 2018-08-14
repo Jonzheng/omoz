@@ -16,7 +16,7 @@ module.exports = async ctx => {
 
     console.log(body)
 
-    await mysql.raw('insert t_answer_his (paper_id,openid,answer,god_on,spend,listen_1,listen_2,listen_3,listen_4) values(?,?,?,?,?,?,?,?,?)on duplicate key update answer=?,spend=?', [paper_id,openid,answer,god_on,spend,listen_1,listen_2,listen_3,listen_4, answer,spend])
+    await mysql.raw('insert t_answer_his (paper_id,openid,answer,god_on,spend,listen_1,listen_2,listen_3,listen_4) values(?,?,?,?,?,?,?,?,?)', [paper_id,openid,answer,god_on,spend,listen_1,listen_2,listen_3,listen_4,])
     
     ctx.state.data = answer
 }

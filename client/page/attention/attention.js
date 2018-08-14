@@ -56,7 +56,7 @@ Page({
           var result = res.data.data
           console.log(result)
           var _url = '../question/question?paper_id=' + paper_id + "&god_on=" + god_on
-          if (result.length > 0){
+          if (result && result.length > 0){
             var answer_his = result[0]
             var answer_count = answer_his.answer.split(";").length
 
@@ -82,7 +82,7 @@ Page({
                     })
                   }else{
                       wx.navigateTo({
-                        url: _url
+                        url: _url + "&cover=1"
                       })
                   }
               }

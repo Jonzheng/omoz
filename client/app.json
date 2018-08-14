@@ -5,6 +5,7 @@
     "page/paper/paper",
     "page/attention/attention",
     "page/lab/lab",
+    "page/game/game",
     "page/question/question",
     "page/mine/mine",
     "page/logs/logs"
