@@ -37,6 +37,8 @@
     display:flex;
     flex: none;
     background-color:#fff;
+    border:1px solid #ccc;
+    box-shadow:0px 0px 10rpx #999;
     width:90rpx;
     height:90rpx;
     justify-content:center;
@@ -46,7 +48,7 @@
 .step{
     display:flex;
     flex: none;
-    background-color:#cdcdcd;
+    background-color:#dedede;
     width:76rpx;
     height:76rpx;
     border:1px solid #bbb;
@@ -54,9 +56,21 @@
     border-radius: 5rpx;
     justify-content:center;
     align-items:center;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.step-kata{
+    border:1px solid #337ab7;
+    box-shadow:0px 0px 10rpx #337ab7;
 }
 
 .step-hover{
     transform: scale(1.1, 1.1);
-    box-shadow: 0 0 10px rgba(0, 0, 255, 0.795);
+    box-shadow: 0 0 10px rgba(0, 0, 255, 0.5);
+}
+
+.step-active{
+    transform: scale(1.12, 1.12);
+    box-shadow: 0 0 10px rgba(0, 0, 255, 0.8);
 }
