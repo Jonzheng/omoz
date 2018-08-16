@@ -24,11 +24,20 @@ Page({
     this_rights:[],
     this_ups:[],
     this_downs:[],
+    level_box:"level-1",
+    level:1,
+    spin_count:0,
+    rest_count:72,
   },
-  loadGome: function(new_fields){
+  loadLevel1: function(new_fields){
     var that = this
     var fields = []
-    that.setData({fields})
+    that.setData({
+      fields,
+      level:1,
+      spin_count:0,
+      rest_count:72,
+    })
     var it = setInterval(function(){
       var step = new_fields.shift()
       if (!step) clearInterval(it)
@@ -107,7 +116,7 @@ Page({
       new_fields.push(rows)
     }
 
-    this.loadGome(new_fields)
+    this.loadLevel1(new_fields)
   },
 
   onLoad: function () {
@@ -265,14 +274,20 @@ isNext: function(old_row, old_col, this_row, this_col){
 hideBoth: function(old_row, old_col, this_row, this_col, steps){
   var fields = this.data.fields
   if (fields[old_row][old_col]["roma"] == fields[this_row][this_col]["roma"]){
-    this.passStep(steps)
+    var both = [old_row+","+old_col, this_row+","+this_col]
+    steps = steps.concat(both)
     fields[old_row][old_col]["status"] = 0
     fields[this_row][this_col]["status"] = 0
+
+    //kata&hira==2
+    var degree = 2
+    if (fields[old_row][old_col]["type"] == fields[this_row][this_col]["type"]) degree = 1
+    this.passStep(steps, degree)
   }
   this.setData({fields})
 },
 
-passStep: function(steps){
+passStep: function(steps, degree){
   var fields = this.data.fields
   for (let step of steps){
     var rc = step.split(",")
@@ -280,8 +295,20 @@ passStep: function(steps){
     var col = rc[1]
     console.log(step)
     fields[row][col]["on"] = !fields[row][col]["on"]
+    //记录分数用
+    var spin_count = this.data.spin_count
+    var rest_count = this.data.rest_count
+    rest_count -= 2
+    spin_count += steps.length * degree
   }
-  this.setData({fields})
+  this.setData({
+    fields,
+    spin_count,
+    rest_count
+  })
+
+  //等级2-恢复
+  if (rest_count == 0) this.loadLevel2()
 },
 
 initTargetPoint: function(this_row, this_col){
@@ -332,7 +359,6 @@ initTargetPoint: function(this_row, this_col){
       var steps = []
       if (this.isNext(old_row, old_col, this_row, this_col)){
           console.log("is next")
-          var steps = [old_row+","+old_col, this_row+","+this_col]
           this.hideBoth(old_row, old_col, this_row, this_col, steps)
           return
       }
@@ -476,6 +502,44 @@ initTargetPoint: function(this_row, this_col){
     }
     this.setData({fields})
 
+  },
+
+  //---------------等级2-------------
+  loadLevel2: function(){
+    this.setData({
+      level:2,
+    })
+  },
+
+  link2:function(e){
+    console.log("link2")
+    var currData = e.currentTarget.dataset
+    var status = currData.status
+    if (status == 0) return
+    var bucket = this.data.bucket
+    var fields = this.data.fields
+    var row = currData.row
+    var col = currData.col
+    
+    fields[row][col]["active"] = true
+    if (bucket.length > 0){
+        var olds = bucket.shift()
+        console.log(old_row,"-",old_col)
+        var old_row = olds[0]
+        var old_col = olds[1]
+        fields[old_row][old_col]["active"] = false
+        if (old_row+""+old_col != row+""+col){
+          bucket.push([row,col])
+          this.linkDirect(old_row, old_col, row, col)
+        }
+    }else{
+      bucket.push([row,col])
+    }
+    
+    for (let bk of bucket){
+      console.log(bk)
+    }
+    this.setData({fields,bucket})
   }
 
 })

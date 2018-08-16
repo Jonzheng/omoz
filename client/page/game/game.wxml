@@ -1,27 +1,42 @@
 <view class="page">
     <view class='title-line'></view>
-    <view class='title-1' bindtap="initGame">「50_Game」</view>
+    <view class='title-1' bindtap="initGame">「{{spin_count}}」</view>
     <view class='title-line'></view>
 
     <view class='box-body'>
         <view class="box-link">
 
             <block wx:for="{{fields}}" wx:key="mkey" wx:for-index="idx">
-                <template is="temp-row" data="{{item,idx}}"/>
+                <template is="{{level_box}}" data="{{item,idx}}"/>
             </block>
 
         </view>
     </view>
 </view>
 
-<template name="temp-row">
+<template name="level-1">
     <view class="box-row">
         <block wx:for="{{item}}" wx:key="mkey" wx:for-index="idx">
             <view class='step-out' data-row="{{item.row}}" data-col="{{item.col}}" data-roma="{{item.roma}}"
                 data-status="{{item.status}}" bindtap="goLink">
-                <view class='step {{item.on ? "step-on":"step-off"}} {{item.status == 0 ? "step-boom":""}} {{item.type == "kata" ? "step-kata":""}} {{item.active ? "step-active":""}}'
-                hover-class='step-hover' >{{item.status == 0 ? "":item.word}}
+                <view class='step {{item.on ? "step-on":"step-off"}} {{item.status == 0 ? "rt-90":""}} {{item.type == "kata" ? "step-kata":""}} {{item.active ? "step-active":""}}'
+                hover-class='step-hover' >
+                <view class='step-word setp-show-2'>{{item.status == 0 ? "":item.word}}</view>
                 </view>
+            </view>
+        </block>
+    </view>
+</template>
+
+<template name="level-2">
+    <view class="box-row">
+        <block wx:for="{{item}}" wx:key="mkey" wx:for-index="idx">
+            <view class='step-out-2'
+                data-row="{{item.row}}" data-col="{{item.col}}"
+                data-roma="{{item.roma}}" data-status="{{item.status}}" bindtap="link2">
+                    <view class='step-2 {{item.on ? "step-on":"step-off"}}'>
+                        <view class='step-word {{item.status==0 || item.active? "setp-show-2":"setp-hide-2"}}' hover-class='step-hover'>{{item.word}}</view>
+                    </view>
             </view>
         </block>
     </view>
