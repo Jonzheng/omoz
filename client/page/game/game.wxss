@@ -15,22 +15,20 @@
 }
 
 .box-body {
-    padding: 6rpx 6rpx;
+    padding: 5rpx 5rpx;
 }
 
 .box-link{
     display: flex;
     flex-direction:column;
-    height: 730rpx;
-    width: 730rpx;
-    border: 1px solid #ccc;
-    border-radius: 6rpx;
+    height: 728rpx;
+    width: 728rpx;
 }
 
 .box-row{
     display: flex;
     flex: none;
-    height: 90rpx;
+    height: 88rpx;
 }
 
 .step-out{
@@ -39,8 +37,8 @@
     background-color:#fff;
     border:1px solid #ccc;
     box-shadow:0px 0px 10rpx #999;
-    width:90rpx;
-    height:90rpx;
+    width:88rpx;
+    height:88rpx;
     justify-content:center;
     align-items:center;
 }
@@ -51,26 +49,58 @@
     background-color:#dedede;
     width:76rpx;
     height:76rpx;
-    border:1px solid #bbb;
+    border:1px solid #999;
     box-shadow:0px 0px 10rpx #666;
     border-radius: 5rpx;
     justify-content:center;
     align-items:center;
     font-weight: bold;
     font-size: 16px;
+    color: #555;
 }
 
 .step-kata{
-    border:1px solid #337ab7;
-    box-shadow:0px 0px 10rpx #337ab7;
+    color: #337ab7;
 }
 
 .step-hover{
     transform: scale(1.1, 1.1);
-    box-shadow: 0 0 10px rgba(0, 0, 255, 0.5);
+    box-shadow: 0 0 20rpx rgba(0, 0, 255, 0.5);
 }
 
 .step-active{
     transform: scale(1.12, 1.12);
-    box-shadow: 0 0 10px rgba(0, 0, 255, 0.8);
+    box-shadow: 0 0 20rpx rgba(0, 0, 255, 0.6);
+}
+
+.step-on{
+    animation: ke-on 0.6s ease-in;
+}
+
+.step-off{
+    animation: ke-off 0.6s ease-in;
+}
+
+@keyframes ke-on{
+    0%{
+        transform: rotate(0deg);
+    }
+    50%{
+        opacity: 0.8;
+    }
+    100%{
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes ke-off{
+    0%{
+        transform: rotate(0deg);
+    }
+    50%{
+        opacity: 0.8;
+    }
+    100%{
+        transform: rotate(-360deg);
+    }
 }

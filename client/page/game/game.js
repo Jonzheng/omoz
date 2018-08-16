@@ -25,17 +25,28 @@ Page({
     this_ups:[],
     this_downs:[],
   },
-  //
+  loadGome: function(new_fields){
+    var that = this
+    var fields = []
+    that.setData({fields})
+    var it = setInterval(function(){
+      var step = new_fields.shift()
+      if (!step) clearInterval(it)
+      console.log(step)
+      fields.push(step)
+      that.setData({fields})
+    },200)
+  },
 
-  onLoad: function () {
+  initGame: function(){
     var kanas = kana_a.concat(kana_ka).concat(kana_sa).concat(kana_ta).concat(kana_na).concat(kana_ha).concat(kana_ma).concat(kana_ya).concat(kana_ra).concat(kana_wa).concat(kana_n)
     //46
     console.log(kanas.length)
     //8x10-2x6 = 70/2 = 35
     kanas.sort(function(){ return (Math.random() - 0.5)})
     //slice splice(change origin)
-    kanas = kanas.slice(0, 12)
-    var sp = kanas.slice(0, 6)
+    kanas = kanas.slice(0, 10) //12
+    var sp = kanas.slice(0, 8) //6
     sp = sp.concat(sp) //12
     sp = sp.concat(sp) //24
     kanas = kanas.concat(kanas) //24
@@ -44,9 +55,13 @@ Page({
     kanas.sort(function(){ return (Math.random() - 0.5)})
     console.log(kanas.length)
     //var train = ["kana_a","kana_ka"]
+    this.initFields(kanas)
+  },
+
+  initFields: function(kanas){
     var train = []
     var target_pos = {}
-    var fields = []
+    var new_fields = []
     for (let row=0;row<max_row;row++){
       var rows = []
       for (let col=0;col<max_col;col++){
@@ -69,10 +84,10 @@ Page({
           hira = kana[2]
           kata = kana[3]
           word = hira
-          var idx = train.indexOf(cate)
-          if (idx != -1){
+          //var idx = train.indexOf(cate)
+          if (Math.random() > 0.9){
             type = "kata"
-            train.splice(idx, 1)
+            //train.splice(idx, 1)
             word = kata
           }
         }
@@ -89,16 +104,15 @@ Page({
         var step = {row,col,roma,word,status,type,active}
         rows.push(step)
       }
-      fields.push(rows)
+      new_fields.push(rows)
     }
 
-    for (let i of fields){
-      console.log(i)
-    }
-    this.setData({
-      fields
-    })
+    this.loadGome(new_fields)
+  },
 
+  onLoad: function () {
+    console.log("onLoad...")
+    this.initGame()
   },
 
 
@@ -108,6 +122,11 @@ Page({
 
 
   rightLink: function(begin_col, end_col, fixed_row){
+    console.log("-right")
+    var fields = this.data.fields
+    var this_lefts = this.data.this_lefts
+    var this_ups = this.data.this_ups
+    var this_downs = this.data.this_downs
     var steps = []
     var step_col = begin_col
     while (step_col < end_col){
@@ -116,75 +135,122 @@ Page({
         if (step.status == 1) break
         var row_col = step.row+","+step.col
         steps.push(row_col)
-        if (this_lefts.includes(row_col)){
-            return steps
-        }else if(this_ups.includes(row_col)){
+        var idx = this_lefts.indexOf(row_col)
+        if (idx != -1){
+          steps = steps.concat(this_lefts.slice(0, idx))
           return steps
-        }else if(this_downs.includes(row_col)){
+        }
+        idx = this_ups.indexOf(row_col)
+        if (idx != -1){
+          steps = steps.concat(this_ups.slice(0, idx))
+          return steps
+        }
+        idx = this_downs.indexOf(row_col)
+        if (idx != -1){
+          steps = steps.concat(this_downs.slice(0, idx))
           return steps
         }
     }//while end
-    return steps
+    return []
 },
 
 downLink: function(begin_row, end_row, fixed_col){
-    var steps = []
-    var step_row = begin_row
-    while (step_row < end_row){
-        step_row += 1
-        var step = fields[step_row][fixed_col]
-        if (step.status == 1) break
-        var row_col = step.row+","+step.col
-        steps.push(row_col)
-        if (this_ups.includes(row_col)){
-          return steps
-        }else if(this_lefts.includes(row_col)){
-          return steps
-        }else if(this_rights.includes(row_col)){
-          return steps
-        }
-    }//while end
-    return steps
+  console.log("-down")
+  var fields = this.data.fields
+  var this_lefts = this.data.this_lefts
+  var this_ups = this.data.this_ups
+  var this_rights = this.data.this_rights
+  var steps = []
+  var step_row = begin_row
+  while (step_row < end_row){
+      step_row += 1
+      var step = fields[step_row][fixed_col]
+      if (step.status == 1) break
+      var row_col = step.row+","+step.col
+      steps.push(row_col)
+      var idx = this_ups.indexOf(row_col)
+      if (idx != -1){
+        steps = steps.concat(this_ups.slice(0, idx))
+        return steps
+      }
+      idx = this_lefts.indexOf(row_col)
+      if (idx != -1){
+        steps = steps.concat(this_lefts.slice(0, idx))
+        return steps
+      }
+      idx = this_rights.indexOf(row_col)
+      if (idx != -1){
+        steps = steps.concat(this_rights.slice(0, idx))
+        return steps
+      }
+  }//while end
+  return []
 },
 
 leftLink: function(begin_col, end_col, fixed_row){
-    var steps = []
-    var step_col = begin_col
-    while (step_col > end_col){
-        step_col -= 1
-        var step = fields[fixed_row][step_col]
-        if (step.status == 1) break
-        var row_col = step.row+","+step.col
-        steps.push(row_col)
-        if (this_rights.includes(row_col)){
-          return steps
-        }else if(this_ups.includes(row_col)){
-          return steps
-        }else if(this_downs.includes(row_col)){
-          return steps
-        }
-    }//while end
-    return steps
+  console.log("-left")
+  var fields = this.data.fields
+  var this_downs = this.data.this_downs
+  var this_ups = this.data.this_ups
+  var this_rights = this.data.this_rights
+  var steps = []
+  var step_col = begin_col
+  while (step_col > end_col){
+      step_col -= 1
+      var step = fields[fixed_row][step_col]
+      if (step.status == 1) break
+      var row_col = step.row+","+step.col
+      steps.push(row_col)
+      var idx = this_rights.indexOf(row_col)
+      if (idx != -1){
+        steps = steps.concat(this_rights.slice(0, idx))
+        return steps
+      }
+      idx = this_ups.indexOf(row_col)
+      if (idx != -1){
+        steps = steps.concat(this_ups.slice(0, idx))
+        return steps
+      }
+      idx = this_downs.indexOf(row_col)
+      if (idx != -1){
+        steps = steps.concat(this_downs.slice(0, idx))
+        return steps
+      }
+  }//while end
+  return []
 },
 
 upLink: function(begin_row, end_row, fixed_col){
-    var steps = []
-    var step_row = begin_row
-    while (step_row > end_row){
-        step_row -= 1
-        var step = fields[step_row][fixed_col]
-        if (step.status == 1) break
-        var row_col = step.row+","+step.col
-        steps.push(row_col)
-        if (this_downs.includes(row_col)){
-          return steps
-        }else if(this_lefts.includes(row_col)){
-          return steps
-        }else if(this_rights.includes(row_col)){
-          return steps
-        }
-    }//while end
-    return steps
+  console.log("-up")
+  var fields = this.data.fields
+  var this_downs = this.data.this_downs
+  var this_lefts = this.data.this_lefts
+  var this_rights = this.data.this_rights
+  var steps = []
+  var step_row = begin_row
+  while (step_row > end_row){
+      step_row -= 1
+      var step = fields[step_row][fixed_col]
+      if (step.status == 1) break
+      var row_col = step.row+","+step.col
+      steps.push(row_col)
+      var idx = this_downs.indexOf(row_col)
+      if (idx != -1){
+        steps = steps.concat(this_downs.slice(0, idx))
+        return steps
+      }
+      idx = this_lefts.indexOf(row_col)
+      if (idx != -1){
+        steps = steps.concat(this_lefts.slice(0, idx))
+        return steps
+      }
+      idx = this_rights.indexOf(row_col)
+      if (idx != -1){
+        steps = steps.concat(this_rights.slice(0, idx))
+        return steps
+      }
+  }//while end
+  return []
 },
 isNext: function(old_row, old_col, this_row, this_col){
     if (old_col == this_col && Math.abs(old_row - this_row) == 1){
@@ -196,13 +262,29 @@ isNext: function(old_row, old_col, this_row, this_col){
     return false
 },
 
-hideBoth: function(old_row, old_col, this_row, this_col){
+hideBoth: function(old_row, old_col, this_row, this_col, steps){
   var fields = this.data.fields
-  fields[old_row][old_col]["active"] = false
-  fields[this_row][this_col]["status"] = 0
-  //this.setData({fields})
+  if (fields[old_row][old_col]["roma"] == fields[this_row][this_col]["roma"]){
+    this.passStep(steps)
+    fields[old_row][old_col]["status"] = 0
+    fields[this_row][this_col]["status"] = 0
+  }
+  this.setData({fields})
 },
-initTargetPoint: function(old_row, old_col, this_row, this_col){
+
+passStep: function(steps){
+  var fields = this.data.fields
+  for (let step of steps){
+    var rc = step.split(",")
+    var row = rc[0]
+    var col = rc[1]
+    console.log(step)
+    fields[row][col]["on"] = !fields[row][col]["on"]
+  }
+  this.setData({fields})
+},
+
+initTargetPoint: function(this_row, this_col){
   var fields = this.data.fields
   var this_lefts = []
   var this_rights = []
@@ -217,7 +299,7 @@ initTargetPoint: function(old_row, old_col, this_row, this_col){
       this_lefts.push(step.row+","+step.col)
   }
   step_col = this_col
-  while (step_col < col_max-1){
+  while (step_col < max_col-1){
       step_col += 1
       var step = fields[this_row][step_col]
       if (step.status == 1) break
@@ -231,7 +313,7 @@ initTargetPoint: function(old_row, old_col, this_row, this_col){
       this_ups.push(step.row+","+step.col)
   }
   step_row = this_row
-  while (step_row < row_max-1){
+  while (step_row < max_row-1){
       step_row += 1
       var step = fields[step_row][this_col]
       if (step.status == 1) break
@@ -246,37 +328,40 @@ initTargetPoint: function(old_row, old_col, this_row, this_col){
 },
 
   linkDirect: function(old_row, old_col, this_row, this_col){
-      var linked = isNext(old_row, old_col, this_row, this_col)
-      if (linked){
+      var fields = this.data.fields
+      var steps = []
+      if (this.isNext(old_row, old_col, this_row, this_col)){
           console.log("is next")
-          this.hideBoth(old_row, old_col, this_row, this_col)
+          var steps = [old_row+","+old_col, this_row+","+this_col]
+          this.hideBoth(old_row, old_col, this_row, this_col, steps)
           return
       }
-      this.initTargetPoint(old_row, old_col, this_row, this_col)
+      this.initTargetPoint(this_row, this_col)
       //从old_开始寻路
-      console.log("右")
-      var steps = this.rightLink(old_col, this_col, old_row)
-      if(steps,length == 0) {
-          console.log("下")
-          steps = this.downLink(old_row, this_row, old_col)
+      steps = this.rightLink(old_col, this_col, old_row)
+      if(steps.length > 0) {
+        this.hideBoth(old_row, old_col, this_row, this_col, steps)
+        return
       }
-      if (steps,length == 0){
-          console.log("左")
-          steps = this.leftLink(old_col, this_col, old_row)
-      }                        
-      if (steps,length == 0){
-          console.log("上")
-          steps = this.upLink(old_row, this_row, old_col)
+      steps = this.downLink(old_row, this_row, old_col)
+      if (steps.length > 0){
+        this.hideBoth(old_row, old_col, this_row, this_col, steps)
+        return
       }
-      if (steps,length == 0){
-          console.log("二次")
-          //右-上/下
-          //左-上/下
-          //下-左/右
-          //上-左/右
+      steps = this.leftLink(old_col, this_col, old_row)
+      if (steps.length > 0){
+        this.hideBoth(old_row, old_col, this_row, this_col, steps)
+        return
+      }
+      steps = this.upLink(old_row, this_row, old_col)
+      if (steps.length > 0){
+        this.hideBoth(old_row, old_col, this_row, this_col, steps)
+        return
+      }
+          console.log("2-right")
           var steps_sec =[]
           var step_col = old_col
-          while (step_col < col_max - 1){
+          while (step_col < max_col - 1){
               step_col += 1
               var step = fields[old_row][step_col]
               if (step.status == 1) break
@@ -285,17 +370,18 @@ initTargetPoint: function(old_row, old_col, this_row, this_col){
               //(begin_row, end_row, fixed_col)
               steps_sec = this.upLink(step.row, this_row, step.col)
               if (steps_sec.length > 0) {
-                  console.log(steps.concat(steps_sec))
-                  break
+                  steps = steps.concat(steps_sec)
+                  this.hideBoth(old_row, old_col, this_row, this_col, steps)
+                  return
               }
               steps_sec = this.downLink(step.row, this_row, step.col)
               if (steps_sec.length > 0) {
-                console.log(steps.concat(steps_sec))
-                break
+                steps = steps.concat(steps_sec)
+                this.hideBoth(old_row, old_col, this_row, this_col, steps)
+                return
               }
           }
-      }
-      if (steps,length == 0){
+          console.log("2-left")
           steps = []
           var step_col = old_col
           while (step_col > 0){
@@ -307,20 +393,21 @@ initTargetPoint: function(old_row, old_col, this_row, this_col){
               //(begin_row, end_row, fixed_col)
               steps_sec = this.upLink(step.row, this_row, step.col)
               if (steps_sec.length > 0) {
-                  console.log(steps.concat(steps_sec))
-                  break
+                steps = steps.concat(steps_sec)
+                  this.hideBoth(old_row, old_col, this_row, this_col, steps)
+                  return
               }
               steps_sec = this.downLink(step.row, this_row, step.col)
               if (steps_sec.length > 0) {
-                console.log(steps.concat(steps_sec))
-                break
+                steps = steps.concat(steps_sec)
+                this.hideBoth(old_row, old_col, this_row, this_col, steps)
+                return
               }
           }
-      }
-      if (steps,length == 0){
+          console.log("2-down")
           steps = []
           var step_row = old_row
-          while (step_row < row_max - 1){
+          while (step_row < max_row - 1){
               step_row += 1
               var step = fields[step_row][old_col]
               if (step.status == 1) break
@@ -329,17 +416,18 @@ initTargetPoint: function(old_row, old_col, this_row, this_col){
               //(begin_col, end_col, fixed_row)
               steps_sec = this.leftLink(step.col, this_col, step.row)
               if (steps_sec.length > 0) {
-                console.log(steps.concat(steps_sec))
-                break
+                steps = steps.concat(steps_sec)
+                this.hideBoth(old_row, old_col, this_row, this_col, steps)
+                return
               }
               steps_sec = this.rightLink(step.col, this_col, step.row)
               if (steps_sec.length > 0) {
-                console.log(steps.concat(steps_sec))
-                break
+                steps = steps.concat(steps_sec)
+                this.hideBoth(old_row, old_col, this_row, this_col, steps)
+                return
               }
           }
-      }
-      if (steps,length == 0){
+          console.log("2-up")
           steps = []
           var step_row = old_row
           while (step_row > 0){
@@ -351,16 +439,17 @@ initTargetPoint: function(old_row, old_col, this_row, this_col){
               //(begin_col, end_col, fixed_row)
               steps_sec = this.leftLink(step.col, this_col, step.row)
               if (steps_sec.length > 0) {
-                console.log(steps.concat(steps_sec))
-                break
+                steps = steps.concat(steps_sec)
+                this.hideBoth(old_row, old_col, this_row, this_col, steps)
+                return
               }
               steps_sec = this.rightLink(step.col, this_col, step.row)
               if (steps_sec.length > 0) {
-                console.log(steps.concat(steps_sec))
-                break
+                steps = steps.concat(steps_sec)
+                this.hideBoth(old_row, old_col, this_row, this_col, steps)
+                return
               }
           }
-      }
   },
   goLink: function(e){
     var currData = e.currentTarget.dataset
@@ -370,26 +459,23 @@ initTargetPoint: function(old_row, old_col, this_row, this_col){
     var fields = this.data.fields
     var row = currData.row
     var col = currData.col
+    
     fields[row][col]["active"] = true
     if (bucket.length == 1){
         var olds = bucket.pop()
+        var old_row = olds[0]
+        var old_col = olds[1]
+
+        fields[old_row][old_col]["active"] = false
+        fields[row][col]["active"] = false
+
+      //顺时针延伸-是否直接包含目标点坐标
+      this.linkDirect(old_row, old_col, row, col)
     }else{
-        bucket.push([row,col])
+      bucket.push([row,col])
     }
     this.setData({fields})
-    var old_row = olds[0]
-    var old_col = olds[1]
-    var this_row = row
-    var this_col = col
 
-    //顺时针延伸-是否直接包含目标点坐标
-    this.linkDirect(old_row, old_col, this_row, this_col)
-
-    //如果找到路径
-    setTimeout(function(){
-      fields[row][col]["active"] = false
-      this.setData({fields})
-    },500)
   }
 
 })

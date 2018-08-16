@@ -295,3 +295,8 @@ form{
   transform: rotate(270deg);
   transition: transform 0.3s ease-in;
 }
+
+.step-boom{
+  transform: rotate(270deg);
+  transition: transform 0.6s ease-in;
+}

@@ -17,11 +17,11 @@
             <view class="cube depth">
             
                 <navigator url="../game/game" hover-class="cube-view">
-                    <view class="cube-view front-pane">实验室简介</view>
+                    <view class="cube-view front-pane">游戏計画</view>
                 </navigator>
 
                 <navigator url="../game/game" hover-class="cube-view">
-                    <view class="cube-view back-pane">五十音</view>
+                    <view class="cube-view back-pane">游戏計画</view>
                 </navigator>
 
                 <view class="cube-view top-pane">卍</view>

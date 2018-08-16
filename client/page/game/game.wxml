@@ -1,6 +1,6 @@
 <view class="page">
     <view class='title-line'></view>
-    <view class='title-1'>「50_Game」</view>
+    <view class='title-1' bindtap="initGame">「50_Game」</view>
     <view class='title-line'></view>
 
     <view class='box-body'>
@@ -17,11 +17,10 @@
 <template name="temp-row">
     <view class="box-row">
         <block wx:for="{{item}}" wx:key="mkey" wx:for-index="idx">
-            <view class="step-out" bindtap="goLink">
-                <view class='step {{item.type == "kata" ? "step-kata":""}} {{item.active ? "step-active":""}}'
-                data-row="{{item.row}}" data-col="{{item.col}}"
-                data-roma="{{item.roma}}"
-                hover-class='{{item.status == 1 ? "step-hover":""}}' >{{item.status == 0 ? "":item.word}}
+            <view class='step-out' data-row="{{item.row}}" data-col="{{item.col}}" data-roma="{{item.roma}}"
+                data-status="{{item.status}}" bindtap="goLink">
+                <view class='step {{item.on ? "step-on":"step-off"}} {{item.status == 0 ? "step-boom":""}} {{item.type == "kata" ? "step-kata":""}} {{item.active ? "step-active":""}}'
+                hover-class='step-hover' >{{item.status == 0 ? "":item.word}}
                 </view>
             </view>
         </block>
