@@ -69,14 +69,14 @@ Page({
 
   initFields: function(kanas){
     var train = []
-    var target_pos = {}
+    var pos_map = {}
     var new_fields = []
     for (let row=0;row<max_row;row++){
       var rows = []
       for (let col=0;col<max_col;col++){
         var kana = ""
-        var space1 = (row == 2 && col > 0 && col < max_col-1)
-        var space2  = (row == 7 && col > 2 && col < 5)
+        var space1 = (row == 6 && col > 0 && col < max_col-1)
+        var space2  = (row == 2 && col > 2 && col < 5)
         if (!space1 && !space2) kana = kanas.pop()
         var active = false
         var type = "hira"
@@ -94,20 +94,18 @@ Page({
           kata = kana[3]
           word = hira
           //var idx = train.indexOf(cate)
-          if (Math.random() > 0.9){
+          if (Math.random() > 0.9 && this.data.level==2){
             type = "kata"
             //train.splice(idx, 1)
             word = kata
           }
-        }
+        } //if (kana) end
 
         //couple
-        var cp = target_pos[roma]
-        if (cp){
-          cp.push(row+","+col)
-          target_pos[roma] = cp
+        if(pos_map[roma]){
+          pos_map[roma].push([row,col])
         }else{
-          target_pos[roma] = [cp]
+          pos_map[roma] = [[row,col]]
         }
 
         var step = {row,col,roma,word,status,type,active}
@@ -116,6 +114,7 @@ Page({
       new_fields.push(rows)
     }
 
+    this.setData({pos_map})
     this.loadLevel1(new_fields)
   },
 
@@ -270,6 +269,75 @@ isNext: function(old_row, old_col, this_row, this_col){
     }
     return false
 },
+autoLink: function(this_row, this_col){
+  var fields = this.data.fields
+  var pos_map = this.data.pos_map
+
+  var roma = fields[this_row][this_col]["roma"]
+  var pos = pos_map[roma]
+  //距离排序--逆序
+  pos.sort(function(a,b){return (a[0]-this_row)**2+(a[1]-this_col)**2 < (b[0]-this_row)**2+(b[1]-this_col)**2})
+  console.log("pos:")
+  console.log(pos)
+  for(let p of pos){
+    console.log(p[0],p[1])
+  }
+  this.setData({fields})
+  console.log("up:")
+  //up_pos
+  if (this_row > 0){
+    console.log("up_pos")
+    var up_row = this_row - 1
+    var up_roma = fields[up_row][this_col]["roma"]
+    var up_pos = pos_map[up_roma]
+    up_pos.sort(function(a,b){return (a[0]-up_row)**2+(a[1]-this_col)**2 < (b[0]-up_row)**2+(b[1]-this_col)**2})
+    for(let p of up_pos){
+      console.log(p)
+    }
+  }
+  this.setData({fields})
+  return
+
+  //down_pos
+  if (this_row < max_row-1){
+    console.log("down_pos")
+    var down_row = this_row + 1
+    var down_roma = fields[down_row][this_col]["roma"]
+    var down_pos = pos_map[down_roma]
+    down_pos.sort(function(a,b){return (a[0]-down_row)**2+(a[1]-this_col)**2 < (b[0]-down_row)**2+(b[1]-this_col)**2})
+    for(let p of down_pos){
+      console.log(p)
+      fields[p[0]][p[1]]["active"] = true
+    }
+  }
+
+  //left_pos
+  if (this_col > 0){
+    console.log("left_pos")
+    var left_col = this_col - 1
+    var left_roma = fields[this_row][left_col]["roma"]
+    var left_pos = pos_map[left_roma]
+    left_pos.sort(function(a,b){return (a[0]-this_row)**2+(a[1]-left_col)**2 < (b[0]-this_row)**2+(b[1]-left_col)**2})
+    for(let p of left_pos){
+      console.log(p)
+      fields[p[0]][p[1]]["active"] = true
+    }
+  }
+
+  //right_pos
+  if (this_col < max_col-1){
+    console.log("right_pos")
+    var right_col = this_col + 1
+    var right_roma = fields[this_row][right_col]["roma"]
+    var right_pos = pos_map[right_roma]
+    right_pos.sort(function(a,b){return (a[0]-this_row)**2+(a[1]-right_col)**2 < (b[0]-this_row)**2+(b[1]-right_col)**2})
+    for(let p of right_pos){
+      console.log(p)
+      fields[p[0]][p[1]]["active"] = true
+    }
+  }
+
+},
 
 hideBoth: function(old_row, old_col, this_row, this_col, steps){
   var fields = this.data.fields
@@ -283,6 +351,10 @@ hideBoth: function(old_row, old_col, this_row, this_col, steps){
     var degree = 2
     if (fields[old_row][old_col]["type"] == fields[this_row][this_col]["type"]) degree = 1
     this.passStep(steps, degree)
+
+    if(steps.length > 5){
+      this.autoLink(this_row, this_col)
+    }
   }
   this.setData({fields})
 },
@@ -360,29 +432,29 @@ initTargetPoint: function(this_row, this_col){
       if (this.isNext(old_row, old_col, this_row, this_col)){
           console.log("is next")
           this.hideBoth(old_row, old_col, this_row, this_col, steps)
-          return
+          return true
       }
       this.initTargetPoint(this_row, this_col)
       //从old_开始寻路
       steps = this.rightLink(old_col, this_col, old_row)
       if(steps.length > 0) {
         this.hideBoth(old_row, old_col, this_row, this_col, steps)
-        return
+        return true
       }
       steps = this.downLink(old_row, this_row, old_col)
       if (steps.length > 0){
         this.hideBoth(old_row, old_col, this_row, this_col, steps)
-        return
+        return true
       }
       steps = this.leftLink(old_col, this_col, old_row)
       if (steps.length > 0){
         this.hideBoth(old_row, old_col, this_row, this_col, steps)
-        return
+        return true
       }
       steps = this.upLink(old_row, this_row, old_col)
       if (steps.length > 0){
         this.hideBoth(old_row, old_col, this_row, this_col, steps)
-        return
+        return true
       }
           console.log("2-right")
           var steps_sec =[]
@@ -398,13 +470,13 @@ initTargetPoint: function(this_row, this_col){
               if (steps_sec.length > 0) {
                   steps = steps.concat(steps_sec)
                   this.hideBoth(old_row, old_col, this_row, this_col, steps)
-                  return
+                  return true
               }
               steps_sec = this.downLink(step.row, this_row, step.col)
               if (steps_sec.length > 0) {
                 steps = steps.concat(steps_sec)
                 this.hideBoth(old_row, old_col, this_row, this_col, steps)
-                return
+                return true
               }
           }
           console.log("2-left")
@@ -421,13 +493,13 @@ initTargetPoint: function(this_row, this_col){
               if (steps_sec.length > 0) {
                 steps = steps.concat(steps_sec)
                   this.hideBoth(old_row, old_col, this_row, this_col, steps)
-                  return
+                  return true
               }
               steps_sec = this.downLink(step.row, this_row, step.col)
               if (steps_sec.length > 0) {
                 steps = steps.concat(steps_sec)
                 this.hideBoth(old_row, old_col, this_row, this_col, steps)
-                return
+                return true
               }
           }
           console.log("2-down")
@@ -444,13 +516,13 @@ initTargetPoint: function(this_row, this_col){
               if (steps_sec.length > 0) {
                 steps = steps.concat(steps_sec)
                 this.hideBoth(old_row, old_col, this_row, this_col, steps)
-                return
+                return true
               }
               steps_sec = this.rightLink(step.col, this_col, step.row)
               if (steps_sec.length > 0) {
                 steps = steps.concat(steps_sec)
                 this.hideBoth(old_row, old_col, this_row, this_col, steps)
-                return
+                return true
               }
           }
           console.log("2-up")
@@ -467,17 +539,19 @@ initTargetPoint: function(this_row, this_col){
               if (steps_sec.length > 0) {
                 steps = steps.concat(steps_sec)
                 this.hideBoth(old_row, old_col, this_row, this_col, steps)
-                return
+                return true
               }
               steps_sec = this.rightLink(step.col, this_col, step.row)
               if (steps_sec.length > 0) {
                 steps = steps.concat(steps_sec)
                 this.hideBoth(old_row, old_col, this_row, this_col, steps)
-                return
+                return true
               }
           }
+      return false
   },
   goLink: function(e){
+    var that = this
     var currData = e.currentTarget.dataset
     var status = currData.status
     if (status == 0) return
