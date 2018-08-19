@@ -527,11 +527,12 @@ Page({
         var openid = App.globalData.openid
         var file_id = this.data.file_id
         var userInfo = App.globalData.userInfo
-        var nickName
+        var showName
         var avatarUrl
         if (userInfo){
-            nickName = userInfo.nickName
+            showName = userInfo.showName
             avatarUrl = userInfo.avatarUrl
+
         }
         console.log(userInfo)
         console.log("data:")
@@ -539,7 +540,7 @@ Page({
 
         var mine = {
             heart: 1,
-            nick_name: nickName,
+            show_name: showName,
             avatar_url: avatarUrl,
             listenStatus: "listen-off",
             boxStyle : "btn-play-box",

@@ -6,6 +6,7 @@
     "page/attention/attention",
     "page/lab/lab",
     "page/game/game",
+    "page/game_link/link",
     "page/question/question",
     "page/mine/mine",
     "page/logs/logs"
@@ -34,6 +35,12 @@
         "selectedIconPath": "image/icon_component_HL.png",
         "text": "式神语录"
         },
+        {
+          "pagePath": "page/game/game",
+          "iconPath": "image/icon_component.png",
+          "selectedIconPath": "image/icon_component_HL.png",
+          "text": "游戏計画"
+          },
         {
         "pagePath": "page/mine/mine",
         "iconPath": "image/icon_API.png",

@@ -23,9 +23,11 @@ Page({
             },
             success: function (res) {
                 console.log('updateLogin:')
-                console.log(res)
-                var openid = res.data.data
-                App.globalData.openid = openid
+                
+                var userInfo = res.data.data[0]
+                console.log(userInfo)
+                App.globalData.openid = userInfo.openid
+                App.globalData.showName = userInfo.show_name
             },
             fail: (res) => {
                 console.log('fail:')

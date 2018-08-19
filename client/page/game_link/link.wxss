@@ -1,0 +1,384 @@
+
+.top-box{
+    display: flex;
+    align-items: center;
+    padding: 20rpx 20rpx;
+    height: 66rpx;
+}
+
+.top-label{
+    position: relative;
+    top:0;
+    font-weight: bold;
+    color: #999;
+    transition: all 0.2s ease-in;
+}
+
+.top-value{
+    position: relative;
+    top:0;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #337ab7;
+    margin: 0 20rpx;
+    transition: all 0.3s ease-in;
+}
+
+.top-setting{
+    position: relative;
+    left: 150rpx;
+
+    width: 60rpx;
+    height: 60rpx;
+    border: 3rpx solid #fff;
+    box-shadow:0px 0px 10rpx #fff;
+    border-radius: 50%;
+    transition: all 0.3s ease-in;
+}
+
+.setting-box{
+    display: flex;
+    flex-direction:column;
+    border: 1rpx solid #bbb;
+    box-shadow:0px 0px 10rpx #eee;
+    padding: 5rpx 5rpx;
+}
+
+.top-option{
+    position: relative;
+    top:0;
+    color: #999;
+    margin: 0 10rpx;
+    border-bottom: 6rpx solid #eee;
+    border-radius: 4px;
+    opacity: 1;
+    transition: all 0.3s ease-in;
+}
+
+.op-hide{
+    opacity: 0;
+    top:-220rpx;
+    transition: all 0.3s ease-in;
+}
+
+.option-active{
+    border-radius: 4px;
+    border-bottom: 6rpx solid #bbb;
+    transition: all 0.3s ease-in;
+}
+
+.box-rank{
+    display: flex;
+    flex-direction:column;
+}
+
+.row-title{
+    display: flex;
+    flex: none;
+    height: 66rpx;
+    color: #bbb;
+}
+
+.row-kana{
+    display: flex;
+}
+
+.setting-reset{
+    position: relative;
+    left: 300rpx;
+    padding: 18rpx 30rpx;
+    border: 1rpx solid #ddd;
+    border-radius: 6rpx;
+    display: flex;
+    align-items: center;
+}
+
+.setting-meun{
+    margin-top: 30rpx;
+    border-top: 1rpx solid #eee;
+    display: flex;
+    align-items: center;
+}
+
+.col-kana{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width:92rpx;
+
+    background-color:#dedede;
+    border:1px solid #fff;
+    box-shadow:0px 0px 10rpx #fff inset;
+    border-radius: 5rpx;
+    margin: 6rpx 6rpx;
+}
+
+.col-hira{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #555;
+    font-size: 22px;
+}
+
+.col-kama{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction:column;
+    font-size: 14px;
+    color: #888;
+}
+
+.row-player{
+    display: flex;
+    flex: none;
+    height: 88rpx;
+    border: 1rpx solid #fff;
+    box-shadow:0px 0px 10rpx #1409a570;
+    color: #aaa;
+}
+
+.rank-value{
+    width: 180rpx;
+    display: flex;
+    border: rpx solid #ddd;
+    box-shadow:0px 0px 10rpx #ddd;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.user-avatar{
+    margin: 0 10rpx;
+    flex: none;
+    width: 60rpx;
+    height: 60rpx;
+    border: 1rpx solid #fff;
+    box-shadow:0px 0px 10rpx #fff;
+    border-radius: 6rpx;
+}
+
+.user-name{
+    margin: 6rpx 6rpx;
+    display: flex;
+    color: #999;
+    font-size: 14px;
+}
+
+.rank-no{
+    width: 100rpx;
+}
+
+.rank-player{
+    width: 380rpx;
+}
+
+.title-line {
+    margin:10rpx auto;
+    width:720rpx;
+    height:6rpx;
+    background-color:#bbb;
+}
+
+.box-body {
+    display: flex;
+    flex-direction:column;
+    padding: 5rpx 5rpx;
+    z-index: 9px;
+}
+
+.box-link{
+    display: flex;
+    flex-direction:column;
+    width: 728rpx;
+}
+
+.box-row{
+    display: flex;
+    flex: none;
+    height: 88rpx;
+}
+
+.box-row{
+    display: flex;
+    flex: none;
+    height: 88rpx;
+}
+
+.step-out{
+    display:flex;
+    flex: none;
+    background-color:#fff;
+    border:1px solid #ccc;
+    box-shadow:0px 0px 10rpx #999;
+    width:88rpx;
+    height:88rpx;
+    justify-content:center;
+    align-items:center;
+}
+
+.step-out-2{
+    display:flex;
+    flex: none;
+    background-color:#fff;
+    border:1px solid #ccc;
+    box-shadow:0px 0px 10rpx #bbb;
+    width:88rpx;
+    height:88rpx;
+    justify-content:center;
+    align-items:center;
+
+}
+
+.step-hover-2{
+    border:1px solid #555;
+    box-shadow: 0 0 20rpx rgba(0, 0, 255, 0.5);
+}
+
+.setp-show-2{
+    animation: 0.6s ke-show ease-out;
+    animation-fill-mode: forwards;
+}
+
+.setp-hide-2{
+    animation: 1s ke-hide ease-out;
+    animation-fill-mode: forwards;
+}
+
+.step-2{
+    display:flex;
+    flex: none;
+    background-color:#dedede;
+    width:76rpx;
+    height:76rpx;
+    border:1px solid #999;
+    box-shadow:0px 0px 10rpx #666;
+    border-radius: 5rpx;
+    justify-content:center;
+    align-items:center;
+    font-weight: bold;
+    font-size: 16px;
+    color: #555;
+}
+
+.result-word{
+    display:flex;
+    flex: none;
+    justify-content:center;
+    align-items:center;
+    background-color:#cdcdcd;
+    width:76rpx;
+    height:76rpx;
+    border:1px solid #fff;
+    box-shadow:0px 0px 10rpx #fff inset;
+    border-radius: 5rpx;
+    color: #666;
+}
+
+.step-word{
+    display:flex;
+    flex: none;
+    justify-content:center;
+    align-items:center;
+    background-color:#cdcdcd;
+    width:76rpx;
+    height:76rpx;
+    border:1px solid #fff;
+    box-shadow:0px 0px 10rpx #fff inset;
+    border-radius: 5rpx;
+
+    transform: rotateX(180deg);
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;	/* Chrome 和 Safari */
+    perspective: 5555rpx;
+    perspective-origin: 80% 2220rpx;
+}
+
+.step{
+    display:flex;
+    flex: none;
+    background-color:#dedede;
+    width:76rpx;
+    height:76rpx;
+    border:1px solid #999;
+    box-shadow:0px 0px 10rpx #666;
+    border-radius: 5rpx;
+    justify-content:center;
+    align-items:center;
+    font-weight: bold;
+    font-size: 16px;
+    color: #555;
+}
+
+.step-color{
+    color: #337ab7;
+}
+
+.step-hover{
+    transform: scale(1.05, 1.05);
+    box-shadow: 0 0 20rpx rgba(0, 0, 255, 0.6);
+}
+
+.step-active{
+    transform: scale(1.06, 1.06);
+    box-shadow: 0 0 20rpx rgba(0, 0, 255, 0.8);
+}
+
+.step-combo{
+    transform: scale(1.1, 1.1);
+    box-shadow: 0 0 20rpx rgba(255, 0, 0, 0.616);
+}
+
+.step-on{
+    animation: ke-on 0.6s ease-in;
+}
+
+.step-off{
+    animation: ke-off 0.6s ease-in;
+}
+
+@keyframes ke-on{
+    0%{
+        transform: rotate(0deg);
+    }
+    50%{
+        opacity: 0.8;
+    }
+    100%{
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes ke-off{
+    0%{
+        transform: rotate(0deg);
+    }
+    50%{
+        opacity: 0.8;
+    }
+    100%{
+        transform: rotate(-360deg);
+    }
+}
+
+@keyframes ke-show{
+    0%{
+        transform: rotateX(180deg);
+    }
+    100%{
+        transform: rotateX(0deg);
+    }
+}
+
+@keyframes ke-hide{
+    0%{
+        transform: scale(1, 1) rotateX(0deg);
+    }
+    50%{
+        transform: scale(1, 1) rotateX(0deg);
+    }
+    100%{
+        transform: scale(0.2, 0.2) rotateX(180deg);
+    }
+}

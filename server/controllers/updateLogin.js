@@ -26,5 +26,6 @@ module.exports = async ctx => {
 
     var avatarUrl = body.avatarUrl
     if (avatarUrl) await mysql("t_user").where("openid", openid).update({ avatar_url: avatarUrl })
-    ctx.state.data = openid
+    var userInfo = await mysql('t_user').select('*').where('openid', openid)
+    ctx.state.data = userInfo
 }

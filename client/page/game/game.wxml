@@ -1,43 +1,32 @@
+<!--pages/index.wxml-->
 <view class="page">
-    <view class='title-line'></view>
-    <view class='title-1' bindtap="initGame">「{{spin_count}}」</view>
-    <view class='title-line'></view>
+    <view class='box-info'>
 
-    <view class='box-body'>
-        <view class="box-link">
+        <view class='top-box'>
+            <view class='top-value'>游戏計画</view>
+        </view>
 
-            <block wx:for="{{fields}}" wx:key="mkey" wx:for-index="idx">
-                <template is="{{level_box}}" data="{{item,idx}}"/>
-            </block>
+    </view>
 
+    <view class='box-cube'>
+        <view class="cube-wrap">
+            <view class="cube depth">
+            
+                <navigator url="../game_link/link" hover-class="cube-view">
+                    <view class="cube-view front-pane">连连看</view>
+                </navigator>
+
+                <navigator url="../game_link/link" hover-class="cube-view">
+                    <view class="cube-view back-pane">黏黏看</view>
+                </navigator>
+
+                <view class="cube-view top-pane">卍</view>
+                <view class="cube-view bottom-pane">卍</view>
+                <view class="cube-view left-pane">?</view>
+                <view class="cube-view right-pane">?</view>
+                
+            </view>
         </view>
     </view>
+
 </view>
-
-<template name="level-1">
-    <view class="box-row">
-        <block wx:for="{{item}}" wx:key="mkey" wx:for-index="idx">
-            <view class='step-out' data-row="{{item.row}}" data-col="{{item.col}}" data-roma="{{item.roma}}"
-                data-status="{{item.status}}" bindtap="goLink">
-                <view class='step {{item.on ? "step-on":"step-off"}} {{item.status == 0 ? "rt-90":""}} {{item.type == "kata" ? "step-kata":""}} {{item.active ? "step-active":""}}'
-                hover-class='step-hover' >
-                <view class='step-word setp-show-2'>{{item.status == 0 ? "":item.word}}</view>
-                </view>
-            </view>
-        </block>
-    </view>
-</template>
-
-<template name="level-2">
-    <view class="box-row">
-        <block wx:for="{{item}}" wx:key="mkey" wx:for-index="idx">
-            <view class='step-out-2'
-                data-row="{{item.row}}" data-col="{{item.col}}"
-                data-roma="{{item.roma}}" data-status="{{item.status}}" bindtap="link2">
-                    <view class='step-2 {{item.on ? "step-on":"step-off"}}'>
-                        <view class='step-word {{item.status==0 || item.active? "setp-show-2":"setp-hide-2"}}' hover-class='step-hover'>{{item.word}}</view>
-                    </view>
-            </view>
-        </block>
-    </view>
-</template>
