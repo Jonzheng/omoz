@@ -9,6 +9,7 @@
 .top-label{
     position: relative;
     top:0;
+    visibility: visible;
     font-weight: bold;
     color: #999;
     transition: all 0.2s ease-in;
@@ -17,6 +18,7 @@
 .top-value{
     position: relative;
     top:0;
+    visibility: visible;
     font-size: 1.5em;
     font-weight: bold;
     color: #337ab7;
@@ -36,7 +38,10 @@
     transition: all 0.3s ease-in;
 }
 
-.setting-box{
+.box-setting{
+    position: relative;
+    top:0;
+    visibility: visible;
     display: flex;
     flex-direction:column;
     border: 1rpx solid #bbb;
@@ -47,27 +52,42 @@
 .top-option{
     position: relative;
     top:0;
+    visibility: visible;
     color: #999;
     margin: 0 10rpx;
     border-bottom: 6rpx solid #eee;
     border-radius: 4px;
-    opacity: 1;
     transition: all 0.3s ease-in;
 }
 
-.op-hide{
-    opacity: 0;
-    top:-220rpx;
+.top-hide{
+    top: -222rpx;
+    visibility: hidden;
+    transition: all 0.3s ease-in;
+}
+
+.left-show{
+    left: 0;
+    visibility: visible;
+    transition: all 0.3s ease-in;
+}
+
+.right-show{
+    right: 0;
+    visibility: visible;
     transition: all 0.3s ease-in;
 }
 
 .option-active{
     border-radius: 4px;
-    border-bottom: 6rpx solid #bbb;
-    transition: all 0.3s ease-in;
+    border-bottom: 6rpx solid #337ab7;
+    transition: all 0.2s ease-in;
 }
 
 .box-rank{
+    position: relative;
+    top:0;
+    visibility: visible;
     display: flex;
     flex-direction:column;
 }
@@ -94,6 +114,7 @@
 }
 
 .setting-meun{
+    position: relative;
     margin-top: 30rpx;
     border-top: 1rpx solid #eee;
     display: flex;
@@ -189,6 +210,9 @@
 }
 
 .box-link{
+    position: relative;
+    top:0;
+    visibility: visible;
     display: flex;
     flex-direction:column;
     width: 728rpx;

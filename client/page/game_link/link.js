@@ -31,8 +31,10 @@ Page({
     avatarUrl:"../../image/heart_full.png",
     icon_setting:"../../image/setting.png",
     showName:"地表最强地表最强",
-    option: 1,
-    op_hide:true,
+    option: 0,
+    top_hide: false,
+    rank_hide: true,
+    setting_hide: true,
   },
 
   getKanaRows: function(kana_row){
@@ -95,7 +97,7 @@ Page({
         return
       }
       fields.push(step)
-      fields = []
+      //fields = []
       that.setData({fields})
     },200)
   },
@@ -734,15 +736,33 @@ initTargetPoint: function(this_row, this_col){
   setting:function(e){
     var currData = e.currentTarget.dataset
     var option = currData.option
-    if (option == 0){
-      var op_hide = !this.data.op_hide
-      this.setData({op_hide})
-    }else if(option == 1){
-      console.log("new")
-    }else if(option == 2){
-      console.log("new")
-    }else if(option == 3){
-      console.log("new")
+    if (option == 0){ //icon-setting
+      //toggle
+      var top_hide = !this.data.top_hide
+      var rank_hide = true
+      var setting_hide = true
+      this.setData({
+        top_hide,
+        rank_hide,
+        setting_hide,
+        option:0
+      })
+    }else if(option == 1){ //假名设定
+      var rank_hide = true
+      var setting_hide = false
+      this.setData({
+        rank_hide,
+        setting_hide,
+        option:1
+      })
+    }else if(option == 2){ //排行榜
+      var rank_hide = false
+      var setting_hide = true
+      this.setData({
+        rank_hide,
+        setting_hide,
+        option:2
+      })
     }
     
   },

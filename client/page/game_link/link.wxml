@@ -1,47 +1,47 @@
 <view class="page">
     <view class='title-line'></view>
         <view class='top-box'>
-            <view class='top-label {{!op_hide ? "op-hide":""}}'>分数:</view>
-            <view class='top-value {{!op_hide ? "op-hide":""}}'>{{spin_count}}</view>
-            <view class='top-option {{option != 1 ? "":"option-active"}} {{op_hide ? "op-hide":""}}' bindtap="setting" data-option="1">难度设定</view>
-            <view class='top-option {{option != 2 ? "":"option-active"}} {{op_hide ? "op-hide":""}}' bindtap="setting" data-option="2">排行榜</view>
-            <image class='top-setting {{op_hide ? "rt-90":""}}' src='{{icon_setting}}' bindtap="setting" data-option="0"></image>
+            <view class='top-label {{!top_hide ? "top-hide":""}}'>分数:</view>
+            <view class='top-value {{!top_hide ? "top-hide":""}}'>{{spin_count}}</view>
+            <view class='top-option {{option != 1 ? "":"option-active"}} {{top_hide ? "top-hide":""}}' bindtap="setting" data-option="1">假名设定</view>
+            <view class='top-option {{option != 2 ? "":"option-active"}} {{top_hide ? "top-hide":""}}' bindtap="setting" data-option="2">排行榜</view>
+            <image class='top-setting {{top_hide ? "rt-90":""}}' src='{{icon_setting}}' bindtap="setting" data-option="0"></image>
         </view>
     <view class='title-line'></view>
 
     <view class='box-body'>
 
-    <view class="setting-box">
+    <view class='box-setting {{setting_hide ? "top-hide":""}}'>
 
         <block wx:for="{{ks_all}}" wx:key="mkey" wx:for-index="row">
             <template is="all_kana" data="{{item,row}}"/>
         </block>
 
-    <view class="setting-meun">
+        <view class="setting-meun">
 
-        <view class='top-label'>片假名:</view>
-        <view class='col-kana {{kata_on ? "step-active":""}}' hover-class='step-hover' bindtap="switchKata">
-            <view class='col-hira {{kata_on ? "step-color":""}}'>{{kata_on ? "ア": "あ"}}</view>
-            <view class="col-kama">
-                <view class="">{{!kata_on ? "ア": "あ"}}</view>
-                <view class="">{{kata_on ? "on": "off"}}</view>
+            <view class='top-label'>片假名:</view>
+            <view class='col-kana {{kata_on ? "step-active":""}}' hover-class='step-hover' bindtap="switchKata">
+                <view class='col-hira {{kata_on ? "step-color":""}}'>{{kata_on ? "ア": "あ"}}</view>
+                <view class="col-kama">
+                    <view class="">{{!kata_on ? "ア": "あ"}}</view>
+                    <view class="">{{kata_on ? "on": "off"}}</view>
+                </view>
+            </view>
+            <view class='setting-reset' hover-class='step-hover' bindtap="resetGame">
+                重置游戏
             </view>
         </view>
-        <view class='setting-reset' hover-class='step-hover' bindtap="resetGame">
-            <view class='top-label'>重置游戏</view>
-        </view>
-    </view>
 
     </view>
 
-        <view class="box-link">
+        <view class='box-link {{top_hide ? "top-hide":""}}'>
 
             <block wx:for="{{fields}}" wx:key="mkey" wx:for-index="idx">
                 <template is="{{level_box}}" data="{{item,idx}}"/>
             </block>
 
         </view>
-        <view class="box-rank">
+        <view class='box-rank {{rank_hide ? "top-hide":""}}'>
             <view class="row-title">
                 <view class="rank-value rank-no">排名</view>
                 <view class="rank-value rank-player">玩家</view>
