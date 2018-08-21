@@ -3,13 +3,16 @@
     display: flex;
     align-items: center;
     padding: 20rpx 20rpx;
+    margin: 20rpx 0;
     height: 66rpx;
+    border-top: 3rpx solid #ddd;
+    border-bottom: 3rpx solid #ddd;
+    box-shadow:0px 0px 10rpx #fff;
 }
 
 .top-label{
     position: relative;
     top:0;
-    visibility: visible;
     font-weight: bold;
     color: #999;
     transition: all 0.2s ease-in;
@@ -18,7 +21,6 @@
 .top-value{
     position: relative;
     top:0;
-    visibility: visible;
     font-size: 1.5em;
     font-weight: bold;
     color: #337ab7;
@@ -38,10 +40,7 @@
     transition: all 0.3s ease-in;
 }
 
-.box-setting{
-    position: relative;
-    top:0;
-    visibility: visible;
+.box-kana{
     display: flex;
     flex-direction:column;
     border: 1rpx solid #bbb;
@@ -52,7 +51,6 @@
 .top-option{
     position: relative;
     top:0;
-    visibility: visible;
     color: #999;
     margin: 0 10rpx;
     border-bottom: 6rpx solid #eee;
@@ -60,21 +58,12 @@
     transition: all 0.3s ease-in;
 }
 
+.box-hide{
+    display: none;
+}
+
 .top-hide{
-    top: -222rpx;
-    visibility: hidden;
-    transition: all 0.3s ease-in;
-}
-
-.left-show{
-    left: 0;
-    visibility: visible;
-    transition: all 0.3s ease-in;
-}
-
-.right-show{
-    right: 0;
-    visibility: visible;
+    top: -111rpx;
     transition: all 0.3s ease-in;
 }
 
@@ -85,9 +74,6 @@
 }
 
 .box-rank{
-    position: relative;
-    top:0;
-    visibility: visible;
     display: flex;
     flex-direction:column;
 }
@@ -107,8 +93,10 @@
     position: relative;
     left: 300rpx;
     padding: 18rpx 30rpx;
-    border: 1rpx solid #ddd;
-    border-radius: 6rpx;
+    background-color:#dedede;
+    border:1px solid #fff;
+    box-shadow:0px 0px 10rpx #fff inset;
+    border-radius: 5rpx;
     display: flex;
     align-items: center;
 }
@@ -163,7 +151,7 @@
 .rank-value{
     width: 180rpx;
     display: flex;
-    border: rpx solid #ddd;
+    border: 1rpx solid #ddd;
     box-shadow:0px 0px 10rpx #ddd;
     align-items: center;
     justify-content: center;
@@ -195,13 +183,6 @@
     width: 380rpx;
 }
 
-.title-line {
-    margin:10rpx auto;
-    width:720rpx;
-    height:6rpx;
-    background-color:#bbb;
-}
-
 .box-body {
     display: flex;
     flex-direction:column;
@@ -210,9 +191,6 @@
 }
 
 .box-link{
-    position: relative;
-    top:0;
-    visibility: visible;
     display: flex;
     flex-direction:column;
     width: 728rpx;
@@ -260,12 +238,12 @@
     box-shadow: 0 0 20rpx rgba(0, 0, 255, 0.5);
 }
 
-.setp-show-2{
+.step-show{
     animation: 0.6s ke-show ease-out;
     animation-fill-mode: forwards;
 }
 
-.setp-hide-2{
+.step-hide{
     animation: 1s ke-hide ease-out;
     animation-fill-mode: forwards;
 }

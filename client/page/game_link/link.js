@@ -7,14 +7,16 @@ const kana_ta = [["kana_ta","ta", "た", "タ"],["kana_ta","chi", "ち", "チ"],
 const kana_na = [["kana_na","na", "な", "ナ"],["kana_na","ni", "に", "ニ"],["kana_na","nu", "ぬ", "ヌ"],["kana_na","ne", "ね", "ネ"],["kana_na","no", "の", "ノ"]]
 const kana_ha = [["kana_ha","ha", "は", "ハ"],["kana_ha","hi", "ひ", "ヒ"],["kana_ha","fu", "ふ", "フ"],["kana_ha","he", "へ", "ヘ"],["kana_ha","ho", "ほ", "ホ"]]
 const kana_ma = [["kana_ma","ma", "ま", "マ"],["kana_ma","mi", "み", "ミ"],["kana_ma","mu", "む", "ム"],["kana_ma","me", "め", "メ"],["kana_ma","mo", "も", "モ"]]
-const kana_ya = [["kana_ya","ya", "や", "ヤ"],["kana_ya","yu", "ゆ", "ユ"],["kana_ya","yo", "よ", "ヨ"]]
+const kana_ya = [["kana_ya","ya", "や", "ヤ"],["","","",""],["kana_ya","yu", "ゆ", "ユ"],["","","",""],["kana_ya","yo", "よ", "ヨ"]]
 const kana_ra = [["kana_ra","ra", "ら", "ラ"],["kana_ra","ri", "り", "リ"],["kana_ra","ru", "る", "ル"],["kana_ra","re", "れ", "レ"],["kana_ra","ro", "ろ", "ロ"]]
-const kana_wa = [["kana_wa","wa", "わ", "ワ"],["kana_wa","wo", "を", "ヲ"]]
+const kana_wa = [["kana_wa","wa", "わ", "ワ"],["","","",""],["","","",""],["","","",""],["kana_wa","wo", "を", "ヲ"]]
 const kana_n = [["kana_n","n","ん","ン"]]
 
 
 const max_row = 10
 const max_col = 8
+const max_sed = 10
+const fix_sed = 8
 
 Page({
 
@@ -24,6 +26,7 @@ Page({
     this_rights:[],
     this_ups:[],
     this_downs:[],
+    ks_sed:[],
     level_box:"level-1",
     level:1,
     spin_count:0,
@@ -31,10 +34,10 @@ Page({
     avatarUrl:"../../image/heart_full.png",
     icon_setting:"../../image/setting.png",
     showName:"地表最强地表最强",
-    option: 0,
-    top_hide: false,
+    option: 1,
+    top_hide: true,
     rank_hide: true,
-    setting_hide: true,
+    kana_hide: true,
   },
 
   getKanaRows: function(kana_row){
@@ -87,7 +90,7 @@ Page({
     that.setData({
       fields,
       level:1,
-      spin_count:9968,
+      spin_count:0,
       rest_count:72,
     })
     var it = setInterval(function(){
@@ -102,7 +105,7 @@ Page({
     },200)
   },
 
-  initGame: function(){
+  initGame0: function(){
     var kanas = kana_a.concat(kana_ka).concat(kana_sa).concat(kana_ta).concat(kana_na).concat(kana_ha).concat(kana_ma).concat(kana_ya).concat(kana_ra).concat(kana_wa).concat(kana_n)
     //46
     console.log(kanas.length)
@@ -122,7 +125,7 @@ Page({
     this.initFields(kanas)
   },
 
-  initFields: function(kanas){
+  initFields0: function(kanas){
     var train = []
     var pos_map = {}
     var new_fields = []
@@ -739,28 +742,22 @@ initTargetPoint: function(this_row, this_col){
     if (option == 0){ //icon-setting
       //toggle
       var top_hide = !this.data.top_hide
-      var rank_hide = true
-      var setting_hide = true
+      var se = this.data.option
       this.setData({
         top_hide,
-        rank_hide,
-        setting_hide,
-        option:0
+        rank_hide: se == 1,
+        kana_hide: se == 2,
       })
     }else if(option == 1){ //假名设定
-      var rank_hide = true
-      var setting_hide = false
       this.setData({
-        rank_hide,
-        setting_hide,
+        kana_hide: false,
+        rank_hide: true,
         option:1
       })
     }else if(option == 2){ //排行榜
-      var rank_hide = false
-      var setting_hide = true
       this.setData({
-        rank_hide,
-        setting_hide,
+        kana_hide: true,
+        rank_hide: false,
         option:2
       })
     }
@@ -771,10 +768,19 @@ initTargetPoint: function(this_row, this_col){
     var row = currData.row
     var col = currData.col
     var ks_all = this.data.ks_all
-    ks_all[row][col]
-    ks_all[row][col]["selected"] = !ks_all[row][col]["selected"]
-    console.log(ks_all[row][col])
-    this.setData({ks_all})
+    var ks_sed = this.data.ks_sed
+    if (ks_all[row][col]["roma"] == "") return
+    var se = ks_all[row][col]["selected"]
+    if (se || ks_sed.length > max_sed){ //如果点击已选或者大于可选--取消最先选择的
+      var ned = ks_sed.shift()
+      var n_row = ned[0]
+      var n_col = ned[1]
+      ks_all[n_row][n_col]["selected"] = false
+    }else{
+      ks_sed.push([row,col])
+    }
+    ks_all[row][col]["selected"] = !se
+    this.setData({ks_all,ks_sed})
   },
 
   switchKata: function(){
@@ -782,21 +788,73 @@ initTargetPoint: function(this_row, this_col){
     this.setData({kata_on})
   },
 
-  resetGame: function(){
+  initGame: function(){
     var ks_ed = []
     var ks_no = []
     var ks_all = this.data.ks_all
     for (let rows of ks_all){
-      for(let col of rows){
-        if(col.selected){
-          ks_ed.push(col)
-        }else{
-          ks_no.push(col)
+      for(let step of rows){
+        if(step.selected){
+          ks_ed.push(step)
+        }else if(step["roma"]){
+          ks_no.push(step)
         }
       }
     }
-    
 
+    ks_no.sort(function(){ return (Math.random() - 0.5)})
+
+    var fill_size = max_sed - ks_ed.length
+    var ks_fill = ks_no.slice(0, fill_size)
+    //concat(ks_fill)
+    ks_ed.push(...ks_fill)
+
+    //倍数修正 8 16 32
+    var ks_fix = ks_ed.slice(0, fix_sed)
+    ks_fix = ks_fix.concat(ks_fix)
+    ks_fix = ks_fix.concat(ks_fix)
+    //10 20 40
+    ks_ed = ks_ed.concat(ks_ed)
+    ks_ed = ks_ed.concat(ks_ed)
+    //40 + 32 + 2
+    ks_ed = ks_ed.concat(ks_fix).concat([{},{}])
+    ks_ed.sort(function(){ return (Math.random() - 0.5)})
+    console.log(ks_ed.length)
+    this.setData({top_hide:true})
+    this.initFields(ks_ed)
+  },
+
+  initFields: function(kanas){
+    //kanas.length == 74
+    var pos_map = {}
+    var new_fields = []
+    var kata_on = this.data.kata_on
+    for (let row=0;row<max_row;row++){
+      var rows = []
+      for (let col=0;col<max_col;col++){
+        var kana = {}
+        var space1 = (row == 6 && col > 0 && col < max_col-1)
+        if (!space1) kana = kanas.pop()
+        var status = kana["roma"] ? 1 : 0
+        var roma = kana["roma"] ? kana["roma"] : ""
+        var word = kana["hira"] ? kana["hira"] : ""
+        word = kata_on ? kana["kata"] : word
+
+        //couple
+        if(pos_map[roma]){
+          pos_map[roma].push([row,col])
+        }else{
+          pos_map[roma] = [[row,col]]
+        }
+
+        var step = {row,col,roma,word,status,kata_on}
+        rows.push(step)
+      }
+      new_fields.push(rows)
+    }
+
+    this.setData({pos_map})
+    this.loadGame(new_fields)
   },
 
 
