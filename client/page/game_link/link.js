@@ -422,7 +422,7 @@ hideBoth: function(old_row, old_col, this_row, this_col, steps){
 
   //kata&hira==2
   var degree = 2
-  if (this_step["type"] == old_step["type"]) degree = 1
+  if (this_step["word"] != old_step["word"]) degree = 1
   this.passStep(steps, degree)
 
   //if(steps.length > 2 && this.data.auto){
@@ -439,7 +439,6 @@ passStep: function(steps, degree){
     var rc = step.split(",")
     var row = rc[0]
     var col = rc[1]
-    console.log(step)
     fields[row][col]["on"] = !fields[row][col]["on"]
     //记录分数用
     var spin_count = this.data.spin_count
@@ -454,7 +453,7 @@ passStep: function(steps, degree){
   })
 
   //等级2-恢复
-  if (rest_count == 0) this.loadLevel2()
+  //if (rest_count == 0) this.initGame()
 },
 
 initTargetPoint: function(this_row, this_col){
@@ -771,15 +770,20 @@ initTargetPoint: function(this_row, this_col){
     var ks_sed = this.data.ks_sed
     if (ks_all[row][col]["roma"] == "") return
     var se = ks_all[row][col]["selected"]
-    if (se || ks_sed.length > max_sed){ //如果点击已选或者大于可选--取消最先选择的
+    if(se){
+      ks_sed.pop()
+      ks_all[row][col]["selected"] = false
+    }else{
+      ks_sed.push([row,col])
+      ks_all[row][col]["selected"] = true
+    }
+    if (ks_sed.length > max_sed){ //如果点击已选或者大于可选--取消最先选择的
       var ned = ks_sed.shift()
       var n_row = ned[0]
       var n_col = ned[1]
       ks_all[n_row][n_col]["selected"] = false
-    }else{
-      ks_sed.push([row,col])
     }
-    ks_all[row][col]["selected"] = !se
+    
     this.setData({ks_all,ks_sed})
   },
 
@@ -817,7 +821,7 @@ initTargetPoint: function(this_row, this_col){
     ks_ed = ks_ed.concat(ks_ed)
     ks_ed = ks_ed.concat(ks_ed)
     //40 + 32 + 2
-    ks_ed = ks_ed.concat(ks_fix).concat([{},{}])
+    ks_ed = ks_ed.concat(ks_fix)
     ks_ed.sort(function(){ return (Math.random() - 0.5)})
     console.log(ks_ed.length)
     this.setData({top_hide:true})
@@ -834,12 +838,16 @@ initTargetPoint: function(this_row, this_col){
       for (let col=0;col<max_col;col++){
         var kana = {}
         var space1 = (row == 6 && col > 0 && col < max_col-1)
-        if (!space1) kana = kanas.pop()
+        var space2  = (row == 3 && col > 2 && col < 5)
+        if (!space1 && !space2) kana = kanas.pop()
         var status = kana["roma"] ? 1 : 0
         var roma = kana["roma"] ? kana["roma"] : ""
         var word = kana["hira"] ? kana["hira"] : ""
-        word = kata_on ? kana["kata"] : word
-
+        var kata = false
+        if(kata_on && (row+col) % 2 == 0){
+          word = kana["kata"]
+          kata = true
+        }
         //couple
         if(pos_map[roma]){
           pos_map[roma].push([row,col])
@@ -847,7 +855,7 @@ initTargetPoint: function(this_row, this_col){
           pos_map[roma] = [[row,col]]
         }
 
-        var step = {row,col,roma,word,status,kata_on}
+        var step = {row,col,roma,word,status,kata}
         rows.push(step)
       }
       new_fields.push(rows)

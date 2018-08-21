@@ -1,10 +1,13 @@
 <view class="page">
         <view class='top-box'>
-            <view class='top-label {{!top_hide ? "top-hide":""}}'>分数:</view>
-            <view class='top-value {{!top_hide ? "top-hide":""}}'>{{spin_count}}</view>
+            <view class='box-point'>
+                <view class='top-label {{!top_hide ? "top-hide":""}}'>分数:</view>
+                <view class='top-value {{!top_hide ? "top-hide":""}}'>{{spin_count}}</view>
+            </view>
             <view class='top-option {{option != 1 ? "":"option-active"}} {{top_hide ? "top-hide":""}}' bindtap="setting" data-option="1">假名设定</view>
             <view class='top-option {{option != 2 ? "":"option-active"}} {{top_hide ? "top-hide":""}}' bindtap="setting" data-option="2">排行榜</view>
             <image class='top-setting {{top_hide ? "rt-90":""}}' src='{{icon_setting}}' bindtap="setting" data-option="0"></image>
+        
         </view><!-- top-box end-->
 
     <view class='box-body'>
@@ -25,14 +28,14 @@
                 </block>
                 <view class="setting-meun">
                     <view class='top-label'>片假名:</view>
-                    <view class='col-kana {{kata_on ? "step-active":""}}' hover-class='step-hover' bindtap="switchKata">
-                        <view class='col-hira {{kata_on ? "step-color":""}}'>{{kata_on ? "ア": "あ"}}</view>
+                    <view class='col-kana {{kata_on ? "kana-active":""}}' hover-class='kana-hover' bindtap="switchKata">
+                        <view class='col-hira {{kata_on ? "kata-color":""}}'>{{kata_on ? "ア": "あ"}}</view>
                         <view class="col-kama">
                             <view class="">{{!kata_on ? "ア": "あ"}}</view>
                             <view class="">{{kata_on ? "on": "off"}}</view>
                         </view>
                     </view>
-                    <view class='setting-reset' hover-class='step-hover' bindtap="initGame">重置游戏</view>
+                    <view class='setting-reset' hover-class='kana-hover' bindtap="initGame">重置游戏</view>
                 </view>
             </view><!-- box-kana end-->
 
@@ -71,9 +74,9 @@
         <block wx:for="{{item}}" wx:key="mkey" wx:for-index="idx">
             <view class='step-out' data-row="{{item.row}}" data-col="{{item.col}}" data-roma="{{item.roma}}"
                 data-status="{{item.status}}" bindtap="goLink">
-                <view class='step {{item.on ? "step-on":"step-off"}} {{item.status == 0 ? "rt-90":""}} {{item.type == "kata" ? "step-kata":""}} {{item.active && item.status==1 ? "step-active":""}}'
+                <view class='step {{item.on ? "step-on":"step-off"}} {{item.status == 0 ? "rt-90":""}} {{item.active && item.status==1 ? "step-active":""}}'
                 hover-class='step-hover' >
-                <view class='step-word step-show'>{{item.status == 0 ? "":item.word}}</view>
+                <view class='step-word step-show {{item.kata ? "kata-black":""}}'>{{item.status == 0 ? "":item.word}}</view>
                 </view>
             </view>
         </block>
@@ -112,8 +115,8 @@
 <template name="all_kana">
     <view class="row-kana">
         <block wx:for="{{item}}" wx:key="mkey" wx:for-index="col">
-            <view class='col-kana {{item.selected ? "step-active":""}}' hover-class='step-hover' data-row="{{row}}" data-col="{{col}}" bindtap="select">
-                <view class='col-hira {{item.selected ? "step-color":""}}'>{{item.hira}}</view>
+            <view class='col-kana {{item.selected ? "kana-active":""}}' hover-class='kana-hover' data-row="{{row}}" data-col="{{col}}" bindtap="select">
+                <view class='col-hira {{item.selected ? "kata-color":""}}'>{{item.hira}}</view>
                 <view class="col-kama">
                     <view class="">{{item.kata}}</view>
                     <view class="">{{item.roma}}</view>
