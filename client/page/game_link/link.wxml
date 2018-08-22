@@ -1,4 +1,6 @@
 <view class="page">
+        <button hidden="{{loged}}" open-type="getUserInfo" class="get-user" bindgetuserinfo="toLogin">卍</button>
+
         <view class='top-box'>
             <view class='box-point'>
                 <view class='top-label {{!top_hide ? "top-hide":""}}'>分数:</view>

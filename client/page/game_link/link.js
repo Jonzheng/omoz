@@ -1,4 +1,5 @@
-
+const App = new getApp()
+const urls = require('../../config')
 
 const kana_a = [["kana_a","a", "あ", "ア"],["kana_a","i", "い", "イ"],["kana_a","u", "う", "ウ"],["kana_a","e", "え", "エ"],["kana_a","o", "お", "オ"]]
 const kana_ka = [["kana_ka","ka", "か", "カ"],["kana_ka","ki", "き", "キ"],["kana_ka","ku", "く", "ク"],["kana_ka","ke", "け", "ケ"],["kana_ka","ko", "こ", "コ"]]
@@ -15,8 +16,13 @@ const kana_n = [["kana_n","n","ん","ン"]]
 
 const max_row = 10
 const max_col = 8
-const max_sed = 10
-const fix_sed = 8
+const max_sed = 18
+const least_sed = 10
+
+// 模拟其他语言中的sleep，实际上可以是任何异步操作。
+const sleep = (timeountMS) => new Promise((resolve) => {
+  setTimeout(resolve, timeountMS);
+});
 
 Page({
 
@@ -105,81 +111,66 @@ Page({
     },200)
   },
 
-  initGame0: function(){
-    var kanas = kana_a.concat(kana_ka).concat(kana_sa).concat(kana_ta).concat(kana_na).concat(kana_ha).concat(kana_ma).concat(kana_ya).concat(kana_ra).concat(kana_wa).concat(kana_n)
-    //46
-    console.log(kanas.length)
-    //8x10-2x6 = 70/2 = 35
-    kanas.sort(function(){ return (Math.random() - 0.5)})
-    //slice splice(change origin)
-    kanas = kanas.slice(0, 10) //12
-    var sp = kanas.slice(0, 8) //6
-    sp = sp.concat(sp) //12
-    sp = sp.concat(sp) //24
-    kanas = kanas.concat(kanas) //24
-    kanas = kanas.concat(kanas) //48
-    kanas = kanas.concat(sp) //48+24
-    kanas.sort(function(){ return (Math.random() - 0.5)})
-    console.log(kanas.length)
-    //var train = ["kana_a","kana_ka"]
-    this.initFields(kanas)
-  },
-
-  initFields0: function(kanas){
-    var train = []
-    var pos_map = {}
-    var new_fields = []
-    for (let row=0;row<max_row;row++){
-      var rows = []
-      for (let col=0;col<max_col;col++){
-        var kana = ""
-        var space1 = (row == 6 && col > 0 && col < max_col-1)
-        var space2  = (row == 2 && col > 2 && col < 5)
-        if (!space1 && !space2) kana = kanas.pop()
-        var active = false
-        var type = "hira"
-        var status = 0
-        var word = ""
-        var cate = ""
-        var roma = ""
-        var hira = ""
-        var kata = ""
-        if (kana){
-          status = 1
-          cate = kana[0]
-          roma = kana[1]
-          hira = kana[2]
-          kata = kana[3]
-          word = hira
-          //var idx = train.indexOf(cate)
-          if (Math.random() > 0.9 && this.data.level==2){
-            type = "kata"
-            //train.splice(idx, 1)
-            word = kata
-          }
-        } //if (kana) end
-
-        //couple
-        if(pos_map[roma]){
-          pos_map[roma].push([row,col])
-        }else{
-          pos_map[roma] = [[row,col]]
-        }
-
-        var step = {row,col,roma,word,status,type,active}
-        rows.push(step)
-      }
-      new_fields.push(rows)
-    }
-
-    this.setData({pos_map})
-    this.loadGame(new_fields)
+  onLoad: function(){
+    this.setData({loged:App.globalData.hasLogin,})
   },
 
   onReady: function () {
     console.log("onLoad...")
     this.initKanaRows()
     this.initGame()
+  },
+
+  toLogin: function (e) {
+    var that = this
+    var userInfo = e.detail.userInfo
+    console.log("toLogin:")
+    if(userInfo){
+        App.globalData.hasLogin = true
+        App.globalData.userInfo = userInfo
+        App.globalData.nickName = userInfo.nickName
+        App.globalData.avatarUrl = userInfo.avatarUrl
+        var gender = 1
+        if (userInfo.gender != "" || userInfo.gender != undefined) gender = userInfo.gender
+        App.globalData.gender = gender
+        this.setData({
+            loged: true,
+        })
+        console.log(userInfo)
+        that.updateUser()
+    }else{
+        App.globalData.hasLogin = false
+        this.setData({
+            loged: false,
+        })
+        console.log(userInfo)
+    }
+},
+
+  //更新用户到数据库
+  updateUser: () => {
+    var openid = App.globalData.openid
+    var nickName = App.globalData.nickName
+    var avatarUrl = App.globalData.avatarUrl
+    var gender = App.globalData.gender
+    wx.request({
+        url: urls.updateUser,
+        method: 'POST',
+        data: {
+            openid,
+            nickName,
+            avatarUrl,
+            gender,
+        },
+        success: function (res) {
+            console.log('updateUser:')
+            console.log(res)
+        },
+        fail: (res) => {
+            console.log('fail:')
+            console.log(res)
+        }
+    });
   },
 
 
@@ -453,7 +444,7 @@ passStep: function(steps, degree){
   })
 
   //等级2-恢复
-  //if (rest_count == 0) this.initGame()
+  if (rest_count == 0) this.initGame()
 },
 
 initTargetPoint: function(this_row, this_col){
@@ -691,7 +682,6 @@ initTargetPoint: function(this_row, this_col){
 
     var new_fields = []
     for (let row=0;row<max_row;row++){
-
       var rows = []
       for (let col=0;col<max_col;col++){
         var word = ""
@@ -701,29 +691,21 @@ initTargetPoint: function(this_row, this_col){
       }
       new_fields.push(rows)
     }
-    new_fields[1][0]["word"] = "分"
-    new_fields[1][1]["word"] = "数:"
+    //声明即执行的async函数表达式
+    (async () => {
+      for (var i = 0; i < 5; i++) {
+          await sleep(1000);
+          console.log(new Date, i);
+      }
 
-    new_fields[2][2]["word"] = "0"
-    new_fields[2][3]["word"] = "3"
-    new_fields[2][4]["word"] = "5"
-    new_fields[2][5]["word"] = "6"
+      await sleep(1000);
+      console.log("out:")
+      console.log(new Date, i);
+    })();
 
-    new_fields[7][0]["word"] = "排"
-    new_fields[7][1]["word"] = "行"
-    new_fields[7][2]["word"] = "榜"
-    new_fields[7][0]["status"] = 1
-    new_fields[7][1]["status"] = 1
-    new_fields[7][2]["status"] = 1
+    console.log("end")
 
-    new_fields[7][5]["word"] = "下"
-    new_fields[7][6]["word"] = "一"
-    new_fields[7][7]["word"] = "局"
-    new_fields[7][5]["status"] = 2
-    new_fields[7][6]["status"] = 2
-    new_fields[7][7]["status"] = 2
-
-    this.loadGame(new_fields)
+    //this.loadGame(new_fields)
   },
 
   next: function(e){
@@ -808,20 +790,14 @@ initTargetPoint: function(this_row, this_col){
 
     ks_no.sort(function(){ return (Math.random() - 0.5)})
 
-    var fill_size = max_sed - ks_ed.length
-    var ks_fill = ks_no.slice(0, fill_size)
+    var ks_fill = ks_no.slice(0, least_sed)
     //concat(ks_fill)
     ks_ed.push(...ks_fill)
-
-    //倍数修正 8 16 32
-    var ks_fix = ks_ed.slice(0, fix_sed)
-    ks_fix = ks_fix.concat(ks_fix)
-    ks_fix = ks_fix.concat(ks_fix)
-    //10 20 40
+    while (ks_ed.length < 36){
+      ks_ed = ks_ed.concat(ks_ed)
+    }
+    ks_ed = ks_ed.slice(0, 36)
     ks_ed = ks_ed.concat(ks_ed)
-    ks_ed = ks_ed.concat(ks_ed)
-    //40 + 32 + 2
-    ks_ed = ks_ed.concat(ks_fix)
     ks_ed.sort(function(){ return (Math.random() - 0.5)})
     console.log(ks_ed.length)
     this.setData({top_hide:true})

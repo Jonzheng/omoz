@@ -10,6 +10,15 @@
     box-shadow:0px 0px 10rpx #fff;
 }
 
+.get-user{
+    position: absolute;
+    margin: 0 0;
+    width:100%;
+    height:1180rpx;
+    border: 1px red solid;
+    opacity: 0;
+}
+
 .box-point{
     display: flex;
     align-items: center;
