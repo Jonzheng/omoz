@@ -1,9 +1,9 @@
-<view class="page">
+<view class="page fixed">
         <button hidden="{{loged}}" open-type="getUserInfo" class="get-user" bindgetuserinfo="toLogin">卍</button>
 
         <view class='top-box'>
             <view class='box-point'>
-                <view class='top-label {{!top_hide ? "top-hide":""}}'>分数:</view>
+                <view class='top-label {{!top_hide ? "top-hide":""}}'>旋转:</view>
                 <view class='top-value {{!top_hide ? "top-hide":""}}'>{{spin_count}}</view>
             </view>
             <view class='top-option {{option != 1 ? "":"option-active"}} {{top_hide ? "top-hide":""}}' bindtap="setting" data-option="1">假名设定</view>
@@ -26,7 +26,7 @@
 
             <view class='box-kana' hidden='{{kana_hide}}'>
                 <block wx:for="{{ks_all}}" wx:key="mkey" wx:for-index="row">
-                    <template is="all_kana" data="{{item,row}}"/>
+                    <template is="all_kana" data="{{item,row,is_max}}"/>
                 </block>
                 <view class="setting-meun">
                     <view class='top-label'>片假名:</view>
@@ -75,10 +75,10 @@
     <view class="box-row">
         <block wx:for="{{item}}" wx:key="mkey" wx:for-index="idx">
             <view class='step-out' data-row="{{item.row}}" data-col="{{item.col}}" data-roma="{{item.roma}}"
-                data-status="{{item.status}}" bindtap="goLink">
-                <view class='step {{item.on ? "step-on":"step-off"}} {{item.status == 0 ? "rt-90":""}} {{item.active && item.status==1 ? "step-active":""}}'
-                hover-class='step-hover' >
-                <view class='step-word step-show {{item.kata ? "kata-black":""}}'>{{item.status == 0 ? "":item.word}}</view>
+                data-word="{{item.word}}" bindtap="goLink">
+                <view class='step {{item.on ? "step-on":"step-off"}} {{item.word == "" ? "rt-90":""}} {{item.active && item.word != "" ? "step-active":""}}'
+                hover-class='step-hover'>
+                <view class='step-word step-show {{item.kata ? "kata-black":""}}'>{{item.word}}</view>
                 </view>
             </view>
         </block>
@@ -117,7 +117,7 @@
 <template name="all_kana">
     <view class="row-kana">
         <block wx:for="{{item}}" wx:key="mkey" wx:for-index="col">
-            <view class='col-kana {{item.selected ? "kana-active":""}}' hover-class='kana-hover' data-row="{{row}}" data-col="{{col}}" bindtap="select">
+            <view class='col-kana {{item.selected ? "kana-active":""}} {{is_max && item.selected ? "kana-max":""}}' hover-class='kana-hover' data-row="{{row}}" data-col="{{col}}" bindtap="select">
                 <view class='col-hira {{item.selected ? "kata-color":""}}'>{{item.hira}}</view>
                 <view class="col-kama">
                     <view class="">{{item.kata}}</view>

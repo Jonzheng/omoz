@@ -12,11 +12,11 @@
         <view class="cube-wrap">
             <view class="cube depth">
             
-                <navigator url="../game_link/link" hover-class="cube-view">
+                <navigator url="../game_link/link" hover-class="">
                     <view class="cube-view front-pane">连连看</view>
                 </navigator>
 
-                <navigator url="../game_link/link" hover-class="cube-view">
+                <navigator url="../game_link/link" hover-class="">
                     <view class="cube-view back-pane">黏黏看</view>
                 </navigator>
 

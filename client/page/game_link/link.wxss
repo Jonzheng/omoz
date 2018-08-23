@@ -1,4 +1,6 @@
-
+.fixed{
+    position:fixed;
+}
 .top-box{
     display: flex;
     align-items: center;
@@ -351,6 +353,11 @@
 .kana-active{
     transform: scale(1.02, 1.02);
     box-shadow: 0 0 20rpx rgba(0, 0, 255, 0.3) inset;
+}
+
+.kana-max{
+    transform: scale(1.02, 1.02);
+    box-shadow: 0 0 20rpx rgba(255, 0, 100, 0.3) inset;
 }
 
 .kana-hover{

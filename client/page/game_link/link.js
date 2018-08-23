@@ -14,15 +14,12 @@ const kana_wa = [["kana_wa","wa", "わ", "ワ"],["","","",""],["","","",""],["",
 const kana_n = [["kana_n","n","ん","ン"]]
 
 
-const max_row = 10
+const max_row = 11
 const max_col = 8
-const max_sed = 18
+const max_sed = 15
 const least_sed = 10
-
-// 模拟其他语言中的sleep，实际上可以是任何异步操作。
-const sleep = (timeountMS) => new Promise((resolve) => {
-  setTimeout(resolve, timeountMS);
-});
+const half_sed = 40
+const total_step = 80
 
 Page({
 
@@ -36,7 +33,9 @@ Page({
     level_box:"level-1",
     level:1,
     spin_count:0,
-    rest_count:72,
+    hita_count:0,
+    sed_size:10,
+    rest_count:total_step,
     avatarUrl:"../../image/heart_full.png",
     icon_setting:"../../image/setting.png",
     showName:"地表最强地表最强",
@@ -97,22 +96,22 @@ Page({
       fields,
       level:1,
       spin_count:0,
-      rest_count:72,
+      rest_count:total_step,
     })
     var it = setInterval(function(){
-      var step = new_fields.shift()
-      if (!step) {
+      var row = new_fields.shift()
+      if (!row) {
         clearInterval(it)
         return
       }
-      fields.push(step)
+      fields.push(row)
       //fields = []
       that.setData({fields})
     },200)
   },
 
   onLoad: function(){
-    this.setData({loged:App.globalData.hasLogin,})
+    this.setData({loged:App.globalData.hasLogin})
   },
 
   onReady: function () {
@@ -190,7 +189,7 @@ Page({
     while (step_col < end_col){
         step_col += 1
         var step = fields[fixed_row][step_col]
-        if (step.status == 1) break
+        if (step["word"] != "") break
         var row_col = step.row+","+step.col
         steps.push(row_col)
         var idx = this_lefts.indexOf(row_col)
@@ -223,7 +222,7 @@ downLink: function(begin_row, end_row, fixed_col){
   while (step_row < end_row){
       step_row += 1
       var step = fields[step_row][fixed_col]
-      if (step.status == 1) break
+      if (step["word"] != "") break
       var row_col = step.row+","+step.col
       steps.push(row_col)
       var idx = this_ups.indexOf(row_col)
@@ -256,7 +255,7 @@ leftLink: function(begin_col, end_col, fixed_row){
   while (step_col > end_col){
       step_col -= 1
       var step = fields[fixed_row][step_col]
-      if (step.status == 1) break
+      if (step["word"] != "") break
       var row_col = step.row+","+step.col
       steps.push(row_col)
       var idx = this_rights.indexOf(row_col)
@@ -289,7 +288,7 @@ upLink: function(begin_row, end_row, fixed_col){
   while (step_row > end_row){
       step_row -= 1
       var step = fields[step_row][fixed_col]
-      if (step.status == 1) break
+      if (step["word"] != "") break
       var row_col = step.row+","+step.col
       steps.push(row_col)
       var idx = this_downs.indexOf(row_col)
@@ -402,29 +401,33 @@ autoLink: function(this_row, this_col){
 },
 
 hideBoth: function(old_row, old_col, this_row, this_col, steps){
-  var same = false
   var fields = this.data.fields
   var this_step = fields[this_row][this_col]
   var old_step = fields[old_row][old_col]
-  var both = [old_row+","+old_col, this_row+","+this_col]
-  steps = steps.concat(both)
-  this_step["status"] = 0
-  old_step["status"] = 0
+  if (this_step["word"] != old_step["word"]) this.data.hita_count += 1
 
-  //kata&hira==2
-  var degree = 2
-  if (this_step["word"] != old_step["word"]) degree = 1
-  this.passStep(steps, degree)
+  var sold = old_row+","+old_col
+  var sthis = this_row+","+this_col
+  var both = [sold, sthis]
+  steps = steps.concat(both)
+  this.passStep(steps)
 
   //if(steps.length > 2 && this.data.auto){
   //  this.autoLink(this_row, this_col)
   //}
 
+  this_step["word"] = ""
+  old_step["word"] = ""
+  this_step["active"] = false
+  old_step["active"] = false
+  this_step["roma"] = sthis
+  old_step["roma"] = sold
+
   this.setData({fields})
   return true
 },
 
-passStep: function(steps, degree){
+passStep: function(steps){
   var fields = this.data.fields
   for (let step of steps){
     var rc = step.split(",")
@@ -435,7 +438,7 @@ passStep: function(steps, degree){
     var spin_count = this.data.spin_count
     var rest_count = this.data.rest_count
     rest_count -= 2
-    spin_count += steps.length * degree
+    spin_count += steps.length
   }
   this.setData({
     fields,
@@ -444,7 +447,9 @@ passStep: function(steps, degree){
   })
 
   //等级2-恢复
-  if (rest_count == 0) this.initGame()
+  if (rest_count == 0){
+    setTimeout(()=>{ this.initResult()},1000)
+  }
 },
 
 initTargetPoint: function(this_row, this_col){
@@ -458,28 +463,28 @@ initTargetPoint: function(this_row, this_col){
   while (step_col > 0){
       step_col -= 1
       var step = fields[this_row][step_col]
-      if (step.status == 1) break
+      if (step["word"] != "") break
       this_lefts.push(step.row+","+step.col)
   }
   step_col = this_col
   while (step_col < max_col-1){
       step_col += 1
       var step = fields[this_row][step_col]
-      if (step.status == 1) break
+      if (step["word"] != "") break
       this_rights.push(step.row+","+step.col)
   }
   var step_row = this_row
   while (step_row > 0){
       step_row -= 1
       var step = fields[step_row][this_col]
-      if (step.status == 1) break
+      if (step["word"] != "") break
       this_ups.push(step.row+","+step.col)
   }
   step_row = this_row
   while (step_row < max_row-1){
       step_row += 1
       var step = fields[step_row][this_col]
-      if (step.status == 1) break
+      if (step["word"] != "") break
       this_downs.push(step.row+","+step.col)
   }
   this.setData({
@@ -521,7 +526,7 @@ initTargetPoint: function(this_row, this_col){
           while (step_col < max_col - 1){
               step_col += 1
               var step = fields[old_row][step_col]
-              if (step.status == 1) break
+              if (step["word"] != "") break
               var row_col = step.row+","+step.col
               steps.push(row_col)
               //(begin_row, end_row, fixed_col)
@@ -542,7 +547,7 @@ initTargetPoint: function(this_row, this_col){
           while (step_col > 0){
               step_col -= 1
               var step = fields[old_row][step_col]
-              if (step.status == 1) break
+              if (step["word"] != "") break
               var row_col = step.row+","+step.col
               steps.push(row_col)
               //(begin_row, end_row, fixed_col)
@@ -563,7 +568,7 @@ initTargetPoint: function(this_row, this_col){
           while (step_row < max_row - 1){
               step_row += 1
               var step = fields[step_row][old_col]
-              if (step.status == 1) break
+              if (step["word"] != "") break
               var row_col = step.row+","+step.col
               steps.push(row_col)
               //(begin_col, end_col, fixed_row)
@@ -584,7 +589,7 @@ initTargetPoint: function(this_row, this_col){
           while (step_row > 0){
               step_row -= 1
               var step = fields[step_row][old_col]
-              if (step.status == 1) break
+              if (step["word"] != "") break
               var row_col = step.row+","+step.col
               steps.push(row_col)
               //(begin_col, end_col, fixed_row)
@@ -604,8 +609,8 @@ initTargetPoint: function(this_row, this_col){
   goLink: function(e){
     var that = this
     var currData = e.currentTarget.dataset
-    var status = currData.status
-    if (status == 0) return
+    var word = currData.word
+    if (word == "") return
     var bucket = this.data.bucket
     var fields = this.data.fields
     var row = currData.row
@@ -624,7 +629,7 @@ initTargetPoint: function(this_row, this_col){
           old_step["active"] = false
           bucket.pop()
           bucket.push([row,col])
-          if (old_step["status"] != 0 && this_step["roma"]==old_step["roma"]){
+          if (old_step["word"] != "" && this_step["roma"]==old_step["roma"]){
             this.linkDirect(old_row, old_col, row, col)
           }
         }
@@ -679,33 +684,56 @@ initTargetPoint: function(this_row, this_col){
 
 
   initResult: function(){
+    console.log("start:")
+    var that = this
+    var fields = this.data.fields
+    var spin_count = this.data.spin_count
+    var hita_count = this.data.hita_count
+    var sed_size = this.data.sed_size
+    var point = Math.round( (spin_count + hita_count * 10) * sed_size/10 )
+    var new_fields = fields
+    new_fields[0][0]["word"] = "旋"
+    new_fields[0][1]["word"] = "转"
+    new_fields[0][2]["word"] = "方"
+    new_fields[0][3]["word"] = "块"
+    
+    new_fields[1][2]["word"] = ":"
+    new_fields[1][3]["word"] = "" + parseInt(spin_count / 1000 % 10)
+    new_fields[1][4]["word"] = "" + parseInt(spin_count / 100 % 10)
+    new_fields[1][5]["word"] = "" + parseInt(spin_count / 10 % 10)
+    new_fields[1][6]["word"] = "" + spin_count % 10
 
-    var new_fields = []
-    for (let row=0;row<max_row;row++){
-      var rows = []
-      for (let col=0;col<max_col;col++){
-        var word = ""
-        var status = 0
-        var step = {row,col,word,status}
-        rows.push(step)
-      }
-      new_fields.push(rows)
-    }
-    //声明即执行的async函数表达式
-    (async () => {
-      for (var i = 0; i < 5; i++) {
-          await sleep(1000);
-          console.log(new Date, i);
-      }
+    new_fields[2][0]["word"] = "异"
+    new_fields[2][1]["word"] = "名"
+    new_fields[2][2]["word"] = "连"
+    new_fields[2][3]["word"] = "接"
+    new_fields[3][2]["word"] = ":"
+    new_fields[3][3]["word"] = "" + parseInt(hita_count / 10 % 10)
+    new_fields[3][4]["word"] = "" + hita_count % 10
 
-      await sleep(1000);
-      console.log("out:")
-      console.log(new Date, i);
-    })();
+    new_fields[4][0]["word"] = "假"
+    new_fields[4][1]["word"] = "名"
+    new_fields[4][2]["word"] = "数"
+    new_fields[4][3]["word"] = "量"
+    new_fields[5][2]["word"] = ":"
+    new_fields[5][3]["word"] = "" + parseInt(sed_size / 10 % 10)
+    new_fields[5][4]["word"] = "" + sed_size % 10
 
+    new_fields[6][0]["word"] = "得"
+    new_fields[6][1]["word"] = "分"
+    new_fields[7][2]["word"] = ":"
+    new_fields[7][3]["word"] = "" + parseInt(point / 1000 % 10)
+    new_fields[7][4]["word"] = "" + parseInt(point / 100 % 10)
+    new_fields[7][5]["word"] = "" + parseInt(point / 10 % 10)
+    new_fields[7][6]["word"] = "" + point % 10
+
+    new_fields[8][0]["word"] = "排"
+    new_fields[8][1]["word"] = "名"
+    new_fields[9][2]["word"] = ":"
+    new_fields[9][3]["word"] = "+"
+    new_fields[9][4]["word"] = 1
+    this.loadGame(new_fields)
     console.log("end")
-
-    //this.loadGame(new_fields)
   },
 
   next: function(e){
@@ -766,7 +794,9 @@ initTargetPoint: function(this_row, this_col){
       ks_all[n_row][n_col]["selected"] = false
     }
     
-    this.setData({ks_all,ks_sed})
+    var sed_size = ks_sed.length
+    var is_max = sed_size == max_sed
+    this.setData({ks_all,ks_sed,is_max,sed_size})
   },
 
   switchKata: function(){
@@ -790,13 +820,15 @@ initTargetPoint: function(this_row, this_col){
 
     ks_no.sort(function(){ return (Math.random() - 0.5)})
 
-    var ks_fill = ks_no.slice(0, least_sed)
+    var fill_size = least_sed - ks_ed.length
+    fill_size = fill_size > 0 ? fill_size : 0
+    var ks_fill = ks_no.slice(0, fill_size)
     //concat(ks_fill)
     ks_ed.push(...ks_fill)
-    while (ks_ed.length < 36){
+    while (ks_ed.length < half_sed){
       ks_ed = ks_ed.concat(ks_ed)
     }
-    ks_ed = ks_ed.slice(0, 36)
+    ks_ed = ks_ed.slice(0, half_sed)
     ks_ed = ks_ed.concat(ks_ed)
     ks_ed.sort(function(){ return (Math.random() - 0.5)})
     console.log(ks_ed.length)
@@ -816,12 +848,11 @@ initTargetPoint: function(this_row, this_col){
         var space1 = (row == 6 && col > 0 && col < max_col-1)
         var space2  = (row == 3 && col > 2 && col < 5)
         if (!space1 && !space2) kana = kanas.pop()
-        var status = kana["roma"] ? 1 : 0
         var roma = kana["roma"] ? kana["roma"] : ""
         var word = kana["hira"] ? kana["hira"] : ""
         var kata = false
         if(kata_on && (row+col) % 2 == 0){
-          word = kana["kata"]
+          word = kana["kata"] ? kana["kata"] : ""
           kata = true
         }
         //couple
@@ -831,7 +862,7 @@ initTargetPoint: function(this_row, this_col){
           pos_map[roma] = [[row,col]]
         }
 
-        var step = {row,col,roma,word,status,kata}
+        var step = {row,col,roma,word,kata}
         rows.push(step)
       }
       new_fields.push(rows)
