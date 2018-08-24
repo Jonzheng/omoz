@@ -38,7 +38,6 @@ Page({
     rest_count:total_step,
     avatarUrl:"../../image/heart_full.png",
     icon_setting:"../../image/setting.png",
-    showName:"地表最强地表最强",
     option: 1,
     top_hide: true,
     rank_hide: true,
@@ -144,12 +143,13 @@ Page({
         })
         console.log(userInfo)
     }
-},
+  },
 
   //更新用户到数据库
   updateUser: () => {
     var openid = App.globalData.openid
     var nickName = App.globalData.nickName
+    var showName = App.globalData.showName
     var avatarUrl = App.globalData.avatarUrl
     var gender = App.globalData.gender
     wx.request({
@@ -158,6 +158,7 @@ Page({
         data: {
             openid,
             nickName,
+            showName,
             avatarUrl,
             gender,
         },
@@ -209,291 +210,291 @@ Page({
         }
     }//while end
     return []
-},
+  },
 
-downLink: function(begin_row, end_row, fixed_col){
-  console.log("-down")
-  var fields = this.data.fields
-  var this_lefts = this.data.this_lefts
-  var this_ups = this.data.this_ups
-  var this_rights = this.data.this_rights
-  var steps = []
-  var step_row = begin_row
-  while (step_row < end_row){
-      step_row += 1
-      var step = fields[step_row][fixed_col]
-      if (step["word"] != "") break
-      var row_col = step.row+","+step.col
-      steps.push(row_col)
-      var idx = this_ups.indexOf(row_col)
-      if (idx != -1){
-        steps = steps.concat(this_ups.slice(0, idx))
-        return steps
+  downLink: function(begin_row, end_row, fixed_col){
+    console.log("-down")
+    var fields = this.data.fields
+    var this_lefts = this.data.this_lefts
+    var this_ups = this.data.this_ups
+    var this_rights = this.data.this_rights
+    var steps = []
+    var step_row = begin_row
+    while (step_row < end_row){
+        step_row += 1
+        var step = fields[step_row][fixed_col]
+        if (step["word"] != "") break
+        var row_col = step.row+","+step.col
+        steps.push(row_col)
+        var idx = this_ups.indexOf(row_col)
+        if (idx != -1){
+          steps = steps.concat(this_ups.slice(0, idx))
+          return steps
+        }
+        idx = this_lefts.indexOf(row_col)
+        if (idx != -1){
+          steps = steps.concat(this_lefts.slice(0, idx))
+          return steps
+        }
+        idx = this_rights.indexOf(row_col)
+        if (idx != -1){
+          steps = steps.concat(this_rights.slice(0, idx))
+          return steps
+        }
+    }//while end
+    return []
+  },
+
+  leftLink: function(begin_col, end_col, fixed_row){
+    console.log("-left")
+    var fields = this.data.fields
+    var this_downs = this.data.this_downs
+    var this_ups = this.data.this_ups
+    var this_rights = this.data.this_rights
+    var steps = []
+    var step_col = begin_col
+    while (step_col > end_col){
+        step_col -= 1
+        var step = fields[fixed_row][step_col]
+        if (step["word"] != "") break
+        var row_col = step.row+","+step.col
+        steps.push(row_col)
+        var idx = this_rights.indexOf(row_col)
+        if (idx != -1){
+          steps = steps.concat(this_rights.slice(0, idx))
+          return steps
+        }
+        idx = this_ups.indexOf(row_col)
+        if (idx != -1){
+          steps = steps.concat(this_ups.slice(0, idx))
+          return steps
+        }
+        idx = this_downs.indexOf(row_col)
+        if (idx != -1){
+          steps = steps.concat(this_downs.slice(0, idx))
+          return steps
+        }
+    }//while end
+    return []
+  },
+
+  upLink: function(begin_row, end_row, fixed_col){
+    console.log("-up")
+    var fields = this.data.fields
+    var this_downs = this.data.this_downs
+    var this_lefts = this.data.this_lefts
+    var this_rights = this.data.this_rights
+    var steps = []
+    var step_row = begin_row
+    while (step_row > end_row){
+        step_row -= 1
+        var step = fields[step_row][fixed_col]
+        if (step["word"] != "") break
+        var row_col = step.row+","+step.col
+        steps.push(row_col)
+        var idx = this_downs.indexOf(row_col)
+        if (idx != -1){
+          steps = steps.concat(this_downs.slice(0, idx))
+          return steps
+        }
+        idx = this_lefts.indexOf(row_col)
+        if (idx != -1){
+          steps = steps.concat(this_lefts.slice(0, idx))
+          return steps
+        }
+        idx = this_rights.indexOf(row_col)
+        if (idx != -1){
+          steps = steps.concat(this_rights.slice(0, idx))
+          return steps
+        }
+    }//while end
+    return []
+  },
+  isNext: function(old_row, old_col, this_row, this_col){
+      if (old_col == this_col && Math.abs(old_row - this_row) == 1){
+          return true
       }
-      idx = this_lefts.indexOf(row_col)
-      if (idx != -1){
-        steps = steps.concat(this_lefts.slice(0, idx))
-        return steps
+      if (old_row == this_row && Math.abs(old_col - this_col) == 1){
+          return true
       }
-      idx = this_rights.indexOf(row_col)
-      if (idx != -1){
-        steps = steps.concat(this_rights.slice(0, idx))
-        return steps
-      }
-  }//while end
-  return []
-},
+      return false
+  },
+  autoLink: function(this_row, this_col){
+    var fields = this.data.fields
+    var pos_map = this.data.pos_map
 
-leftLink: function(begin_col, end_col, fixed_row){
-  console.log("-left")
-  var fields = this.data.fields
-  var this_downs = this.data.this_downs
-  var this_ups = this.data.this_ups
-  var this_rights = this.data.this_rights
-  var steps = []
-  var step_col = begin_col
-  while (step_col > end_col){
-      step_col -= 1
-      var step = fields[fixed_row][step_col]
-      if (step["word"] != "") break
-      var row_col = step.row+","+step.col
-      steps.push(row_col)
-      var idx = this_rights.indexOf(row_col)
-      if (idx != -1){
-        steps = steps.concat(this_rights.slice(0, idx))
-        return steps
-      }
-      idx = this_ups.indexOf(row_col)
-      if (idx != -1){
-        steps = steps.concat(this_ups.slice(0, idx))
-        return steps
-      }
-      idx = this_downs.indexOf(row_col)
-      if (idx != -1){
-        steps = steps.concat(this_downs.slice(0, idx))
-        return steps
-      }
-  }//while end
-  return []
-},
-
-upLink: function(begin_row, end_row, fixed_col){
-  console.log("-up")
-  var fields = this.data.fields
-  var this_downs = this.data.this_downs
-  var this_lefts = this.data.this_lefts
-  var this_rights = this.data.this_rights
-  var steps = []
-  var step_row = begin_row
-  while (step_row > end_row){
-      step_row -= 1
-      var step = fields[step_row][fixed_col]
-      if (step["word"] != "") break
-      var row_col = step.row+","+step.col
-      steps.push(row_col)
-      var idx = this_downs.indexOf(row_col)
-      if (idx != -1){
-        steps = steps.concat(this_downs.slice(0, idx))
-        return steps
-      }
-      idx = this_lefts.indexOf(row_col)
-      if (idx != -1){
-        steps = steps.concat(this_lefts.slice(0, idx))
-        return steps
-      }
-      idx = this_rights.indexOf(row_col)
-      if (idx != -1){
-        steps = steps.concat(this_rights.slice(0, idx))
-        return steps
-      }
-  }//while end
-  return []
-},
-isNext: function(old_row, old_col, this_row, this_col){
-    if (old_col == this_col && Math.abs(old_row - this_row) == 1){
-        return true
-    }
-    if (old_row == this_row && Math.abs(old_col - this_col) == 1){
-        return true
-    }
-    return false
-},
-autoLink: function(this_row, this_col){
-  var fields = this.data.fields
-  var pos_map = this.data.pos_map
-
-  //var roma = fields[this_row][this_col]["roma"]
-  //var pos = pos_map[roma]
-  //距离排序--逆序
- //pos.sort(function(a,b){return (a[0]-this_row)**2+(a[1]-this_col)**2 < (b[0]-this_row)**2+(b[1]-this_col)**2})
- //console.log("pos:")
- //console.log(pos)
- //for(let p of pos){
- //  console.log(p[0],p[1])
- //}
- //this.setData({fields})
-  //console.log("up:")
-  //up_pos
-  if (this_row > 0){
-    console.log("up_pos")
-    var up_row = this_row - 1
-    var up_roma = fields[up_row][this_col]["roma"]
-    var up_pos = pos_map[up_roma]
-    up_pos.sort(function(a,b){return (a[0]-up_row)**2+(a[1]-this_col)**2 < (b[0]-up_row)**2+(b[1]-this_col)**2})
-    for(let p of up_pos){
-      
-      var row = p[0]
-      var col = p[1]
-      if (fields[row][col]["status"] == 0) break
-      console.log("--start",row, col,fields[row][col]["word"])
-      
-      var linked = this.linkDirect(up_row, this_col, row, col)
-      if (linked) {
-        console.log("--link-true")
-        this.setData({auto:false})
-        break
-      }
-    }
-  }
-  console.log("--end")
-  //this.setData({fields})
-  return
-
-  //down_pos
-  if (this_row < max_row-1){
-    console.log("down_pos")
-    var down_row = this_row + 1
-    var down_roma = fields[down_row][this_col]["roma"]
-    var down_pos = pos_map[down_roma]
-    down_pos.sort(function(a,b){return (a[0]-down_row)**2+(a[1]-this_col)**2 < (b[0]-down_row)**2+(b[1]-this_col)**2})
-    for(let p of down_pos){
-      console.log(p)
-      fields[p[0]][p[1]]["active"] = true
-    }
-  }
-
-  //left_pos
-  if (this_col > 0){
-    console.log("left_pos")
-    var left_col = this_col - 1
-    var left_roma = fields[this_row][left_col]["roma"]
-    var left_pos = pos_map[left_roma]
-    left_pos.sort(function(a,b){return (a[0]-this_row)**2+(a[1]-left_col)**2 < (b[0]-this_row)**2+(b[1]-left_col)**2})
-    for(let p of left_pos){
-      console.log(p)
-      fields[p[0]][p[1]]["active"] = true
-    }
-  }
-
-  //right_pos
-  if (this_col < max_col-1){
-    console.log("right_pos")
-    var right_col = this_col + 1
-    var right_roma = fields[this_row][right_col]["roma"]
-    var right_pos = pos_map[right_roma]
-    right_pos.sort(function(a,b){return (a[0]-this_row)**2+(a[1]-right_col)**2 < (b[0]-this_row)**2+(b[1]-right_col)**2})
-    for(let p of right_pos){
-      console.log(p)
-      fields[p[0]][p[1]]["active"] = true
-    }
-  }
-
-},
-
-hideBoth: function(old_row, old_col, this_row, this_col, steps){
-  var fields = this.data.fields
-  var this_step = fields[this_row][this_col]
-  var old_step = fields[old_row][old_col]
-  if (this_step["word"] != old_step["word"]) this.data.hita_count += 1
-
-  var sold = old_row+","+old_col
-  var sthis = this_row+","+this_col
-  var both = [sold, sthis]
-  steps = steps.concat(both)
-  this.passStep(steps)
-
-  //if(steps.length > 2 && this.data.auto){
-  //  this.autoLink(this_row, this_col)
+    //var roma = fields[this_row][this_col]["roma"]
+    //var pos = pos_map[roma]
+    //距离排序--逆序
+  //pos.sort(function(a,b){return (a[0]-this_row)**2+(a[1]-this_col)**2 < (b[0]-this_row)**2+(b[1]-this_col)**2})
+  //console.log("pos:")
+  //console.log(pos)
+  //for(let p of pos){
+  //  console.log(p[0],p[1])
   //}
+  //this.setData({fields})
+    //console.log("up:")
+    //up_pos
+    if (this_row > 0){
+      console.log("up_pos")
+      var up_row = this_row - 1
+      var up_roma = fields[up_row][this_col]["roma"]
+      var up_pos = pos_map[up_roma]
+      up_pos.sort(function(a,b){return (a[0]-up_row)**2+(a[1]-this_col)**2 < (b[0]-up_row)**2+(b[1]-this_col)**2})
+      for(let p of up_pos){
+        
+        var row = p[0]
+        var col = p[1]
+        if (fields[row][col]["status"] == 0) break
+        console.log("--start",row, col,fields[row][col]["word"])
+        
+        var linked = this.linkDirect(up_row, this_col, row, col)
+        if (linked) {
+          console.log("--link-true")
+          this.setData({auto:false})
+          break
+        }
+      }
+    }
+    console.log("--end")
+    //this.setData({fields})
+    return
 
-  this_step["word"] = ""
-  old_step["word"] = ""
-  this_step["active"] = false
-  old_step["active"] = false
-  this_step["roma"] = sthis
-  old_step["roma"] = sold
+    //down_pos
+    if (this_row < max_row-1){
+      console.log("down_pos")
+      var down_row = this_row + 1
+      var down_roma = fields[down_row][this_col]["roma"]
+      var down_pos = pos_map[down_roma]
+      down_pos.sort(function(a,b){return (a[0]-down_row)**2+(a[1]-this_col)**2 < (b[0]-down_row)**2+(b[1]-this_col)**2})
+      for(let p of down_pos){
+        console.log(p)
+        fields[p[0]][p[1]]["active"] = true
+      }
+    }
 
-  this.setData({fields})
-  return true
-},
+    //left_pos
+    if (this_col > 0){
+      console.log("left_pos")
+      var left_col = this_col - 1
+      var left_roma = fields[this_row][left_col]["roma"]
+      var left_pos = pos_map[left_roma]
+      left_pos.sort(function(a,b){return (a[0]-this_row)**2+(a[1]-left_col)**2 < (b[0]-this_row)**2+(b[1]-left_col)**2})
+      for(let p of left_pos){
+        console.log(p)
+        fields[p[0]][p[1]]["active"] = true
+      }
+    }
 
-passStep: function(steps){
-  var fields = this.data.fields
-  for (let step of steps){
-    var rc = step.split(",")
-    var row = rc[0]
-    var col = rc[1]
-    fields[row][col]["on"] = !fields[row][col]["on"]
-    //记录分数用
-    var spin_count = this.data.spin_count
-    var rest_count = this.data.rest_count
-    rest_count -= 2
-    spin_count += steps.length
-  }
-  this.setData({
-    fields,
-    spin_count,
-    rest_count
-  })
+    //right_pos
+    if (this_col < max_col-1){
+      console.log("right_pos")
+      var right_col = this_col + 1
+      var right_roma = fields[this_row][right_col]["roma"]
+      var right_pos = pos_map[right_roma]
+      right_pos.sort(function(a,b){return (a[0]-this_row)**2+(a[1]-right_col)**2 < (b[0]-this_row)**2+(b[1]-right_col)**2})
+      for(let p of right_pos){
+        console.log(p)
+        fields[p[0]][p[1]]["active"] = true
+      }
+    }
 
-  //等级2-恢复
-  if (rest_count == 0){
-    setTimeout(()=>{ this.initResult()},1000)
-  }
-},
+  },
 
-initTargetPoint: function(this_row, this_col){
-  var fields = this.data.fields
-  var this_lefts = []
-  var this_rights = []
-  var this_ups = []
-  var this_downs = []
+  hideBoth: function(old_row, old_col, this_row, this_col, steps){
+    var fields = this.data.fields
+    var this_step = fields[this_row][this_col]
+    var old_step = fields[old_row][old_col]
+    if (this_step["word"] != old_step["word"]) this.data.hita_count += 1
 
-  var step_col = this_col
-  while (step_col > 0){
-      step_col -= 1
-      var step = fields[this_row][step_col]
-      if (step["word"] != "") break
-      this_lefts.push(step.row+","+step.col)
-  }
-  step_col = this_col
-  while (step_col < max_col-1){
-      step_col += 1
-      var step = fields[this_row][step_col]
-      if (step["word"] != "") break
-      this_rights.push(step.row+","+step.col)
-  }
-  var step_row = this_row
-  while (step_row > 0){
-      step_row -= 1
-      var step = fields[step_row][this_col]
-      if (step["word"] != "") break
-      this_ups.push(step.row+","+step.col)
-  }
-  step_row = this_row
-  while (step_row < max_row-1){
-      step_row += 1
-      var step = fields[step_row][this_col]
-      if (step["word"] != "") break
-      this_downs.push(step.row+","+step.col)
-  }
-  this.setData({
-    this_lefts,
-    this_rights,
-    this_ups,
-    this_downs
-  })
-},
+    var sold = old_row+","+old_col
+    var sthis = this_row+","+this_col
+    var both = [sold, sthis]
+    steps = steps.concat(both)
+    this.passStep(steps)
+
+    //if(steps.length > 2 && this.data.auto){
+    //  this.autoLink(this_row, this_col)
+    //}
+
+    this_step["word"] = ""
+    old_step["word"] = ""
+    this_step["active"] = false
+    old_step["active"] = false
+    this_step["roma"] = sthis
+    old_step["roma"] = sold
+
+    this.setData({fields})
+    return true
+  },
+
+  passStep: function(steps){
+    var fields = this.data.fields
+    for (let step of steps){
+      var rc = step.split(",")
+      var row = rc[0]
+      var col = rc[1]
+      fields[row][col]["on"] = !fields[row][col]["on"]
+      //记录分数用
+      var spin_count = this.data.spin_count
+      var rest_count = this.data.rest_count
+      rest_count -= 2
+      spin_count += steps.length
+    }
+    this.setData({
+      fields,
+      spin_count,
+      rest_count
+    })
+
+    //等级2-恢复
+    if (rest_count == 0){
+      setTimeout(()=>{ this.initResult()},1000)
+    }
+  },
+
+  initTargetPoint: function(this_row, this_col){
+    var fields = this.data.fields
+    var this_lefts = []
+    var this_rights = []
+    var this_ups = []
+    var this_downs = []
+
+    var step_col = this_col
+    while (step_col > 0){
+        step_col -= 1
+        var step = fields[this_row][step_col]
+        if (step["word"] != "") break
+        this_lefts.push(step.row+","+step.col)
+    }
+    step_col = this_col
+    while (step_col < max_col-1){
+        step_col += 1
+        var step = fields[this_row][step_col]
+        if (step["word"] != "") break
+        this_rights.push(step.row+","+step.col)
+    }
+    var step_row = this_row
+    while (step_row > 0){
+        step_row -= 1
+        var step = fields[step_row][this_col]
+        if (step["word"] != "") break
+        this_ups.push(step.row+","+step.col)
+    }
+    step_row = this_row
+    while (step_row < max_row-1){
+        step_row += 1
+        var step = fields[step_row][this_col]
+        if (step["word"] != "") break
+        this_downs.push(step.row+","+step.col)
+    }
+    this.setData({
+      this_lefts,
+      this_rights,
+      this_ups,
+      this_downs
+    })
+  },
 
   linkDirect: function(old_row, old_col, this_row, this_col){
       var fields = this.data.fields
@@ -520,94 +521,93 @@ initTargetPoint: function(this_row, this_col){
       if (steps.length > 0){
         return this.hideBoth(old_row, old_col, this_row, this_col, steps)
       }
-          console.log("2-right")
-          var steps_sec =[]
-          var step_col = old_col
-          while (step_col < max_col - 1){
-              step_col += 1
-              var step = fields[old_row][step_col]
-              if (step["word"] != "") break
-              var row_col = step.row+","+step.col
-              steps.push(row_col)
-              //(begin_row, end_row, fixed_col)
-              steps_sec = this.upLink(step.row, this_row, step.col)
-              if (steps_sec.length > 0) {
-                  steps = steps.concat(steps_sec)
-                  return this.hideBoth(old_row, old_col, this_row, this_col, steps)
-              }
-              steps_sec = this.downLink(step.row, this_row, step.col)
-              if (steps_sec.length > 0) {
-                steps = steps.concat(steps_sec)
-                return this.hideBoth(old_row, old_col, this_row, this_col, steps)
-              }
+      console.log("2-right")
+      var steps_sec =[]
+      var step_col = old_col
+      while (step_col < max_col - 1){
+          step_col += 1
+          var step = fields[old_row][step_col]
+          if (step["word"] != "") break
+          var row_col = step.row+","+step.col
+          steps.push(row_col)
+          //(begin_row, end_row, fixed_col)
+          steps_sec = this.upLink(step.row, this_row, step.col)
+          if (steps_sec.length > 0) {
+              steps = steps.concat(steps_sec)
+              return this.hideBoth(old_row, old_col, this_row, this_col, steps)
           }
-          console.log("2-left")
-          steps = []
-          var step_col = old_col
-          while (step_col > 0){
-              step_col -= 1
-              var step = fields[old_row][step_col]
-              if (step["word"] != "") break
-              var row_col = step.row+","+step.col
-              steps.push(row_col)
-              //(begin_row, end_row, fixed_col)
-              steps_sec = this.upLink(step.row, this_row, step.col)
-              if (steps_sec.length > 0) {
-                steps = steps.concat(steps_sec)
-                  return this.hideBoth(old_row, old_col, this_row, this_col, steps)
-              }
-              steps_sec = this.downLink(step.row, this_row, step.col)
-              if (steps_sec.length > 0) {
-                steps = steps.concat(steps_sec)
-                return this.hideBoth(old_row, old_col, this_row, this_col, steps)
-              }
+          steps_sec = this.downLink(step.row, this_row, step.col)
+          if (steps_sec.length > 0) {
+            steps = steps.concat(steps_sec)
+            return this.hideBoth(old_row, old_col, this_row, this_col, steps)
           }
-          console.log("2-down")
-          steps = []
-          var step_row = old_row
-          while (step_row < max_row - 1){
-              step_row += 1
-              var step = fields[step_row][old_col]
-              if (step["word"] != "") break
-              var row_col = step.row+","+step.col
-              steps.push(row_col)
-              //(begin_col, end_col, fixed_row)
-              steps_sec = this.leftLink(step.col, this_col, step.row)
-              if (steps_sec.length > 0) {
-                steps = steps.concat(steps_sec)
-                return this.hideBoth(old_row, old_col, this_row, this_col, steps)
-              }
-              steps_sec = this.rightLink(step.col, this_col, step.row)
-              if (steps_sec.length > 0) {
-                steps = steps.concat(steps_sec)
-                return this.hideBoth(old_row, old_col, this_row, this_col, steps)
-              }
+      }
+      console.log("2-left")
+      steps = []
+      var step_col = old_col
+      while (step_col > 0){
+          step_col -= 1
+          var step = fields[old_row][step_col]
+          if (step["word"] != "") break
+          var row_col = step.row+","+step.col
+          steps.push(row_col)
+          //(begin_row, end_row, fixed_col)
+          steps_sec = this.upLink(step.row, this_row, step.col)
+          if (steps_sec.length > 0) {
+            steps = steps.concat(steps_sec)
+              return this.hideBoth(old_row, old_col, this_row, this_col, steps)
           }
-          console.log("2-up")
-          steps = []
-          var step_row = old_row
-          while (step_row > 0){
-              step_row -= 1
-              var step = fields[step_row][old_col]
-              if (step["word"] != "") break
-              var row_col = step.row+","+step.col
-              steps.push(row_col)
-              //(begin_col, end_col, fixed_row)
-              steps_sec = this.leftLink(step.col, this_col, step.row)
-              if (steps_sec.length > 0) {
-                steps = steps.concat(steps_sec)
-                return this.hideBoth(old_row, old_col, this_row, this_col, steps)
-              }
-              steps_sec = this.rightLink(step.col, this_col, step.row)
-              if (steps_sec.length > 0) {
-                steps = steps.concat(steps_sec)
-                return this.hideBoth(old_row, old_col, this_row, this_col, steps)
-              }
+          steps_sec = this.downLink(step.row, this_row, step.col)
+          if (steps_sec.length > 0) {
+            steps = steps.concat(steps_sec)
+            return this.hideBoth(old_row, old_col, this_row, this_col, steps)
           }
+      }
+      console.log("2-down")
+      steps = []
+      var step_row = old_row
+      while (step_row < max_row - 1){
+          step_row += 1
+          var step = fields[step_row][old_col]
+          if (step["word"] != "") break
+          var row_col = step.row+","+step.col
+          steps.push(row_col)
+          //(begin_col, end_col, fixed_row)
+          steps_sec = this.leftLink(step.col, this_col, step.row)
+          if (steps_sec.length > 0) {
+            steps = steps.concat(steps_sec)
+            return this.hideBoth(old_row, old_col, this_row, this_col, steps)
+          }
+          steps_sec = this.rightLink(step.col, this_col, step.row)
+          if (steps_sec.length > 0) {
+            steps = steps.concat(steps_sec)
+            return this.hideBoth(old_row, old_col, this_row, this_col, steps)
+          }
+      }
+      console.log("2-up")
+      steps = []
+      var step_row = old_row
+      while (step_row > 0){
+          step_row -= 1
+          var step = fields[step_row][old_col]
+          if (step["word"] != "") break
+          var row_col = step.row+","+step.col
+          steps.push(row_col)
+          //(begin_col, end_col, fixed_row)
+          steps_sec = this.leftLink(step.col, this_col, step.row)
+          if (steps_sec.length > 0) {
+            steps = steps.concat(steps_sec)
+            return this.hideBoth(old_row, old_col, this_row, this_col, steps)
+          }
+          steps_sec = this.rightLink(step.col, this_col, step.row)
+          if (steps_sec.length > 0) {
+            steps = steps.concat(steps_sec)
+            return this.hideBoth(old_row, old_col, this_row, this_col, steps)
+          }
+      }
       return false
   },
   goLink: function(e){
-    var that = this
     var currData = e.currentTarget.dataset
     var word = currData.word
     if (word == "") return
@@ -640,48 +640,7 @@ initTargetPoint: function(this_row, this_col){
 
   },
 
-  //---------------等级2-------------
-  loadLevel2: function(){
-    this.setData({
-      level:2,
-    })
-  },
-
-  link2:function(e){
-    console.log("link2")
-    return
-    var currData = e.currentTarget.dataset
-    var status = currData.status
-    if (status == 0) return
-    var bucket = this.data.bucket
-    var fields = this.data.fields
-    var row = currData.row
-    var col = currData.col
-    
-    fields[row][col]["active"] = true
-    if (bucket.length > 0){
-        var olds = bucket.shift()
-        console.log(old_row,"-",old_col)
-        var old_row = olds[0]
-        var old_col = olds[1]
-        fields[old_row][old_col]["active"] = false
-        if (old_row+""+old_col != row+""+col){
-          bucket.push([row,col])
-          this.linkDirect(old_row, old_col, row, col)
-        }
-    }else{
-      bucket.push([row,col])
-    }
-    
-    for (let bk of bucket){
-      console.log(bk)
-    }
-    this.setData({fields,bucket})
-  },
-
-
 //---------------------------------------------
-
 
   initResult: function(){
     console.log("start:")
@@ -697,54 +656,72 @@ initTargetPoint: function(this_row, this_col){
     new_fields[0][2]["word"] = "方"
     new_fields[0][3]["word"] = "块"
     
-    new_fields[1][2]["word"] = ":"
-    new_fields[1][3]["word"] = "" + parseInt(spin_count / 1000 % 10)
-    new_fields[1][4]["word"] = "" + parseInt(spin_count / 100 % 10)
-    new_fields[1][5]["word"] = "" + parseInt(spin_count / 10 % 10)
-    new_fields[1][6]["word"] = "" + spin_count % 10
+    new_fields[1][2]["word"] = "" + parseInt(spin_count / 1000 % 10)
+    new_fields[1][3]["word"] = "" + parseInt(spin_count / 100 % 10)
+    new_fields[1][4]["word"] = "" + parseInt(spin_count / 10 % 10)
+    new_fields[1][5]["word"] = "" + spin_count % 10
 
     new_fields[2][0]["word"] = "异"
     new_fields[2][1]["word"] = "名"
     new_fields[2][2]["word"] = "连"
     new_fields[2][3]["word"] = "接"
-    new_fields[3][2]["word"] = ":"
-    new_fields[3][3]["word"] = "" + parseInt(hita_count / 10 % 10)
-    new_fields[3][4]["word"] = "" + hita_count % 10
+    new_fields[3][2]["word"] = "" + parseInt(hita_count / 10 % 10)
+    new_fields[3][3]["word"] = "" + hita_count % 10
 
     new_fields[4][0]["word"] = "假"
     new_fields[4][1]["word"] = "名"
     new_fields[4][2]["word"] = "数"
     new_fields[4][3]["word"] = "量"
-    new_fields[5][2]["word"] = ":"
-    new_fields[5][3]["word"] = "" + parseInt(sed_size / 10 % 10)
-    new_fields[5][4]["word"] = "" + sed_size % 10
+    new_fields[5][2]["word"] = "" + parseInt(sed_size / 10 % 10)
+    new_fields[5][3]["word"] = "" + sed_size % 10
 
     new_fields[6][0]["word"] = "得"
     new_fields[6][1]["word"] = "分"
-    new_fields[7][2]["word"] = ":"
-    new_fields[7][3]["word"] = "" + parseInt(point / 1000 % 10)
-    new_fields[7][4]["word"] = "" + parseInt(point / 100 % 10)
-    new_fields[7][5]["word"] = "" + parseInt(point / 10 % 10)
-    new_fields[7][6]["word"] = "" + point % 10
+    new_fields[7][2]["word"] = "" + parseInt(point / 1000 % 10)
+    new_fields[7][3]["word"] = "" + parseInt(point / 100 % 10)
+    new_fields[7][4]["word"] = "" + parseInt(point / 10 % 10)
+    new_fields[7][5]["word"] = "" + point % 10
 
-    new_fields[8][0]["word"] = "排"
-    new_fields[8][1]["word"] = "名"
-    new_fields[9][2]["word"] = ":"
-    new_fields[9][3]["word"] = "+"
-    new_fields[9][4]["word"] = 1
-    this.loadGame(new_fields)
+    new_fields[8][0]["word"] = "最"
+    new_fields[8][1]["word"] = "高"
+    var openid = App.globalData.openid
+    wx.request({
+        url: urls.saveLinkRank,
+        method: 'POST',
+        data: {
+            openid,
+            point,
+            status: 1,
+        },
+        success: function (res) {
+            console.log('saveLinkRank:')
+            var rank = res.data.data[0]
+            var best = point > rank.point ? point : rank.point
+            new_fields[9][2]["word"] = "" + parseInt(best / 1000 % 10)
+            new_fields[9][3]["word"] = "" + parseInt(best / 100 % 10)
+            new_fields[9][4]["word"] = "" + parseInt(best / 10 % 10)
+            new_fields[9][5]["word"] = "" + best % 10
+            that.loadGame(new_fields)
+        }
+    });
+
     console.log("end")
   },
 
-  next: function(e){
-    var currData = e.currentTarget.dataset
-    var status = currData.status
-    if (status == 1){ //排行榜
-      console.log("rank")
-    }else if(status == 2){ //下一局
-      console.log("new")
-    }
+  loadRank: function(){
+    var that = this
+    wx.request({
+        url: urls.queryLinkRank,
+        method: 'POST',
+        success: function (res) {
+            console.log('saveLinkRank:')
+            var ranks = res.data.data
+            console.log(ranks)
+            that.setData({ranks})
+        }
+    });
   },
+
   setting:function(e){
     var currData = e.currentTarget.dataset
     var option = currData.option
@@ -764,6 +741,7 @@ initTargetPoint: function(this_row, this_col){
         option:1
       })
     }else if(option == 2){ //排行榜
+      this.loadRank()
       this.setData({
         kana_hide: true,
         rank_hide: false,

@@ -93,13 +93,17 @@
 .box-rank{
     display: flex;
     flex-direction:column;
+    box-shadow:0px 0px 10rpx #ddd;
 }
 
 .row-title{
     display: flex;
     flex: none;
-    height: 66rpx;
+    height: 80rpx;
+    border: 1rpx solid #fff;
+    box-shadow:0px 0px 10rpx #fff;
     color: #bbb;
+    font-size: 16px;
 }
 
 .row-kana{
@@ -163,12 +167,12 @@
     flex: none;
     height: 88rpx;
     border: 1rpx solid #fff;
-    box-shadow:0px 0px 10rpx #1409a570;
+    box-shadow:0px 0px 10rpx #fff;
     color: #aaa;
 }
 
 .rank-value{
-    width: 180rpx;
+    width: 135rpx;
     display: flex;
     border: 1rpx solid #ddd;
     box-shadow:0px 0px 10rpx #ddd;
@@ -198,8 +202,14 @@
     width: 100rpx;
 }
 
+.width-player{
+    width: 360rpx;
+}
+
 .rank-player{
-    width: 380rpx;
+    display: flex;
+    justify-content: left;
+    align-items: center;
 }
 
 .box-body {
@@ -237,24 +247,6 @@
     height:88rpx;
     justify-content:center;
     align-items:center;
-}
-
-.step-out-2{
-    display:flex;
-    flex: none;
-    background-color:#fff;
-    border:1px solid #ccc;
-    box-shadow:0px 0px 10rpx #bbb;
-    width:88rpx;
-    height:88rpx;
-    justify-content:center;
-    align-items:center;
-
-}
-
-.step-hover-2{
-    border:1px solid #555;
-    box-shadow: 0 0 20rpx rgba(0, 0, 255, 0.5);
 }
 
 .step-show{
@@ -338,6 +330,10 @@
 
 .kata-black{
     color: #333;
+}
+
+.one-hover{
+    box-shadow: 0 0 20rpx rgba(0, 0, 255, 0.6);
 }
 
 .step-hover{

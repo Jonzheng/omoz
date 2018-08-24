@@ -1,4 +1,4 @@
-<view class="page fixed">
+<view class='page {{!rank_hide && !top_hide ? "":"fixed"}}'>
         <button hidden="{{loged}}" open-type="getUserInfo" class="get-user" bindgetuserinfo="toLogin">卍</button>
 
         <view class='top-box'>
@@ -26,7 +26,7 @@
 
             <view class='box-kana' hidden='{{kana_hide}}'>
                 <block wx:for="{{ks_all}}" wx:key="mkey" wx:for-index="row">
-                    <template is="all_kana" data="{{item,row,is_max}}"/>
+                    <template is="all-kana" data="{{item,row,is_max}}"/>
                 </block>
                 <view class="setting-meun">
                     <view class='top-label'>片假名:</view>
@@ -44,25 +44,13 @@
             <view class='box-rank' hidden='{{rank_hide}}'>
                 <view class="row-title">
                     <view class="rank-value rank-no">排名</view>
-                    <view class="rank-value rank-player">玩家</view>
+                    <view class="rank-value width-player">玩家</view>
                     <view class="rank-value">分数</view>
                     <view class="rank-value">通关次数</view>
                 </view>
-                <view class="row-player">
-                    <view class="rank-value rank-no">1</view>
-                    <view class="rank-value rank-player">
-                        <image class='user-avatar' src='{{avatarUrl}}'></image>
-                        <view class='user-name'>{{showName}}</view>
-                    </view>
-                    <view class="rank-value">356</view>
-                    <view class="rank-value">5</view>
-                </view>
-                <view class="row-player">
-                    <view class="rank-value rank-no">1</view>
-                    <view class="rank-value rank-player">玩家1</view>
-                    <view class="rank-value">356</view>
-                    <view class="rank-value">5</view>
-                </view>
+                <block wx:for="{{ranks}}" wx:key="mkey" wx:for-index="idx">
+                    <template is="rank-0" data="{{...item,idx}}"/>
+                </block>
             </view><!-- box-rank end-->
 
         </view><!-- box-setting end-->
@@ -85,36 +73,21 @@
     </view>
 </template>
 
-<template name="level-2">
-    <view class="box-row">
-        <block wx:for="{{item}}" wx:key="mkey" wx:for-index="idx">
-            <view class='step-out-2'
-                data-row="{{item.row}}" data-col="{{item.col}}"
-                data-roma="{{item.roma}}" data-status="{{item.status}}" bindtap="link2">
-                    <view class='step-2 {{item.on ? "step-on":"step-off"}}'>
-                        <view class='step-word {{item.status==0 || item.active? "step-show":"step-hide"}}' hover-class='step-hover'>{{item.word}}</view>
-                    </view>
-            </view>
-        </block>
-    </view>
-</template>
-
-<!-- 结算页 -->
-<template name="level-0">
-    <view class="box-row">
-        <block wx:for="{{item}}" wx:key="mkey" wx:for-index="idx">
-            <view class='step-out-2'
-                data-row="{{item.row}}" data-col="{{item.col}}" data-status="{{item.status}}" bindtap="next">
-                    <view class='step-2 {{item.on ? "step-on":"step-off"}}'>
-                        <view class='result-word {{item.word == "" ? "rt-90":""}}' hover-class='step-hover'>{{item.word}}</view>
-                    </view>
-            </view>
-        </block>
+<!-- 排行榜 -->
+<template name="rank-0">
+    <view class="row-player" hover-class='one-hover'>
+        <view class="rank-value rank-no">{{idx+1}}</view>
+        <view class="rank-value width-player rank-player">
+            <image class='user-avatar' src='{{avatar_url}}'></image>
+            <view class='user-name'>{{show_name}}</view>
+        </view>
+        <view class="rank-value">{{point}}</view>
+        <view class="rank-value">{{round}}</view>
     </view>
 </template>
 
 <!-- 设定假名 -->
-<template name="all_kana">
+<template name="all-kana">
     <view class="row-kana">
         <block wx:for="{{item}}" wx:key="mkey" wx:for-index="col">
             <view class='col-kana {{item.selected ? "kana-active":""}} {{is_max && item.selected ? "kana-max":""}}' hover-class='kana-hover' data-row="{{row}}" data-col="{{col}}" bindtap="select">
