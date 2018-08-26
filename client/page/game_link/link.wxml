@@ -12,7 +12,7 @@
         
         </view><!-- top-box end-->
 
-    <view class='box-body'>
+    <view class='box-body' hidden="{{!loged}}">
 
         <view class='box-link' hidden='{{!top_hide}}'>
 

@@ -1,6 +1,7 @@
 <!--pages/index.wxml-->
 <view class="page">
-    <view class='box-top'>
+    <button hidden="{{loged}}" open-type="getUserInfo" class="get-user" bindgetuserinfo="toLogin">卍</button>
+    <view class='box-top' hidden="{{!loged}}">
 
         <image class='user-avatar' src='{{avatarUrl}}'></image>
         

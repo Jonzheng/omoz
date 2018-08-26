@@ -29,6 +29,8 @@ var urls = {
     updateAnswerHis: `${host}/weapp/updateAnswerHis`,
     saveLinkRank: `${host}/weapp/saveLinkRank`,
     queryLinkRank: `${host}/weapp/queryLinkRank`,
+    saveAnswer: `${host}/weapp/saveAnswer`,
+    queryAnswer: `${host}/weapp/queryAnswer`,
 };
 
 module.exports = urls;

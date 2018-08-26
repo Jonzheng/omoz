@@ -5,7 +5,7 @@
 
         <view class="box-title border-title">{{paper.title}}</view>
 
-        
+        <view class="box-attention" hidden="{{show_result}}">
             <view class="box-cate">
                 <view class="paper-label">试卷结构: </view>
                 <view class="content-cate">
@@ -42,7 +42,7 @@
                 
                 <view class="button-sp-area">
 
-                    <button style="border:1px solid #7ed5f0;color: #3498db;width: 98%;" type="default" plain="true" bindtap="openConfirm" hover-class="btn-start-hover">开始答题</button>
+                    <button style="border:1px solid #7ed5f0;color: #3498db;width: 98%;" type="default" plain="true" bindtap="openConfirm" hover-class="btn-hover">开始答题</button>
 
                 </view>
 
@@ -59,6 +59,49 @@
                 </navigator>
 
             </view>
+        </view> <!-- box-attention end -->
+
+        <view class="box-result" hidden="{{!show_result}}" bindtap="fadeIn">
+            <view class="box-iriza">
+                <image class='image-iriza {{i_show ? "in-iriza":""}}' src="https://systems-1256378396.cos.ap-guangzhou.myqcloud.com/iriza0.png" />
+            </view>
+            <view class="box-rate">
+                <view class="box-cate">
+                    <view class="paper-label">正确率: </view>
+                    <view class="content-cate">
+                        <view class="line-box" hover-class="white-hover">
+                            
+                            <view class="que-label">选择题: </view>
+                            <view class="rate-bar-box">
+                                <view class="bar-right" style='width: {{right_bar1}}%;'></view>
+                                <view class="bar-wrong" style='width: {{100-right_bar1}}%;'></view>
+                            </view>
+                            <view class="que-right">{{cate1_right}}</view>
+                            <view class="que-total">{{cate1_total}}</view>
+                        </view>
+                        <view class="line-box" hover-class="white-hover">
+                            <view class="que-label">阅读题: </view>
+                            <view class="rate-bar-box">
+                                <view class="bar-right" style='width: {{right_bar2}}%;'></view>
+                                <view class="bar-wrong" style='width: {{100-right_bar2}}%;'></view>
+                            </view>
+                            <view class="que-right">{{cate2_right}}</view>
+                            <view class="que-total">{{cate2_total}}</view>
+                        </view>
+                        <view class="line-box" hover-class="white-hover">
+                            <view class="que-label">聴解题: </view>
+                            <view class="rate-bar-box">
+                                <view class="bar-right" style='width: {{right_bar3}}%;'></view>
+                                <view class="bar-wrong" style='width: {{100-right_bar3}}%;'></view>
+                            </view>
+                            <view class="que-right">{{cate3_right}}</view>
+                            <view class="que-total">{{cate3_total}}</view>
+                        </view>
+                    </view>
+                </view>
+            </view>
+
+        </view> <!-- box-result end -->
 
     </view>
 

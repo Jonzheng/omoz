@@ -88,7 +88,7 @@
         </block>
         <!-- 听解题 -->
         <block wx:for="{{que_type21}}" wx:key="mkey" wx:for-index="idx">
-            <template is="question-cate3" data="{{...item,idx,god_on,size21}}"/>
+            <template is="question-cate3" data="{{...item,idx,god_on}}"/>
         </block>
         <block wx:for="{{que_type22}}" wx:key="mkey" wx:for-index="idx">
             <template is="question-cate3" data="{{...item,idx,god_on}}"/>
@@ -100,6 +100,11 @@
             <template is="question-cate3" data="{{...item,idx,god_on}}"/>
         </block>
 
+    </view>
+
+    <!-- 交卷 -->
+    <view class='{{top_show ? "box-line fixed-bottom" : "box-line-hidden"}}' hidden="{{cate1_total + cate2_total + cate3_total != cate1_done + cate2_done + cate3_done}}">
+        <button style="border:1px solid #7ed5f0;color: #3498db;width: 98%;" type="default" plain="true" bindtap="publishAnswer" hover-class="btn-hover">交卷</button>
     </view>
 
 </view>
@@ -174,12 +179,12 @@
 <template name="question-cate3">
     <view id='{{question_no == 1 ? "cate3" : ""}}' class="type-desc" hidden="{{question_no != 1}}">{{type_desc}}</view>
     <view class="box-listen" hidden="{{question_no != 1}}">
-        <view class="btn-circle" bindtap="listen" data-src="{{src_sound}}">
-            <view class='{{listen1 ? "sound-stop" : "sound-play"}} '></view>
+        <view class="btn-circle" bindtap="listen" data-src="{{src_sound}}" data-type="{{type}}" hover-class="one-hover">
+            <view class='{{listening ? "" : "sound-play"}} '></view>
         </view>
         <view class="box-listen-desc">
             <view class="que-desc">{{que_desc}}</view>
-            <view class="que-desc">本段材料共{{size21}}问</view>
+            <view class="que-desc">本段材料共{{size}}问,已播放{{listen_times}}/1次</view>
             <view class="listen-desc">{{listen_desc}}</view>
         </view>
     </view>

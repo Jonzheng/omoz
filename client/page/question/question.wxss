@@ -1,6 +1,7 @@
 .content-paper{
     border-top:1rpx solid #fff;
     color: #666;
+    margin-bottom: 140rpx;
 }
 
 .box-text{
@@ -158,6 +159,19 @@
     box-shadow: 0 0 10rpx #7ed5f0;
     background-color: #fefefe;
     z-index: 99;
+}
+
+.fixed-bottom{
+    position:fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-top: 1rpx solid #5bc0de;
+    border-bottom: 1rpx solid #5bc0de;
+    box-shadow: 0 0 10rpx #7ed5f0;
+    background-color: #fefefe;
+    z-index: 99;
+    font-weight: bold;
 }
 
 .top-label{

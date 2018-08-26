@@ -1,5 +1,6 @@
 .content-paper{
     border-top:5rpx solid #5bc0de;
+    position: fixed;
 }
 
 .box-title{
@@ -58,11 +59,6 @@
     color: #7ed5f0;
 }
 
-.btn-start-hover{
-    transform:scale(0.98, 0.98);
-    box-shadow: 0 0 10rpx #7ed5f0;
-}
-
 .fixed-bottom{
     font-weight: bold;
     position:fixed;
@@ -106,4 +102,73 @@
     width: 70%;
     color: #bbb;
     font-size:14px;
+}
+
+.box-result{
+    width: 750rpx;
+}
+
+.box-rate{
+    border-top: 6rpx solid #bbb;
+    margin-top: 30rpx;
+    padding-top: 15rpx;
+}
+
+.box-iriza{
+    background: #777;
+}
+
+.image-iriza{
+    position: relative;
+    left: 620rpx;
+    top: 13rpx;
+}
+
+.in-iriza{
+    position: relative;
+    left: 110rpx;
+    top: 13rpx;
+    transition: all 0.2s ease-out;
+}
+
+.line-box{
+    display: flex;
+    align-items: center;
+}
+
+.que-label{
+    margin-right: 8rpx;
+    color: #bbb;
+}
+
+.rate-bar-box{
+    display: flex;
+    width: 400rpx;
+    background-color: #fff;
+    height: 6rpx;
+    margin: 0 20rpx;
+}
+
+.bar-right{
+    background-color: #3498db;
+    box-shadow: 0 0 10rpx #3498db;
+    margin-right: 3rpx;
+}
+
+.bar-wrong{
+    background-color: #eee;
+    box-shadow: 0 0 10rpx #fff;
+}
+
+.que-right{
+    color: #3498db;
+}
+
+.que-right::after{
+    content: '/';
+    color: #bbb;
+}
+
+.que-total{
+    color: #bbb;
 }

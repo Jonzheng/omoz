@@ -56,6 +56,9 @@ Page({
     });
     
     audioContext.onPlay(() => {
+      var answer_map = this.data.answer_map
+      console.log("on_play...")
+      this.saveAnswerHis(answer_map)
       this.setData({
           listening: true,
       });
@@ -66,6 +69,24 @@ Page({
 
     audioContext.onEnded(() => {
         console.log("end")
+        var type = this.data.listen_type
+        if (type == 21){
+          var que_type21 = this.data.que_type21
+          que_type21[0]["listening"] = false
+          this.setData({que_type21,listen_type:-1})
+        }else if(type == 22){
+          var que_type22 = this.data.que_type22
+          que_type22[0]["listening"] = false
+          this.setData({que_type22,listen_type:-1})
+        }else if(type == 23){
+          var que_type23 = this.data.que_type23
+          que_type23[0]["listening"] = false
+          this.setData({que_type23,listen_type:-1})
+        }else if(type == 24){
+          var que_type24 = this.data.que_type24
+          que_type24[0]["listening"] = false
+          this.setData({que_type24,listen_type:-1})
+        }
         this.setData({
           listening: false,
       });
@@ -152,7 +173,7 @@ Page({
     var cate3_total = 0
 
     var answer_map = this.data.answer_map
-    for (let [i, v] of questions.entries()){
+    for (let v of questions){
 
       v["radioItems"] = this.getRadioItems(v, answer_map)
 
@@ -197,6 +218,7 @@ Page({
           v["que_desc"] = "请先听问题,接着听对话,然后选出正确的答案"
           v["type_desc"] = "聴解题1--问题理解"
           que_type21.push(v)
+          v["listen_times"] = this.data.listen_1
         }else if (v.type == 22){
           v["que_desc"] = "请先听问题,接着听对话,然后选出正确的答案"
           v["type_desc"] = "聴解题2--重点理解"
@@ -213,13 +235,9 @@ Page({
       }
 
     }  //end for
-    
+    if (que_type21.length) que_type21[0]["size"] = que_type21.length
     console.log(que_type21)
     that.setData({
-      size21:que_type21.length,
-      size22:que_type22.length,
-      size23:que_type23.length,
-      size24:que_type24.length,
       cate1_total,
       cate2_total,
       cate3_total,
@@ -249,6 +267,7 @@ Page({
           console.log("queryQuestion:")
           var questions = res.data.data
           if (questions){
+            that.setData({questions})
             that.initQuestions(questions)
           }
       }
@@ -297,6 +316,7 @@ Page({
                 console.log(answer_map)
                 that.setData({
                   answer_map,
+                  answer,
                   listen_1,
                   listen_2,
                   listen_3,
@@ -399,6 +419,7 @@ Page({
               isFirst: false,
               show_save: true,
               spend_save: spend,
+              answer,
             })
             setTimeout(function(){that.setData({show_save:false})},1000)
         }
@@ -415,6 +436,7 @@ Page({
               isFirst: false,
               show_save: true,
               spend_save: spend,
+              answer,
             })
             setTimeout(function(){that.setData({show_save:false})},1000)
         }
@@ -455,13 +477,43 @@ Page({
   },
 
   listen: function(e){
-    var currData = e.currentTarget.dataset
-    var src = currData.src
-    var audioContext = this.data.audioContext
-    audioContext.src = src
-    if (!this.data.oriPlaying){
-        audioContext.play()
-
+    if (!this.data.listening){
+      var currData = e.currentTarget.dataset
+      var type = currData.type
+      if (type == 21){
+        var listen_type = 21
+        this.data.listen_1 += 1
+        var que_type21 = this.data.que_type21
+        que_type21[0]["listen_times"] = this.data.listen_1
+        que_type21[0]["listening"] = true
+        this.setData({que_type21,listen_type})
+      }else if(type == 22){
+        var listen_type = 22
+        this.data.listen_2 += 1
+        var que_type22 = this.data.que_type22
+        que_type22[0]["listen_times"] = this.data.listen_2
+        que_type22[0]["listening"] = true
+        this.setData({que_type22,listen_type})
+      }else if(type == 23){
+        var listen_type = 23
+        this.data.listen_3 += 1
+        var que_type23 = this.data.que_type23
+        que_type23[0]["listen_times"] = this.data.listen_3
+        que_type23[0]["listening"] = true
+        this.setData({que_type23,listen_type})
+      }else if(type == 24){
+        var listen_type = 24
+        this.data.listen_4 += 1
+        var que_type24 = this.data.que_type24
+        que_type24[0]["listen_times"] = this.data.listen_4
+        que_type24[0]["listening"] = true
+        this.setData({que_type24,listen_type})
+      }
+      var src = currData.src
+      var audioContext = this.data.audioContext
+      audioContext.src = src
+      
+      audioContext.play()
     }
   },
 
@@ -569,6 +621,52 @@ Page({
         clearInterval(back_it)
       }
     },1000)
+  },
+
+  //----交卷----
+  publishAnswer: function(){
+    console.log("publishAnswer")
+    var openid = App.globalData.openid
+    var paper_id = this.data.paper_id
+    var answer = this.data.answer
+    var spend = this.data.spend
+
+    var answer_map = this.data.answer_map
+    var questions = this.data.questions
+
+    var cate1_right = 0
+    var cate2_right = 0
+    var cate3_right = 0
+    for (let v of questions){
+      //统计各大题的正确数量
+      if (v.type <= 10){
+        if (answer_map[v.question_id] == v.right_option) cate1_right += 1
+      }else if(10 < v.type && v.type <= 20){
+        if (answer_map[v.question_id] == v.right_option) cate2_right += 1
+      }else if(v.type > 20){
+        if (answer_map[v.question_id] == v.right_option) cate3_right += 1
+      }
+
+    } //end for
+    var cate1_total = this.data.cate1_total
+    var cate2_total = this.data.cate2_total
+    var cate3_total = this.data.cate3_total
+
+    var answer_id = paper_id + "_" + new Date().getTime()
+    //cate1_total + cate2_total + cate3_total != cate1_done + cate2_done + cate3_done
+    var point = (cate1_right/cate1_total) * 60 + (cate2_right/cate2_total) * 60 + (cate3_right/cate3_total) * 60
+    wx.request({
+      url: urls.saveAnswer,
+      method: 'POST',
+      data: {answer_id, paper_id, openid, answer, spend, point, cate1_right, cate2_right, cate3_right, cate1_total, cate2_total, cate3_total},
+      success: function (res) {
+          console.log("saveAnswer:")
+          var answer_id = res.data.data
+          console.log(answer_id)
+          var _url = '../attention/attention?paper_id=' + paper_id + "&answer_id=" + answer_id
+          wx.redirectTo({url: _url})
+      }
+  })
   },
 
 })

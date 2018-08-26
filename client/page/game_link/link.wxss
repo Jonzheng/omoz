@@ -15,7 +15,7 @@
 .get-user{
     position: absolute;
     margin: 0 0;
-    width:100%;
+    width: 750rpx;
     height:1180rpx;
     border: 1px red solid;
     opacity: 0;
@@ -330,10 +330,6 @@
 
 .kata-black{
     color: #333;
-}
-
-.one-hover{
-    box-shadow: 0 0 20rpx rgba(0, 0, 255, 0.6);
 }
 
 .step-hover{

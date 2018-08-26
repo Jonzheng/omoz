@@ -13,7 +13,7 @@ module.exports = async ctx => {
     var listen_3 = body.listen_3
     var listen_4 = body.listen_4
     
-    console.log(body)
+    //console.log(body)
 
     await mysql("t_answer_his").where("paper_id", paper_id).andWhere("openid", openid).andWhere("god_on", god_on).update({
         answer: answer,

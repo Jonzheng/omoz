@@ -46,12 +46,17 @@ Page({
 
     onLoad: function () {
         console.log("onLoad")
+        if (!App.globalData.hasLogin) {
+            return
+        }
         var userInfo = App.globalData.userInfo
-        var showName = App.globalData.showName
-        var nickName = userInfo.nickName
-        if (!showName) showName = nickName
         if(userInfo){
+            console.log(userInfo)
+            var showName = App.globalData.showName
+            var nickName = userInfo.nickName
+            if (!showName) showName = nickName
             this.setData({
+                loged: true,
                 userInfo,
                 nickName: nickName,
                 avatarUrl: userInfo.avatarUrl,
@@ -66,6 +71,59 @@ Page({
     editName:function(){
         console.log("edit..")
         this.setData({edit:true})
+    },
+
+    toLogin: function (e) {
+        var that = this
+        var userInfo = e.detail.userInfo
+        console.log("toLogin:")
+        if(userInfo){
+            var openid = App.globalData.openid
+            var nickName = userInfo.nickName
+            var avatarUrl = userInfo.avatarUrl
+            var gender = 1
+            if (userInfo.gender != "" || userInfo.gender != undefined) gender = userInfo.gender
+            wx.request({
+                url: urls.updateUser,
+                method: 'POST',
+                data: {
+                    openid,
+                    nickName,
+                    avatarUrl,
+                    gender,
+                },
+                success: function (res) {
+                    console.log('updateUser:')
+                    var userInfo = res.data.data[0]
+                    console.log(userInfo)
+                    var showName = userInfo.show_name
+                    var nickName = userInfo.nick_name
+                    App.globalData.hasLogin = true
+                    App.globalData.userInfo = userInfo
+                    App.globalData.nickName = nickName
+                    App.globalData.showName = showName
+                    App.globalData.avatarUrl = avatarUrl
+                    App.globalData.gender = gender
+                    that.setData({
+                        loged: true,
+                        avatarUrl,
+                        nickName,
+                        showName
+                    })
+                },
+                fail: (res) => {
+                    console.log('fail:')
+                    console.log(res)
+                }
+            });
+
+        }else{
+            App.globalData.hasLogin = false
+            this.setData({
+                loged: false,
+            })
+            console.log(userInfo)
+        }
     },
 
     updateName: function(e){
@@ -90,6 +148,7 @@ Page({
                 showName,
             },
             success: function (res) {
+                App.globalData.showName = showName
                 that.setData({
                     edit:false,
                     nickName,

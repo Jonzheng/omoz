@@ -8,6 +8,15 @@
     align-items: center;
 }
 
+.get-user{
+    position: absolute;
+    margin: 0 0;
+    width: 750rpx;
+    height:1180rpx;
+    border: 1px red solid;
+    opacity: 0;
+}
+
 .user-avatar{
     flex: none;
     width: 88rpx;
