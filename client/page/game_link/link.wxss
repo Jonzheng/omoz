@@ -227,6 +227,8 @@
 
 .box-row{
     display: flex;
+    justify-content: center;
+    align-items: center;
     flex: none;
     height: 88rpx;
 }
@@ -235,6 +237,46 @@
     display: flex;
     flex: none;
     height: 88rpx;
+}
+
+.mg-top{
+    margin-top: 10rpx;
+}
+
+.btn-out{
+    display:flex;
+    flex: none;
+    padding: 0 3rpx;
+    background-color:#fff;
+    border:1px solid #ccc;
+    box-shadow:0px 0px 10rpx #999;
+    justify-content:center;
+    align-items:center;
+    height: 0;
+    opacity: 0;
+    transition: all 0.2s ease-out;
+}
+
+.btn-show{
+    height:88rpx;
+    opacity: 1;
+    transition: all 0.3s ease-in;
+}
+
+.btn-continue{
+    display:flex;
+    flex: none;
+    background-color:#dedede;
+    height:80rpx;
+    padding: 0 50rpx;
+    border:1px solid #ddd;
+    box-shadow:0px 0px 10rpx #fff inset;
+    border-radius: 5rpx;
+    justify-content:center;
+    align-items:center;
+    font-weight: bold;
+    font-size: 16px;
+    color: #555;
 }
 
 .step-out{

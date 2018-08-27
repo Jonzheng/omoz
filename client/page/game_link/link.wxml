@@ -19,7 +19,11 @@
             <block wx:for="{{fields}}" wx:key="mkey" wx:for-index="idx">
                 <template is="{{level_box}}" data="{{item,idx}}"/>
             </block>
-
+            <view class='box-row mg-top' hidden="{{!btn_show}}">
+                <view class='btn-out {{btn_show ? "btn-show":""}}'>
+                    <view class='btn-continue' hover-class='step-hover' bindtap="initGame">继 续</view>
+                </view>
+            </view>
         </view><!-- box-link end-->
 
         <view class='box-setting' hidden='{{top_hide}}'>
@@ -75,7 +79,7 @@
 
 <!-- 排行榜 -->
 <template name="rank-0">
-    <view class="row-player" hover-class='one-hover'>
+    <view class="row-player" hover-class='btn-hover'>
         <view class="rank-value rank-no">{{idx+1}}</view>
         <view class="rank-value width-player rank-player">
             <image class='user-avatar' src='{{avatar_url}}'></image>

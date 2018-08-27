@@ -95,6 +95,7 @@ Page({
       fields,
       level:1,
       spin_count:0,
+      hita_count:0,
       rest_count:total_step,
     })
     var it = setInterval(function(){
@@ -447,9 +448,14 @@ Page({
       rest_count
     })
 
-    //等级2-恢复
+    //分数结算
     if (rest_count == 0){
-      setTimeout(()=>{ this.initResult()},1000)
+      setTimeout(()=>{
+        this.initResult()
+      },600)
+      setTimeout(()=>{
+        this.setData({btn_show:true})
+      },3600)
     }
   },
 
@@ -696,7 +702,8 @@ Page({
         success: function (res) {
             console.log('saveLinkRank:')
             var rank = res.data.data[0]
-            var best = point > rank.point ? point : rank.point
+            console.log(rank)
+            var best = Math.max(point, rank.point)
             new_fields[9][2]["word"] = "" + parseInt(best / 1000 % 10)
             new_fields[9][3]["word"] = "" + parseInt(best / 100 % 10)
             new_fields[9][4]["word"] = "" + parseInt(best / 10 % 10)
@@ -714,7 +721,7 @@ Page({
         url: urls.queryLinkRank,
         method: 'POST',
         success: function (res) {
-            console.log('saveLinkRank:')
+            console.log('queryLinkRank:')
             var ranks = res.data.data
             console.log(ranks)
             that.setData({ranks})
@@ -810,7 +817,7 @@ Page({
     ks_ed = ks_ed.concat(ks_ed)
     ks_ed.sort(function(){ return (Math.random() - 0.5)})
     console.log(ks_ed.length)
-    this.setData({top_hide:true})
+    this.setData({top_hide:true,btn_show:false})
     this.initFields(ks_ed)
   },
 
