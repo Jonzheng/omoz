@@ -52,7 +52,7 @@
             <view class="box-ori">
                 <button hidden="{{loged}}" open-type="getUserInfo" class="get-user" bindgetuserinfo="toLogin">卍</button>
                 
-                <view class="btn-circle" bindtap="playOri">
+                <view class="btn-circle" bindtap="playOri" hover-class="black-hover">
                     <view class='{{oriPlaying ? "sound-stop" : "sound-play"}} '></view>
                 </view>
                 <view class='{{slider}}'></view>
@@ -81,18 +81,18 @@
             <view class="record-box">
                 <button hidden="{{loged}}" open-type="getUserInfo" class="get-user" bindgetuserinfo="toLogin">卍</button>
 
-                <view class='btn-circle {{!isRecording && hasTmp ? "" : "btn-hidden"}}' bindtap="playMyVoice">
+                <view class='btn-circle {{!isRecording && hasTmp ? "" : "btn-hidden"}}' bindtap="playMyVoice" hover-class="black-hover">
                     <view class='{{isPlaying ? "sound-stop" : "sound-play"}} '></view>
                 </view>
 
-                <view class="btn-circle btn-center" bindtap="startRecord">
+                <view class="btn-circle btn-center" bindtap="startRecord" hover-class="black-hover">
                     <view class='{{isRecording ? "sound-stop" : "btn-empty"}}'></view>
                     <image wx:if="{{hasTmp}}" src='{{icon_trash}}' class='btn-record'></image>
                     <image wx:elif="{{!isRecording}}" src='{{icon_record}}' class='btn-record'></image>
 
                 </view>
 
-                <view class='btn-circle {{isPlayed && hasTmp ? "" : "btn-hidden"}}' bindtap="uploadRecord">
+                <view class='btn-circle {{isPlayed && hasTmp ? "" : "btn-hidden"}}' bindtap="uploadRecord" hover-class="black-hover">
                     <image src='{{isPlayed && hasTmp ? icon_upload : ""}}' class="btn-record"></image>
                 </view>
 

@@ -1,7 +1,7 @@
 .content-paper{
     border-top:1rpx solid #fff;
     color: #666;
-    margin-bottom: 140rpx;
+    margin-bottom: 162rpx;
 }
 
 .box-text{

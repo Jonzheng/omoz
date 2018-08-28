@@ -95,6 +95,7 @@ Page({
             method: 'POST',
             success: function (res) {
                 var _list = res.data.data
+                if (!_list) return
                 _list.sort((a,b) => {return b.stars - a.stars})
                 var ssr_list = []
                 var sr_list = []

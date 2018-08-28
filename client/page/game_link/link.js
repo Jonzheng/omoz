@@ -107,7 +107,7 @@ Page({
       fields.push(row)
       //fields = []
       that.setData({fields})
-    },200)
+    },120)
   },
 
   onLoad: function(){
@@ -436,15 +436,24 @@ Page({
       var row = rc[0]
       var col = rc[1]
       fields[row][col]["on"] = !fields[row][col]["on"]
-      //记录分数用
-      var spin_count = this.data.spin_count
-      var rest_count = this.data.rest_count
-      rest_count -= 2
-      spin_count += steps.length
     }
+    //记录分数用
+    var spin_count = this.data.spin_count
+    var rest_count = this.data.rest_count
+    rest_count -= 2
+    var to_spin = spin_count + steps.length
+
+    var spit = setInterval(()=>{
+      if(spin_count < to_spin){
+        spin_count += 1
+        this.setData({spin_count})
+      }else{
+        clearInterval(spit)
+      }
+    },66)
+    
     this.setData({
       fields,
-      spin_count,
       rest_count
     })
 
@@ -452,10 +461,10 @@ Page({
     if (rest_count == 0){
       setTimeout(()=>{
         this.initResult()
-      },600)
+      },500)
       setTimeout(()=>{
         this.setData({btn_show:true})
-      },3600)
+      },4200)
     }
   },
 
