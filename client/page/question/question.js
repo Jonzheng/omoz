@@ -128,23 +128,24 @@ Page({
       })
   },
 
-  getRadioItems: function(question, answer_map){
-    var radioItems = [{name: question.option_a, value: "A"},{name: question.option_b, value: "B"},{name: question.option_c, value: "C"},{name: question.option_d, value: "D"}]
-
-    var option = answer_map[question.question_id]
-
-    if(option == "A"){
-      //如果已选择
-      radioItems[0]["checked"] = true
-    }else if(option == "B"){
-      radioItems[1]["checked"] = true
-    }else if(option == "C"){
-      radioItems[2]["checked"] = true
-    }else if(option == "D"){
-      radioItems[3]["checked"] = true
+  initRadioItems(radioItems, my_option){
+    for (let i = 0; i < radioItems.length; i++) {
+      radioItems[i]["checked"] = radioItems[i]["value"] == my_option
+      radioItems[i]["sed"] = true
     }
-    if (option){
-      this.initCate(question.question_id)
+    return radioItems
+  },
+
+  getRadioItems: function(question, answer_map){
+    var right_option = question.right_option
+    var question_id = question.question_id
+    var radioItems = [{name: question.option_a, value: "A", right_option: right_option},{name: question.option_b, value: "B", right_option: right_option},{name: question.option_c, value: "C", right_option: right_option},{name: question.option_d, value: "D", right_option: right_option}]
+
+    var my_option = answer_map[question_id]
+
+    if (my_option){
+      radioItems = this.initRadioItems(radioItems, my_option)
+      this.initCate(question_id)
     }
     return radioItems
   },
@@ -449,28 +450,18 @@ Page({
 
   radioChange: function (e) {
       var currData = e.currentTarget.dataset
-      var god_on = this.data.god_on
       var curr_type = "que_type" + currData.type
       var _list = this.data[curr_type]
-      var right_option = _list[currData.index].right_option.toUpperCase()
-      var radioItems = _list[currData.index].radioItems
-      for (var i = 0, len = radioItems.length; i < len; ++i) {
-
-          radioItems[i].checked = radioItems[i].value == e.detail.value
-
-          if (god_on == 1){
-              radioItems[i].right = radioItems[i].value == right_option
-              radioItems[i].abled = true
-          }
-          
-      }
-
+      var radioItems = _list[currData.index]["radioItems"]
+      var my_option = e.detail.value
+      radioItems = this.initRadioItems(radioItems, my_option)
+      
       var question = _list[currData.index]
       var question_id = question.question_id
       var answer_map = this.data.answer_map
       //更新显示已做的题目数
       if (!answer_map[question_id]) this.initCate(question_id)
-      answer_map[question_id] = e.detail.value
+      answer_map[question_id] = my_option
 
       this.setQueList(currData.type, _list)
       this.saveAnswerHis(answer_map)

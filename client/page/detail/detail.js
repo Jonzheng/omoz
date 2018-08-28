@@ -45,7 +45,8 @@ Page({
         loged: false,
         slider: 'bar-ori',
         oriPlaying: false,
-        isWifi: false,
+        show_video: false,
+        an_in: false,
         canIUse: wx.canIUse('button.open-type.getUserInfo'),
         list_master:[],
         record_map:{},
@@ -164,7 +165,7 @@ Page({
     unlock: function(){
         console.log("unlock")
         this.setData({
-            isWifi:true
+            show_video:true
         })
     },
     //更新用户到数据库
@@ -253,6 +254,7 @@ Page({
             file_id,
             loged:App.globalData.hasLogin,
         })
+        setTimeout(()=>{this.setData({an_in:true})},300)
     },
 
     setOriStop: function(){

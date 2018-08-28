@@ -120,20 +120,20 @@
     <view class="weui-cells weui-cells_after-title">
         <radio-group bindchange="radioChange" data-index="{{idx}}" data-type="{{type}}">
 
-            <view class="label-cover" hidden="{{god_on != 1}}"></view>
+            <view class="label-cover" hidden="{{god_on != 1}}" hover-class="black-hover"></view>
             <label class="weui-cell weui-check__label my-full-label" wx:for="{{radioItems}}" wx:key="value" hover-class="my-option-hover">
 
-                <view class='box-radio {{item.checked ? "radio-checked" : ""}} {{god_on == 1 && !item.abled ? "god-on-radio" : ""}}'>
+                <view class='box-radio {{item.checked ? "radio-checked" : ""}} {{god_on == 1 && !item.sed ? "god-on-radio" : ""}}'>
                     <view class='{{item.checked ? "center-checked" : ""}}'></view>
                 </view>
 
-                <radio class="weui-check" value="{{item.value}}" checked="{{item.checked}}" disabled="{{item.abled}}"/>
+                <radio class="weui-check" value="{{item.value}}" checked="{{item.checked}}" disabled="{{god_on == 1 && item.sed}}"/>
 
                 <view class="weui-cell__bd my-option">
                     <view class="my-label">{{item.value}}.</view>{{item.name}}
                 </view>
 
-                <view class="weui-cell__ft weui-cell__ft_in-radio" wx:if="{{item.right}}">
+                <view class="weui-cell__ft weui-cell__ft_in-radio" wx:if="{{god_on == 1 && item.sed && item.right_option == item.value}}">
                     <icon class="weui-icon-radio" type="success_no_circle" size="30"></icon>
                 </view>
             </label>

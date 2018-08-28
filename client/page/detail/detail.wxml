@@ -9,7 +9,7 @@
 
         <view class="page-section box-video">
 
-            <video wx:if='{{isWifi}}' id="myVideo" src="{{list_element.src_video}}"
+            <video wx:if='{{show_video}}' id="myVideo" src="{{list_element.src_video}}"
                 show-fullscreen-btn='{{false}}'
                 custom-cache="{{false}}"
                 enable-progress-gesture="{{false}}"
@@ -24,14 +24,14 @@
                 </view>
 
                 <view class='fuin-unlock' bindtap="unlock">
-                    <view class=''>卍解</view>
+                    <view class=''>播放</view>
                 </view>
 
-                <view class='fuin-2'>
+                <view class='fuin-2 {{!show_video && an_in ? "an-second" : ""}}'>
                     <view class='spin-2'>卍卍卍卍卍卍卍卍卍卍最強の封印卍卍卍卍卍卍卍卍卍</view>
                 </view>
 
-                <view class='fuin-1'>
+                <view class='fuin-1 {{!show_video && an_in ? "an-first" : ""}}'>
                     <!--<view class='spin-1'>keep out  keep out  keep out keep out</view> -->
                     <view class='spin-1'>立入禁止 立入禁止 立入禁止 立入禁止 立入禁止 立入禁止</view>
                 </view>

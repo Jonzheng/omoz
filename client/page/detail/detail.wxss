@@ -14,6 +14,19 @@ video {
     overflow: visible;
 }
 
+.an-show{
+    opacity: 1;
+    height: 360rpx;
+    transition: all 0.2s ease-in;
+}
+
+.an-hide{
+    display: none;
+    opacity: 0;
+    height: 0;
+    transition: all 0.2s ease-in;
+}
+
 .warning-black{
     position: relative;
     text-transform: uppercase;
@@ -21,10 +34,12 @@ video {
     border: 6rpx double rgba(255,255,255,.25);
     border-width: 6rpx 0;
     width:700rpx;
-    height: 360rpx;
     background: #aaa;
     text-align: center;
     overflow: visible;
+    opacity: 1;
+    height: 360rpx;
+    transition: all 0.2s ease-out;
 }
 
 @keyframes an-slide {
@@ -65,13 +80,16 @@ video {
     font-weight: bold;
     letter-spacing: 7rpx;
     text-shadow: 0 0 300rpx #eee;
+    opacity: 0;
+}
 
-    animation: an-first 0.3s ease-in;
+.an-first{
+    animation: ke-first 0.3s ease-in;
     animation-fill-mode: forwards;
 }
 
-@keyframes an-first{
-    0% { transform: rotate(0deg);opacity: 0;}
+@keyframes ke-first{
+    0% { transform: rotate(0deg);}
     30% {opacity: 0;}
     100% { transform: rotate(10deg);opacity: 1;}
 }
@@ -89,15 +107,18 @@ video {
     font-weight: bold;
     letter-spacing: 10rpx;
     text-shadow: 0 0 300rpx #eee;
-
-    animation: an-second 0.5s ease-in;
-    animation-fill-mode: forwards;
+    opacity: 0;
 
     transform: rotate(-20deg);
 }
 
-@keyframes an-second{
-    0% { opacity: 0;}
+.an-second{
+    animation: ke-second 0.7s ease-in;
+    animation-fill-mode: forwards;
+}
+
+@keyframes ke-second{
+    0% {opacity: 0;}
     79% {opacity: 0;}
     80% {opacity: 1;}
     90% {opacity: 0.6;}
