@@ -1,4 +1,4 @@
-<view class='page {{!rank_hide && !top_hide ? "":"fixed"}}'>
+<view class='page {{top_hide ? "fixed":""}}'>
         <button hidden="{{loged}}" open-type="getUserInfo" class="get-user" bindgetuserinfo="toLogin">卍</button>
 
         <view class='top-box'>

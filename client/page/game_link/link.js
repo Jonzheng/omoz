@@ -664,6 +664,7 @@ Page({
     var spin_count = this.data.spin_count
     var hita_count = this.data.hita_count
     var sed_size = this.data.sed_size
+    sed_size = Math.max(sed_size, 10)
     var point = Math.round( (spin_count + hita_count * 10) * sed_size/10 )
     var new_fields = fields
     new_fields[0][0]["word"] = "旋"
@@ -823,15 +824,16 @@ Page({
       ks_ed = ks_ed.concat(ks_ed)
     }
     ks_ed = ks_ed.slice(0, half_sed)
-    ks_ed = ks_ed.concat(ks_ed)
     ks_ed.sort(function(){ return (Math.random() - 0.5)})
-    console.log(ks_ed.length)
+    var t_kanas = ks_ed.concat()
+    t_kanas.sort(function(){ return (Math.random() - 0.5)})
+    //console.log(ks_ed.length)
     this.setData({top_hide:true,btn_show:false})
-    this.initFields(ks_ed)
+    this.initFields(ks_ed, t_kanas)
   },
 
-  initFields: function(kanas){
-    //kanas.length == 74
+  initFields: function(kanas, t_kanas){
+    //total_step = kanas + t_kanas
     var pos_map = {}
     var new_fields = []
     var kata_on = this.data.kata_on
@@ -841,13 +843,17 @@ Page({
         var kana = {}
         var space1 = (row == 6 && col > 0 && col < max_col-1)
         var space2  = (row == 3 && col > 2 && col < 5)
-        if (!space1 && !space2) kana = kanas.pop()
-        var roma = kana["roma"] ? kana["roma"] : ""
-        var word = kana["hira"] ? kana["hira"] : ""
-        var kata = false
-        if(kata_on && (row+col) % 2 == 0){
-          word = kana["kata"] ? kana["kata"] : ""
-          kata = true
+        if((row+col) % 2 == 0){
+          if (!space1 && !space2) kana = kanas.pop()
+          var roma = kana["roma"] ? kana["roma"] : ""
+          var word = kana["hira"] ? kana["hira"] : ""
+          var kata = false
+        }else{
+          if (!space1 && !space2) kana = t_kanas.pop()
+          var roma = kana["roma"] ? kana["roma"] : ""
+          var word = kana["hira"] ? kana["hira"] : ""
+          if (kata_on) word = kana["kata"] ? kana["kata"] : ""
+          var kata = kata_on
         }
         //couple
         if(pos_map[roma]){
