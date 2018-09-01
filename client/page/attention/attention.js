@@ -5,6 +5,7 @@ Page({
 
   data: {
     god_on: 0,
+    point_count: 0,
     show_result: false,
   },
 
@@ -117,7 +118,17 @@ Page({
     },300)
 
     setTimeout(()=> this.fadeIn(), 3000)
-    
+
+    var point_count = 0
+    var point = max1/100 * 60 + max2/100 * 60 + max3/100 * 60
+    var spit = setInterval(()=>{
+      if(point_count < point){
+        point_count += 1
+        this.setData({point_count})
+      }else{
+        clearInterval(spit)
+      }
+    },26)
   },
 
   loadQuestion: function(paper_id){

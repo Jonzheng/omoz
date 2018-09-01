@@ -11,7 +11,7 @@ Page({
     wx.request({
         url: urls.queryPaper,
         method: 'POST',
-        data: {},
+        data: {status: 1},
         success: function (res) {
             console.log("queryPaper:")
             var _list = res.data.data

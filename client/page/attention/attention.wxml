@@ -101,6 +101,13 @@
                 </view>
             </view>
 
+            <view class="box-cate">
+                <view class="paper-label">得分: </view>
+                <view class="content-cate">
+                    <view class="c-text s-text">{{point_count}}</view>
+                </view>
+            </view>
+
         </view> <!-- box-result end -->
 
     </view>

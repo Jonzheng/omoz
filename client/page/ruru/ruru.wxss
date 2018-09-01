@@ -45,8 +45,23 @@
 .content-cate{
     color: #999;
     border-left:6rpx solid #ddd;
-    margin-left: 70rpx;
+    margin-left: 30rpx;
     padding-left: 12rpx;
+}
+
+.content{
+    margin: 6rpx 0;
+}
+
+.content-sm{
+    margin-left: 40rpx;
+    color: #aaa;
+    font-size: 28rpx;
+}
+
+.content-desc{
+    margin-left: 30rpx;
+    font-size: 30rpx;
 }
 
 .c-text{
