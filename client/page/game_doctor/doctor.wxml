@@ -1,0 +1,105 @@
+<view class='page {{top_hide ? "fixed":""}}'>
+        <button hidden="{{loged}}" open-type="getUserInfo" class="get-user" bindgetuserinfo="toLogin">卍</button>
+
+        <view class='top-box'>
+            <view class='box-point'>
+                <view class='top-label {{!top_hide ? "top-hide":""}}'>旋转:</view>
+                <view class='top-value {{!top_hide ? "top-hide":""}}'>{{spin_count}}</view>
+            </view>
+            <view class='top-option {{option != 1 ? "":"option-active"}} {{top_hide ? "top-hide":""}}' bindtap="setting" data-option="1">假名设定</view>
+            <view class='top-option {{option != 2 ? "":"option-active"}} {{top_hide ? "top-hide":""}}' bindtap="setting" data-option="2">排行榜</view>
+            <image class='top-setting {{top_hide ? "rt-90":""}}' src='{{icon_setting}}' bindtap="setting" data-option="0"></image>
+        
+        </view><!-- top-box end-->
+
+    <view class='box-body' hidden="{{!loged}}">
+
+        <view class='box-link' hidden='{{!top_hide}}'>
+
+            <block wx:for="{{fields}}" wx:key="mkey" wx:for-index="idx">
+                <template is="level-1" data="{{item,idx}}"/>
+            </block>
+            <view class='box-row mg-top' hidden="{{!btn_show}}">
+                <view class='btn-out {{btn_show ? "btn-show":""}}'>
+                    <view class='btn-continue' hover-class='step-hover' bindtap="initGame">继 续</view>
+                </view>
+            </view>
+        </view><!-- box-link end-->
+
+        <view class='box-setting' hidden='{{top_hide}}'>
+
+            <view class='box-kana' hidden='{{kana_hide}}'>
+                <block wx:for="{{ks_all}}" wx:key="mkey" wx:for-index="row">
+                    <template is="all-kana" data="{{item,row,is_max}}"/>
+                </block>
+                <view class="setting-meun">
+                    <view class='top-label'>片假名:</view>
+                    <view class='col-kana {{kata_on ? "kana-active":""}}' hover-class='kana-hover' bindtap="switchKata">
+                        <view class='col-hira {{kata_on ? "kata-color":""}}'>{{kata_on ? "ア": "あ"}}</view>
+                        <view class="col-kama">
+                            <view class="">{{!kata_on ? "ア": "あ"}}</view>
+                            <view class="">{{kata_on ? "on": "off"}}</view>
+                        </view>
+                    </view>
+                    <view class='setting-reset' hover-class='kana-hover' bindtap="initGame">重置游戏</view>
+                </view>
+            </view><!-- box-kana end-->
+
+            <view class='box-rank' hidden='{{rank_hide}}'>
+                <view class="row-title">
+                    <view class="rank-value rank-no">排名</view>
+                    <view class="rank-value width-player">玩家</view>
+                    <view class="rank-value">分数</view>
+                    <view class="rank-value">通关次数</view>
+                </view>
+                <block wx:for="{{ranks}}" wx:key="mkey" wx:for-index="idx">
+                    <template is="rank-0" data="{{...item,idx}}"/>
+                </block>
+            </view><!-- box-rank end-->
+
+        </view><!-- box-setting end-->
+
+    </view><!-- box-body end-->
+
+</view><!-- box-page end-->
+
+<template name="level-1">
+    <view class="box-row">
+        <block wx:for="{{item}}" wx:key="mkey" wx:for-index="idx">
+            <view class='step-out' data-row="{{item.row}}" data-col="{{item.col}}" data-roma="{{item.roma}}"
+                data-word="{{item.word}}" bindtap="click">
+                <view class='step {{item.on ? "step-on":"step-off"}}' hover-class='step-hover'>
+                <view class='step-word {{item.kata ? "kata-color":""}} {{item.active ? "step-active":""}}'>{{item.word}}</view>
+                </view>
+            </view>
+        </block>
+    </view>
+</template>
+
+<!-- 排行榜 -->
+<template name="rank-0">
+    <view class="row-player" hover-class='btn-hover'>
+        <view class="rank-value rank-no">{{idx+1}}</view>
+        <view class="rank-value width-player rank-player">
+            <image class='user-avatar' src='{{avatar_url}}'></image>
+            <view class='user-name'>{{show_name}}</view>
+        </view>
+        <view class="rank-value">{{point}}</view>
+        <view class="rank-value">{{round}}</view>
+    </view>
+</template>
+
+<!-- 设定假名 -->
+<template name="all-kana">
+    <view class="row-kana">
+        <block wx:for="{{item}}" wx:key="mkey" wx:for-index="col">
+            <view class='col-kana {{item.selected ? "kana-active":""}} {{is_max && item.selected ? "kana-max":""}}' hover-class='kana-hover' data-row="{{row}}" data-col="{{col}}" bindtap="select">
+                <view class='col-hira {{item.selected ? "kata-color":""}}'>{{item.hira}}</view>
+                <view class="col-kama">
+                    <view class="">{{item.kata}}</view>
+                    <view class="">{{item.roma}}</view>
+                </view>
+            </view>
+        </block>
+    </view>
+</template>

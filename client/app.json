@@ -7,6 +7,7 @@
     "page/lab/lab",
     "page/game/game",
     "page/game_link/link",
+    "page/game_doctor/doctor",
     "page/ruru/ruru",
     "page/question/question",
     "page/mine/mine",
