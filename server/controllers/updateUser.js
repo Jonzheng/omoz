@@ -7,7 +7,7 @@ module.exports = async ctx => {
     var showName = body.showName
     var avatarUrl = body.avatarUrl
     var gender = body.gender
-    console.log(body)
+    //console.log(body)
     if (showName){
         await mysql("t_user").where("openid", openid).update({ nick_name: nickName,show_name: showName, avatar_url: avatarUrl, gender: gender})
     }else{

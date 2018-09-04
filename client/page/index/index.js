@@ -10,28 +10,24 @@ Page({
     },
     
     //注册到数据库
-    updateLogin: (js_code)=>{
-        var avatarUrl
-        if (App.globalData.userInfo) avatarUrl = App.globalData.userInfo.avatarUrl
-
+    updateLogin: function(js_code, userInfo){
+        var avatarUrl = userInfo ? userInfo.avatarUrl : ""
+        var nickName = userInfo ? userInfo.nickName : ""
         wx.request({
             url: urls.updateLogin,
             method: 'POST',
             data: {
                 js_code,
                 avatarUrl,
+                nickName
             },
             success: function (res) {
                 console.log('updateLogin:')
-                
-                var userInfo = res.data.data[0]
-                console.log(userInfo)
-                App.globalData.openid = userInfo.openid
-                App.globalData.showName = userInfo.show_name
-            },
-            fail: (res) => {
-                console.log('fail:')
-                console.log(res)
+                var user = res.data.data[0]
+                console.log(user)
+                App.globalData.openid = user.openid
+                App.globalData.nickName = user.nick_name
+                App.globalData.showName = user.show_name
             }
         });
     },
@@ -61,25 +57,23 @@ Page({
         wx.login({
             success: function (res) {
                 console.log("login_success")
-                if (res.code) {
-                    var js_code = res.code
-                    console.log(js_code)
+                var js_code = res.code
+                if (js_code) {
                     //尝试获取用户信息
                     wx.getUserInfo({
                         success: function (res) {
                             console.log("getUserInfo-success")
                             App.globalData.hasLogin = true
-                            console.log(res)
                             var userInfo = res.userInfo
                             App.globalData.userInfo = userInfo
+                            that.updateLogin(js_code, userInfo)
                         },
                         fail: function (err) {
+                            //授权之前
                             console.log("getUserInfo-fail")
-                            App.globalData.hasLogin = false
                             console.log(err)
-                        },
-                        complete: function () {
-                            that.updateLogin(js_code)
+                            App.globalData.hasLogin = false
+                            that.updateLogin(js_code, undefined)
                         }
                     })
 

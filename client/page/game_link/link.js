@@ -71,7 +71,7 @@ Page({
     var ks_n = this.getKanaRows(kana_n)
     var ks_all = []
     ks_all.push(ks_a,ks_ka,ks_sa,ks_ta,ks_na,ks_ha,ks_ma,ks_ya,ks_ra,ks_wa,ks_n)
-    console.log(ks_all)
+    //console.log(ks_all)
     this.setData({
       ks_all,
       ks_a,
@@ -153,6 +153,7 @@ Page({
     var showName = App.globalData.showName
     var avatarUrl = App.globalData.avatarUrl
     var gender = App.globalData.gender
+    console.log(nickName)
     wx.request({
         url: urls.updateUser,
         method: 'POST',

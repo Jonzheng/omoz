@@ -20,12 +20,13 @@ module.exports = async ctx => {
         })
     }
     await getOpenid()
-    //console.log(openid)
+    console.log(openid)
 
     await mysql.raw('insert into t_user(openid, c_date) values (?,now())on duplicate key update latest_date = now()', openid);
 
     var avatarUrl = body.avatarUrl
-    if (avatarUrl) await mysql("t_user").where("openid", openid).update({ avatar_url: avatarUrl })
+    var nickName = body.nickName
+    if (avatarUrl) await mysql("t_user").where("openid", openid).update({avatar_url: avatarUrl, nick_name: nickName})
     var userInfo = await mysql('t_user').select('*').where('openid', openid)
     ctx.state.data = userInfo
 }
