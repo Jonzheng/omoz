@@ -68,8 +68,10 @@
         <block wx:for="{{item}}" wx:key="mkey" wx:for-index="idx">
             <view class='step-out' data-row="{{item.row}}" data-col="{{item.col}}" data-roma="{{item.roma}}"
                 data-word="{{item.word}}" bindtap="click">
-                <view class='step {{item.on ? "step-on":"step-off"}}' hover-class='step-hover'>
-                <view class='step-word {{item.kata ? "kata-color":""}} {{item.active ? "step-active":""}}'>{{item.word}}</view>
+                <view class='step' hover-class='step-hover'>
+                    <view class='{{item.active ? "step-active":""}}'>
+                        <view class='step-word {{item.on ? "step-on":"step-off"}} {{item.kata ? "kata-color":""}}'>{{item.word}}</view>
+                    </view>
                 </view>
             </view>
         </block>

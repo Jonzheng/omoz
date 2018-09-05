@@ -201,19 +201,18 @@ click: function(e){
   var row = currData.row
   var col = currData.col
   console.log(row, col)
-  console.log(this.data.doctor)
+
   if (this.data.doctor > 0){
     console.log("=========")
-    console.log(fields[0])
+    console.log(fields[row][col])
   }else{
-    this.initBucket()
     var doctor = setInterval(()=>{
       var bucket = this.data.bucket
       fields = that.data.fields
       if (bucket.length == 2){
         var right = bucket.pop()
         var left = bucket.pop()
-        if (left.row < 9 && right.row < 9){
+        if (left.row < 10 && right.row < 10 && fields[left.row+1][left.col]["word"] == "" && fields[right.row+1][right.col]["word"] == ""){
           console.log("down...")
           fields[left.row][left.col]["word"] = ""
           fields[right.row][right.col]["word"] = ""
@@ -222,23 +221,30 @@ click: function(e){
           fields[left.row][left.col]["active"] = false
           fields[right.row][right.col]["active"] = false
   
+          //移动到目标点
           fields[left.row+1][left.col]["word"] = left["word"]
-          fields[right.row+1][right.col]["word"] = left["word"]
+          fields[right.row+1][right.col]["word"] = right["word"]
+
           fields[left.row+1][left.col]["roma"] = left["roma"]
-          fields[right.row+1][right.col]["roma"] = left["roma"]
+          fields[right.row+1][right.col]["roma"] = right["roma"]
           fields[left.row+1][left.col]["active"] = true
           fields[right.row+1][right.col]["active"] = true
+          fields[left.row+1][left.col]["on"] = !fields[left.row+1][left.col]["on"]
+          fields[right.row+1][right.col]["on"] = !fields[right.row+1][right.col]["on"]
   
           left = fields[left.row+1][left.col]
-          right = fields[right.row][right.col]
+          right = fields[right.row+1][right.col]
           bucket.push(left, right)
           this.setData({bucket, fields})
+        }else{ //触底
+          this.initBucket()
         }
 
-      }else{
+      }else{ //游戏开始
         console.log("bucket-no")
+        this.initBucket()
       }
-    },2000)
+    },3000)
     this.setData({doctor})
   }
   

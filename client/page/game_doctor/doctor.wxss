@@ -340,6 +340,12 @@
     border:1px solid #fff;
     box-shadow:0px 0px 10rpx #fff inset;
     border-radius: 5rpx;
+
+    transform: rotateX(180deg);
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;	/* Chrome 和 Safari */
+    perspective: 5555rpx;
+    perspective-origin: 80% 2220rpx;
 }
 
 .step{
@@ -372,7 +378,8 @@
 }
 
 .step-active{
-    animation: ke-active 3s infinite;
+    color: black;
+    box-shadow: 0 0 20rpx rgba(0, 0, 255, 0.6);
 }
 
 .kana-active{
@@ -396,33 +403,31 @@
 }
 
 .step-on{
-    animation: ke-on 0.6s ease-in;
+    animation: ke-on 0.3s ease-in;
+    animation-fill-mode: forwards;
 }
 
 .step-off{
-    animation: ke-off 0.6s ease-in;
+    animation: ke-off 0.3s ease-in;
+    animation-fill-mode: forwards;
 }
 
 @keyframes ke-on{
-    0%{opacity: 1;}
-    45%{opacity: 1;}
-    50%{opacity: 0.65;}
-    55%{opacity: 1;}
-    60%{opacity: 1;}
-    65%{opacity: 1;}
-    95%{opacity: 0.6;}
-    100%{opacity: 1;}
+    0%{
+        transform: rotateX(60deg);
+    }
+    100%{
+        transform: rotateX(0deg);
+    }
 }
 
 @keyframes ke-off{
-    0%{opacity: 1;}
-    45%{opacity: 1;}
-    50%{opacity: 0.66;}
-    55%{opacity: 1;}
-    60%{opacity: 1;}
-    65%{opacity: 1;}
-    95%{opacity: 0.6;}
-    100%{opacity: 1;}
+    0%{
+        transform: rotateX(62deg);
+    }
+    100%{
+        transform: rotateX(0deg);
+    }
 }
 
 @keyframes ke-show{
@@ -448,6 +453,7 @@
 
 @keyframes ke-active{
     50%{
-        box-shadow: 0 0 20rpx rgba(0, 0, 255, 0.6);
+        box-shadow: 0 0 30rpx rgba(0, 0, 255, 0.8);
+        color: black;
     }
 }
