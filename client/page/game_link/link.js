@@ -30,18 +30,18 @@ Page({
     this_ups:[],
     this_downs:[],
     ks_sed:[],
-    level_box:"level-1",
     level:1,
     spin_count:0,
     hita_count:0,
     sed_size:10,
+    st_hint:0,
     rest_count:total_step,
-    avatarUrl:"../../image/heart_full.png",
     icon_setting:"../../image/setting.png",
     option: 1,
     top_hide: true,
     rank_hide: true,
     kana_hide: true,
+    step_show: true,
   },
 
   getKanaRows: function(kana_row){
@@ -135,8 +135,7 @@ Page({
         this.setData({
             loged: true,
         })
-        console.log(userInfo)
-        that.updateUser()
+        that.updateUser(userInfo)
     }else{
         App.globalData.hasLogin = false
         this.setData({
@@ -147,29 +146,24 @@ Page({
   },
 
   //更新用户到数据库
-  updateUser: () => {
+  updateUser: (userInfo) => {
+    console.log(userInfo)
     var openid = App.globalData.openid
-    var nickName = App.globalData.nickName
-    var showName = App.globalData.showName
-    var avatarUrl = App.globalData.avatarUrl
-    var gender = App.globalData.gender
-    console.log(nickName)
+    var nickName = userInfo.nickName
+    var avatarUrl = userInfo.avatarUrl
+    var gender = 1
+    if (userInfo.gender != "" || userInfo.gender != undefined) gender = userInfo.gender
     wx.request({
         url: urls.updateUser,
         method: 'POST',
         data: {
             openid,
             nickName,
-            showName,
             avatarUrl,
             gender,
         },
         success: function (res) {
             console.log('updateUser:')
-            console.log(res)
-        },
-        fail: (res) => {
-            console.log('fail:')
             console.log(res)
         }
     });
@@ -452,8 +446,9 @@ Page({
         clearInterval(spit)
       }
     },66)
-    
+    var step_show = !this.data.step_show
     this.setData({
+      step_show,
       fields,
       rest_count
     })
@@ -626,7 +621,8 @@ Page({
   goLink: function(e){
     var currData = e.currentTarget.dataset
     var word = currData.word
-    if (word == "") return
+    var st_hint = this.data.st_hint
+    if (word == "" || st_hint != 0) return
     var bucket = this.data.bucket
     var fields = this.data.fields
     var row = currData.row
@@ -640,7 +636,7 @@ Page({
         var old_step = fields[old_row][old_col]
         var old_rc = old_row+""+old_col
         var rc = row+""+col
-        console.log(old_row, old_col)
+        //console.log(old_row, old_col)
         if (old_rc != rc){
           old_step["active"] = false
           bucket.pop()
@@ -654,6 +650,26 @@ Page({
     }
     this.setData({fields,bucket})
 
+  },
+
+  showRoma: function(e){
+    var currData = e.currentTarget.dataset
+    var word = currData.word
+    var st_hint = this.data.st_hint
+    if (word == "" || st_hint != 0) return
+    wx.vibrateLong()
+    var fields = this.data.fields
+    var row = currData.row
+    var col = currData.col
+    var this_step = fields[row][col]
+    this_step["hint"] = true
+    
+    var st_hint = setTimeout(()=>{
+      this_step["hint"] = false
+      this.setData({fields, st_hint:0})
+    },1000)
+
+    this.setData({fields, st_hint})
   },
 
 //---------------------------------------------
@@ -713,7 +729,6 @@ Page({
         success: function (res) {
             console.log('saveLinkRank:')
             var rank = res.data.data[0]
-            console.log(rank)
             var best = Math.max(point, rank.point)
             new_fields[9][2]["word"] = "" + parseInt(best / 1000 % 10)
             new_fields[9][3]["word"] = "" + parseInt(best / 100 % 10)
@@ -734,7 +749,6 @@ Page({
         success: function (res) {
             console.log('queryLinkRank:')
             var ranks = res.data.data
-            console.log(ranks)
             that.setData({ranks})
         }
     });

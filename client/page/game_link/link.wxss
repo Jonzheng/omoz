@@ -169,7 +169,6 @@
     flex: none;
     height: 88rpx;
     border: 1rpx solid #fff;
-    box-shadow:0px 0px 10rpx #fff;
     color: #aaa;
 }
 
@@ -289,6 +288,16 @@
     align-items:center;
 }
 
+.show-0{
+    animation: 0.5s ke-show ease-out;
+    animation-fill-mode: forwards;
+}
+
+.show-1{
+    animation: 0.5s ke-show-1 ease-out;
+    animation-fill-mode: forwards;
+}
+
 .step-show{
     animation: 0.6s ke-show ease-out;
     animation-fill-mode: forwards;
@@ -348,6 +357,14 @@
     perspective-origin: 80% 2220rpx;
 }
 
+.step-180{
+    transform: rotateX(180deg);
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;	/* Chrome 和 Safari */
+    perspective: 5555rpx;
+    perspective-origin: 80% 2220rpx;
+}
+
 .step{
     display:flex;
     flex: none;
@@ -385,6 +402,24 @@
 .kana-active{
     transform: scale(1.02, 1.02);
     box-shadow: 0 0 20rpx rgba(0, 0, 255, 0.3) inset;
+}
+
+.kana-sm{
+    transform: scale(0.92, 0.92);
+}
+
+.abs-hide{
+    position: absolute;
+    left: 44%;
+    top: -111rpx;
+    transition: top 0.2s ease-in;
+}
+
+.kana-abs{
+    position: absolute;
+    top: 15rpx;
+    left: 44%;
+    transition: top 0.3s ease-in;
 }
 
 .kana-max{
@@ -437,6 +472,15 @@
 @keyframes ke-show{
     0%{
         transform: rotateX(180deg);
+    }
+    100%{
+        transform: rotateX(0deg);
+    }
+}
+
+@keyframes ke-show-1{
+    0%{
+        transform: rotateX(179deg);
     }
     100%{
         transform: rotateX(0deg);

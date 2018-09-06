@@ -316,3 +316,8 @@ form{
   transform:scale(0.98, 0.98);
   box-shadow: 0 0 10rpx #7ed5f0;
 }
+
+.blue-hover{
+  transform:scale(1.01, 1.01);
+  box-shadow: 0 0 20rpx rgba(0, 0, 255, 0.3);
+}
