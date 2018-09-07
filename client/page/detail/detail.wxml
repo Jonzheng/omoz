@@ -104,12 +104,12 @@
 <template name="ele-master">
     <view class="weui-cell an-fade-in">
         <view class="re-user weui-cell__hd">
-            <view class="re-nickname">{{show_name}}</view>
+            <view class="re-nickname">{{show_name ? show_name : nick_name}}</view>
             <image src="{{avatar_url}}" class="master-record"></image>
 
             <view class="tri"></view>
             <view class="{{boxStyle}} {{anListen}}" data-idx="{{index}}"
-                bindtap="listen" data-nickName="{{show_name}}" data-record_id="{{record_id}}">
+                bindtap="listen" data-nickName="{{show_name ? show_name : nick_name}}" data-record_id="{{record_id}}">
                 <view class='box-paly-btn'>
                     <view hidden="{{isListen}}" class="btn-one"></view>
                     <view class="btn-two {{listenStatus}}"></view>

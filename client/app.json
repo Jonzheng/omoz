@@ -1,11 +1,11 @@
 {
   "pages":[
-    "page/index/index",
+    "page/index/game",
+    "page/skami/skami",
     "page/detail/detail",
     "page/paper/paper",
     "page/attention/attention",
     "page/lab/lab",
-    "page/game/game",
     "page/game_link/link",
     "page/game_doctor/doctor",
     "page/ruru/ruru",
@@ -32,13 +32,13 @@
         "text": "日语试题"
         },
         {
-        "pagePath": "page/index/index",
+        "pagePath": "page/skami/skami",
         "iconPath": "image/icon_component.png",
         "selectedIconPath": "image/icon_component_HL.png",
         "text": "式神语录"
         },
         {
-          "pagePath": "page/game/game",
+          "pagePath": "page/index/game",
           "iconPath": "image/icon_component.png",
           "selectedIconPath": "image/icon_component_HL.png",
           "text": "游戏計画"

@@ -289,12 +289,12 @@
 }
 
 .show-0{
-    animation: 0.5s ke-show ease-out;
+    animation: 0.2s ke-show ease-in;
     animation-fill-mode: forwards;
 }
 
 .show-1{
-    animation: 0.5s ke-show-1 ease-out;
+    animation: 0.2s ke-show-1 ease-in;
     animation-fill-mode: forwards;
 }
 

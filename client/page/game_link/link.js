@@ -41,7 +41,11 @@ Page({
     top_hide: true,
     rank_hide: true,
     kana_hide: true,
-    step_show: true,
+    kon: true,
+    skon:false,
+    sakki_hira:"",
+    sakki_kata:"",
+    sakki_roma:"",
   },
 
   getKanaRows: function(kana_row){
@@ -93,6 +97,8 @@ Page({
     var fields = []
     that.setData({
       fields,
+      sakki_roma: "",
+      bucket: [],
       level:1,
       spin_count:0,
       hita_count:0,
@@ -115,7 +121,6 @@ Page({
   },
 
   onReady: function () {
-    console.log("onLoad...")
     this.initKanaRows()
     this.initGame()
   },
@@ -123,7 +128,6 @@ Page({
   toLogin: function (e) {
     var that = this
     var userInfo = e.detail.userInfo
-    console.log("toLogin:")
     if(userInfo){
         App.globalData.hasLogin = true
         App.globalData.userInfo = userInfo
@@ -163,7 +167,6 @@ Page({
             gender,
         },
         success: function (res) {
-            console.log('updateUser:')
             console.log(res)
         }
     });
@@ -401,13 +404,27 @@ Page({
     var fields = this.data.fields
     var this_step = fields[this_row][this_col]
     var old_step = fields[old_row][old_col]
-    if (this_step["word"] != old_step["word"]) this.data.hita_count += 1
-
+    //解锁假名
+    if (this_step["word"] != old_step["word"]){
+      var puzs = this.data.puzs
+      var roma = this_step["roma"]
+      if (puzs && puzs.size > 0) {
+        puzs.add(roma)
+      }else{
+        puzs = new Set([roma])
+      }
+      this.setData({puzs})
+      this.data.hita_count += 1
+    }
     var sold = old_row+","+old_col
     var sthis = this_row+","+this_col
     var both = [sold, sthis]
     steps = steps.concat(both)
     this.passStep(steps)
+
+    var sakki_roma = this_step["roma"]
+    var sakki_hira = this_step["hira"]
+    var sakki_kata = this_step["kata"]
 
     //if(steps.length > 2 && this.data.auto){
     //  this.autoLink(this_row, this_col)
@@ -420,7 +437,13 @@ Page({
     this_step["roma"] = sthis
     old_step["roma"] = sold
 
-    this.setData({fields})
+    this.setData({
+      fields,
+      skon:false,
+      sakki_roma,
+      sakki_hira,
+      sakki_kata,
+    })
     return true
   },
 
@@ -446,9 +469,8 @@ Page({
         clearInterval(spit)
       }
     },66)
-    var step_show = !this.data.step_show
+
     this.setData({
-      step_show,
       fields,
       rest_count
     })
@@ -672,10 +694,14 @@ Page({
     this.setData({fields, st_hint})
   },
 
+  sakki: function(){
+    var skon = !this.data.skon
+    this.setData({skon})
+  },
+
 //---------------------------------------------
 
   initResult: function(){
-    console.log("start:")
     var that = this
     var fields = this.data.fields
     var spin_count = this.data.spin_count
@@ -718,6 +744,13 @@ Page({
     new_fields[8][0]["word"] = "最"
     new_fields[8][1]["word"] = "高"
     var openid = App.globalData.openid
+
+    //解锁假名
+    var puzs = this.data.puzs
+    var puz = ""
+    if (puzs && puzs.size > 0) {
+      puz = Array.from(st) + ""
+    }
     wx.request({
         url: urls.saveLinkRank,
         method: 'POST',
@@ -725,6 +758,7 @@ Page({
             openid,
             point,
             status: 1,
+            puz,
         },
         success: function (res) {
             console.log('saveLinkRank:')
@@ -737,8 +771,7 @@ Page({
             that.loadGame(new_fields)
         }
     });
-
-    console.log("end")
+    
   },
 
   loadRank: function(){
@@ -810,8 +843,8 @@ Page({
   },
 
   switchKata: function(){
-    var kata_on = !this.data.kata_on
-    this.setData({kata_on})
+    var kon = !this.data.kon
+    this.setData({kon})
   },
 
   initGame: function(){
@@ -835,6 +868,7 @@ Page({
     var ks_fill = ks_no.slice(0, fill_size)
     //concat(ks_fill)
     ks_ed.push(...ks_fill)
+    var ks_ori = ks_ed.concat()
     while (ks_ed.length < half_sed){
       ks_ed = ks_ed.concat(ks_ed)
     }
@@ -843,7 +877,7 @@ Page({
     var t_kanas = ks_ed.concat()
     t_kanas.sort(function(){ return (Math.random() - 0.5)})
     //console.log(ks_ed.length)
-    this.setData({top_hide:true,btn_show:false})
+    this.setData({top_hide:true,btn_show:false, ks_ori})
     this.initFields(ks_ed, t_kanas)
   },
 
@@ -851,7 +885,7 @@ Page({
     //total_step = kanas + t_kanas
     var pos_map = {}
     var new_fields = []
-    var kata_on = this.data.kata_on
+    var kon = this.data.kon
     for (let row=0;row<max_row;row++){
       var rows = []
       for (let col=0;col<max_col;col++){
@@ -861,14 +895,17 @@ Page({
         if((row+col) % 2 == 0){
           if (!space1 && !space2) kana = kanas.pop()
           var roma = kana["roma"] ? kana["roma"] : ""
-          var word = kana["hira"] ? kana["hira"] : ""
-          var kata = false
+          var hira = kana["hira"] ? kana["hira"] : ""
+          var kata = kana["kata"] ? kana["kata"] : ""
+          var word = hira
+          var kton = false
         }else{
           if (!space1 && !space2) kana = t_kanas.pop()
           var roma = kana["roma"] ? kana["roma"] : ""
-          var word = kana["hira"] ? kana["hira"] : ""
-          if (kata_on) word = kana["kata"] ? kana["kata"] : ""
-          var kata = kata_on
+          var hira = kana["hira"] ? kana["hira"] : ""
+          var kata = kana["kata"] ? kana["kata"] : ""
+          var word = kon ? kata : hira
+          var kton = kon
         }
         //couple
         if(pos_map[roma]){
@@ -877,7 +914,7 @@ Page({
           pos_map[roma] = [[row,col]]
         }
 
-        var step = {row,col,roma,word,kata}
+        var step = {row,col,roma,hira,kata,word,kton}
         rows.push(step)
       }
       new_fields.push(rows)

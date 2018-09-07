@@ -6,11 +6,11 @@
         <image class='user-avatar' src='{{avatarUrl}}'></image>
         
         <view class='user-name {{!edit ? "my-show":"my-hide"}}'>
-            {{showName}}
+            {{show_name ? show_name : nick_name}}
             <image class='icon-edit' src='{{icon_edit}}' bindtap="editName"></image>
         </view>
 
-        <input class='my-input {{edit ? "my-show":"my-hide"}}' placeholder="在实验室的昵称" focus="{{edit}}" maxlength="8" bindblur="hideInput" bindconfirm="updateName" value="{{showName}}"/>
+        <input class='my-input {{edit ? "my-show":"my-hide"}}' placeholder="实验室昵称" focus="{{edit}}" maxlength="8" bindblur="hideInput" bindconfirm="updateName" value="{{show_name ? show_name : nick_name}}"/>
 
     </view>
 

@@ -5,43 +5,26 @@ const urls = require('../../config')
 Page({
 
     data: {
-        motto: 'Hello World',
-        userInfo: {},
-        hasUserInfo: false,
         canIUse: wx.canIUse('button.open-type.getUserInfo'),
         taps:[],
         po_x:0,
         po_y:0,
         icon_coin:"../../image/coin.png",
         icon_edit:"../../image/edit.png",
-        icon_avatar:"",
-        nickName:"",
         level:0,
         edit: false,
         act:false
     },
-    onclick:function(e){
-        console.log("click.")
-    },
+
     point: function (e) {
-        //var au = new AudioContext();
-        //console.log(au)
-        var that = this
         console.log(e.detail)
         var _taps = this.data.taps
         _taps.push(6)
-        console.log(_taps)
         this.setData({
             po_x: e.detail["x"]-20,
             po_y: e.detail["y"]-90,
             taps: _taps
         })
-    },
-
-    black: function() {
-        console.log("to black")
-        console.log(this.data.userInfo)
-        //wx.navigateTo({ url: '../b_index/index' })
     },
 
     onLoad: function () {
@@ -52,20 +35,15 @@ Page({
         var userInfo = App.globalData.userInfo
         if(userInfo){
             console.log(userInfo)
-            var showName = App.globalData.showName
-            var nickName = userInfo.nickName
-            if (!showName) showName = nickName
+            var show_name = App.globalData.showName
+            var nick_name = userInfo.nickName
             this.setData({
                 loged: true,
-                userInfo,
-                nickName: nickName,
+                nick_name,
+                show_name,
                 avatarUrl: userInfo.avatarUrl,
-                showName
             })
         }
-    },
-    onReady: function () {
-        console.log("onReady")
     },
 
     editName:function(){
@@ -94,12 +72,12 @@ Page({
                 },
                 success: function (res) {
                     console.log('updateUser:')
-                    var userInfo = res.data.data[0]
-                    console.log(userInfo)
-                    var showName = userInfo.show_name
-                    var nickName = userInfo.nick_name
+                    var user = res.data.data[0]
+                    console.log(user)
+                    var show_name = user.show_name
+                    var nick_name = user.nick_name
                     App.globalData.hasLogin = true
-                    App.globalData.userInfo = userInfo
+                    App.globalData.userInfo = user
                     App.globalData.nickName = nickName
                     App.globalData.showName = showName
                     App.globalData.avatarUrl = avatarUrl
@@ -107,14 +85,10 @@ Page({
                     that.setData({
                         loged: true,
                         avatarUrl,
-                        nickName,
-                        showName
+                        nick_name,
+                        show_name
                     })
                 },
-                fail: (res) => {
-                    console.log('fail:')
-                    console.log(res)
-                }
             });
 
         }else{
@@ -122,7 +96,6 @@ Page({
             this.setData({
                 loged: false,
             })
-            console.log(userInfo)
         }
     },
 
@@ -148,22 +121,24 @@ Page({
                 showName,
             },
             success: function (res) {
-                App.globalData.showName = showName
+                var show_name = showName
+                var nick_name = nickName
+                App.globalData.showName = show_name
                 that.setData({
                     edit:false,
-                    nickName,
-                    showName
+                    nick_name,
+                    show_name
                 })
-                App.globalData["showName"] = showName
             }
         });
 
-    }
-    ,
+    },
+
     hideInput:function(){
+        var show_name = this.data.show_name
         this.setData({
             edit:false,
-            nickName:this.data.nickName
+            show_name,
         })
     }
 })

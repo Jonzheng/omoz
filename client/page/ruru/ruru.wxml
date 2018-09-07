@@ -29,6 +29,14 @@
                     <view class="content-desc">※选定<view class="c-text">少于</view>10个假名时,会随机补齐到10个</view>
                 </view>
             </view>
+
+            <view class="box-cate">
+                <view class="paper-label">帮助:</view>
+                <view class="content-cate">
+                    <view class="content">1.<view class="c-text">长按</view>方块可以查看<view class="c-text">罗马音</view>提示</view>
+                </view>
+            </view>
+
             <view class="box-cate">
                 <view class="paper-label">分数(暂时):</view>
                 <view class="content-cate">
