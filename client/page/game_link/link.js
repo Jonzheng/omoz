@@ -37,12 +37,14 @@ Page({
     st_hint:0,
     rest_count:total_step,
     icon_setting:"../../image/setting.png",
+    icon_omoz: 'https://systems-1256378396.cos.ap-guangzhou.myqcloud.com/omoz_sm.png',
     option: 1,
     top_hide: true,
     rank_hide: true,
     kana_hide: true,
     kon: true,
     skon:false,
+    puzon:false,
     sakki_hira:"",
     sakki_kata:"",
     sakki_roma:"",
@@ -99,6 +101,7 @@ Page({
       fields,
       sakki_roma: "",
       bucket: [],
+      puzs: [],
       level:1,
       spin_count:0,
       hita_count:0,
@@ -117,7 +120,13 @@ Page({
   },
 
   onLoad: function(){
-    this.setData({loged:App.globalData.hasLogin})
+    var avatar_url = App.globalData.avatarUrl
+    avatar_url = avatar_url ? avatar_url : ""
+    var loged = App.globalData.hasLogin
+    this.setData({
+      loged,
+      avatar_url
+    })
   },
 
   onReady: function () {
@@ -129,48 +138,49 @@ Page({
     var that = this
     var userInfo = e.detail.userInfo
     if(userInfo){
-        App.globalData.hasLogin = true
-        App.globalData.userInfo = userInfo
-        App.globalData.nickName = userInfo.nickName
-        App.globalData.avatarUrl = userInfo.avatarUrl
+        var openid = App.globalData.openid
+        var nickName = userInfo.nickName
+        var avatarUrl = userInfo.avatarUrl
         var gender = 1
         if (userInfo.gender != "" || userInfo.gender != undefined) gender = userInfo.gender
-        App.globalData.gender = gender
-        this.setData({
-            loged: true,
-        })
-        that.updateUser(userInfo)
+        wx.request({
+            url: urls.updateUser,
+            method: 'POST',
+            data: {
+                openid,
+                nickName,
+                avatarUrl,
+                gender,
+            },
+            success: function (res) {
+                console.log('updateUser:')
+                var user = res.data.data[0]
+                console.log(user)
+                var show_name = user.show_name
+                var nick_name = user.nick_name
+                var avatar_url = user.avatar_url
+                App.globalData.hasLogin = true
+                App.globalData.userInfo = user
+                App.globalData.nickName = nick_name
+                App.globalData.showName = show_name
+                App.globalData.avatarUrl = avatar_url
+                App.globalData.gender = gender
+                that.setData({
+                    loged: true,
+                    avatar_url,
+                    nick_name,
+                    show_name
+                })
+            },
+        });
+
     }else{
         App.globalData.hasLogin = false
         this.setData({
             loged: false,
         })
-        console.log(userInfo)
     }
-  },
-
-  //更新用户到数据库
-  updateUser: (userInfo) => {
-    console.log(userInfo)
-    var openid = App.globalData.openid
-    var nickName = userInfo.nickName
-    var avatarUrl = userInfo.avatarUrl
-    var gender = 1
-    if (userInfo.gender != "" || userInfo.gender != undefined) gender = userInfo.gender
-    wx.request({
-        url: urls.updateUser,
-        method: 'POST',
-        data: {
-            openid,
-            nickName,
-            avatarUrl,
-            gender,
-        },
-        success: function (res) {
-            console.log(res)
-        }
-    });
-  },
+},
 
 
 //-----------------------------------------------------------------------------
@@ -749,8 +759,9 @@ Page({
     var puzs = this.data.puzs
     var puz = ""
     if (puzs && puzs.size > 0) {
-      puz = Array.from(st) + ""
+      puz = Array.from(puzs) + ""
     }
+    console.log(puz)
     wx.request({
         url: urls.saveLinkRank,
         method: 'POST',
@@ -762,6 +773,7 @@ Page({
         },
         success: function (res) {
             console.log('saveLinkRank:')
+            console.log(res)
             var rank = res.data.data[0]
             var best = Math.max(point, rank.point)
             new_fields[9][2]["word"] = "" + parseInt(best / 1000 % 10)
@@ -796,6 +808,7 @@ Page({
       var se = this.data.option
       this.setData({
         top_hide,
+        puzon: top_hide,
         rank_hide: se == 1,
         kana_hide: se == 2,
       })
@@ -840,6 +853,40 @@ Page({
     var sed_size = ks_sed.length
     var is_max = sed_size == max_sed
     this.setData({ks_all,ks_sed,is_max,sed_size})
+  },
+
+  showPuz: function(){
+    var that = this
+    var openid = App.globalData.openid
+    var puzon = !this.data.puzon
+    if (puzon){
+      wx.request({
+        url: urls.queryLinkRank,
+        method: 'POST',
+        data: {openid},
+        success: function (res) {
+            var rank = res.data.data[0]
+            console.log(rank)
+            var re_puz = rank.puz
+            var puz_map = {}
+            if (re_puz && re_puz != ""){
+                var puz_sp = re_puz.split(";")
+                for (let sp of puz_sp){
+                    if (sp == "") continue
+                    var sps = sp.split(",")
+                    var spk = sps[0]
+                    var spv = sps[1]
+                    puz_map[spk] = spv
+                }
+            }
+            that.setData({puz_map, puzon})
+        }
+      });
+
+    }else{
+      that.setData({puzon})
+    }
+
   },
 
   switchKata: function(){

@@ -23,9 +23,11 @@ Page({
                 console.log('updateLogin:')
                 var user = res.data.data[0]
                 console.log(user)
+                App.globalData.userInfo = user
                 App.globalData.openid = user.openid
                 App.globalData.nickName = user.nick_name
                 App.globalData.showName = user.show_name
+                App.globalData.avatarUrl = user.avatar_url
             }
         });
     },
@@ -52,12 +54,10 @@ Page({
                             console.log("getUserInfo-success")
                             App.globalData.hasLogin = true
                             var userInfo = res.userInfo
-                            App.globalData.userInfo = userInfo
                             that.updateLogin(js_code, userInfo)
                         },
                         fail: function (err) {
                             //授权之前
-                            console.log("getUserInfo-fail")
                             console.log(err)
                             App.globalData.hasLogin = false
                             that.updateLogin(js_code, undefined)

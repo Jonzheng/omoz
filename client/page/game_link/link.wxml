@@ -1,5 +1,5 @@
 <view class='page {{top_hide ? "fixed":""}}'>
-        <button hidden="{{loged}}" open-type="getUserInfo" class="get-user" bindgetuserinfo="toLogin">卍</button>
+        <button hidden="{{loged}}" open-type="getUserInfo" class="get-user" bindgetuserinfo="toLogin">点击授权</button>
 
         <view class='top-box'>
             <view class='box-point'>
@@ -40,7 +40,7 @@
 
             <view class='box-kana' hidden='{{kana_hide}}'>
                 <block wx:for="{{ks_all}}" wx:key="mkey" wx:for-index="row">
-                    <template is="all-kana" data="{{item,row,is_max}}"/>
+                    <template is="all-kana" data="{{item,row,is_max,puzon,puz_map}}"/>
                 </block>
                 <view class="setting-meun">
                     <view class='top-label'>片假名:</view>
@@ -52,6 +52,12 @@
                         </view>
                     </view>
                     <view class='setting-reset' hover-class='kana-hover' bindtap="initGame">重置游戏</view>
+                </view>
+
+                <!-- omoz-img -->
+                <view class='box-omoz-img' hidden='{{!puzon}}'>
+                    <image class='omoz-sm omoz-spin' src='{{icon_omoz}}'></image>
+                    <image class='omoz-avatar' src='{{avatar_url}}'></image>
                 </view>
             </view><!-- box-kana end-->
 
@@ -104,11 +110,12 @@
 <template name="all-kana">
     <view class="row-kana">
         <block wx:for="{{item}}" wx:key="mkey" wx:for-index="col">
-            <view class='col-kana {{item.selected ? "kana-active":""}} {{is_max && item.selected ? "kana-max":""}}' hover-class='kana-hover' data-row="{{row}}" data-col="{{col}}" bindtap="select">
+            <view class='col-kana {{item.selected ? "kana-active":""}} {{is_max && item.selected ? "kana-max":""}}'
+            hover-class='kana-hover' data-row="{{row}}" data-col="{{col}}" bindtap="select" bindlongpress="showPuz">
                 <view class='col-hira {{item.selected ? "kata-color":""}}'>{{item.hira}}</view>
                 <view class="col-kama">
                     <view class="">{{item.kata}}</view>
-                    <view class="">{{item.roma}}</view>
+                    <view class="">{{puzon ? puz_map[item.roma] ? puz_map[item.roma]: item.roma ? 0:"" :item.roma}}</view>
                 </view>
             </view>
         </block>

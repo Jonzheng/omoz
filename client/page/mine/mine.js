@@ -35,13 +35,14 @@ Page({
         var userInfo = App.globalData.userInfo
         if(userInfo){
             console.log(userInfo)
-            var show_name = App.globalData.showName
-            var nick_name = userInfo.nickName
+            var show_name = userInfo.show_name
+            var nick_name = userInfo.nick_name
+            var avatar_url = userInfo.avatar_url
             this.setData({
                 loged: true,
                 nick_name,
                 show_name,
-                avatarUrl: userInfo.avatarUrl,
+                avatar_url,
             })
         }
     },
@@ -76,15 +77,16 @@ Page({
                     console.log(user)
                     var show_name = user.show_name
                     var nick_name = user.nick_name
+                    var avatar_url = user.avatar_url
                     App.globalData.hasLogin = true
                     App.globalData.userInfo = user
-                    App.globalData.nickName = nickName
-                    App.globalData.showName = showName
-                    App.globalData.avatarUrl = avatarUrl
+                    App.globalData.nickName = nick_name
+                    App.globalData.showName = show_name
+                    App.globalData.avatarUrl = avatar_url
                     App.globalData.gender = gender
                     that.setData({
                         loged: true,
-                        avatarUrl,
+                        avatar_url,
                         nick_name,
                         show_name
                     })
@@ -104,11 +106,12 @@ Page({
         var that = this
         var showName = e.detail.value
         var userInfo = App.globalData.userInfo
-        var nickName = userInfo.nickName
+        console.log(userInfo)
+        var nickName = userInfo.nick_name
         if (showName == App.globalData.showName) return
         //更新用户到数据库
         var openid = App.globalData.openid
-        var avatarUrl = userInfo.avatarUrl
+        var avatarUrl = userInfo.avatar_url
         var gender = userInfo.gender
         wx.request({
             url: urls.updateUser,

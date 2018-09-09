@@ -6,6 +6,9 @@ module.exports = async ctx => {
     var file_id = body.file_id
     var cate = body.cate
     var user_id = body.user_id
+    result["list_result"] = []
+    result["audio_result"] = []
+    result["record_result"] = []
     if (file_id){
         result["list_result"] = await mysql('t_list').select('*').where('cate', cate).andWhere('file_id', file_id).andWhere('status', 1)
         result["audio_result"] = await mysql('t_audio').select('*').where('file_id', file_id).andWhere('status', 1)

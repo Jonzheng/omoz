@@ -1,6 +1,6 @@
 
 <view class="page">
-
+    <button hidden="{{loged}}" open-type="getUserInfo" class="get-user" bindgetuserinfo="toLogin">点击授权</button>
     <view class="content-paper">
         <block wx:for="{{_list}}" wx:key="mid">
             <template is="ele-list" data="{{...item}}"/>

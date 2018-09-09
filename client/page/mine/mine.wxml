@@ -1,9 +1,9 @@
 <!--pages/index.wxml-->
 <view class="page">
-    <button hidden="{{loged}}" open-type="getUserInfo" class="get-user" bindgetuserinfo="toLogin">卍</button>
+    <button hidden="{{loged}}" open-type="getUserInfo" class="get-user" bindgetuserinfo="toLogin">点击授权</button>
     <view class='box-top' hidden="{{!loged}}">
 
-        <image class='user-avatar' src='{{avatarUrl}}'></image>
+        <image class='user-avatar' src='{{avatar_url}}'></image>
         
         <view class='user-name {{!edit ? "my-show":"my-hide"}}'>
             {{show_name ? show_name : nick_name}}

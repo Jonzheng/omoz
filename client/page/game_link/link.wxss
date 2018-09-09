@@ -15,12 +15,39 @@
 }
 
 .get-user{
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: absolute;
-    margin: 0 auto;
+    top: 0;
     width: 750rpx;
     height:1180rpx;
-    border: 1px red solid;
-    opacity: 0;
+    opacity: 0.8;
+    color: #bbb;
+}
+
+.box-omoz-img{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    position: absolute;
+    top: 875rpx;
+    right: 15rpx;
+}
+
+.omoz-avatar{
+    border-radius: 50%;
+    position: absolute;
+    top: 62rpx;
+    width: 100rpx;
+    height: 100rpx;
+    z-index: 99px;
+}
+
+.omoz-sm{
+    width: 222rpx;
+    height: 222rpx;
+    z-index: 9px;
 }
 
 .box-point{
@@ -443,6 +470,19 @@
 
 .step-off{
     animation: ke-off 0.6s ease-in;
+}
+
+.omoz-spin{
+    animation: ke-spin 120s linear infinite;
+}
+
+@keyframes ke-spin{
+    0%{
+        transform: rotate(0deg);
+    }
+    100%{
+        transform: rotate(360deg);
+    }
 }
 
 @keyframes ke-on{
