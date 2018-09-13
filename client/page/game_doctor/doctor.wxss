@@ -15,12 +15,39 @@
 }
 
 .get-user{
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: absolute;
-    margin: 0 auto;
+    top: 0;
     width: 750rpx;
     height:1180rpx;
-    border: 1px red solid;
-    opacity: 0;
+    opacity: 0.8;
+    color: #bbb;
+}
+
+.box-omoz-img{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    position: absolute;
+    top: 875rpx;
+    right: 15rpx;
+}
+
+.omoz-avatar{
+    border-radius: 50%;
+    position: absolute;
+    top: 62rpx;
+    width: 100rpx;
+    height: 100rpx;
+    z-index: 99px;
+}
+
+.omoz-sm{
+    width: 222rpx;
+    height: 222rpx;
+    z-index: 9px;
 }
 
 .box-point{
@@ -169,7 +196,6 @@
     flex: none;
     height: 88rpx;
     border: 1rpx solid #fff;
-    box-shadow:0px 0px 10rpx #fff;
     color: #aaa;
 }
 
@@ -289,6 +315,16 @@
     align-items:center;
 }
 
+.show-0{
+    animation: 0.2s ke-show ease-in;
+    animation-fill-mode: forwards;
+}
+
+.show-1{
+    animation: 0.2s ke-show-1 ease-in;
+    animation-fill-mode: forwards;
+}
+
 .step-show{
     animation: 0.6s ke-show ease-out;
     animation-fill-mode: forwards;
@@ -334,7 +370,6 @@
     flex: none;
     justify-content:center;
     align-items:center;
-    background-color:#cdcdcd;
     width:76rpx;
     height:76rpx;
     border:1px solid #fff;
@@ -348,20 +383,46 @@
     perspective-origin: 80% 2220rpx;
 }
 
+.step-180{
+    transform: rotateX(180deg);
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;	/* Chrome 和 Safari */
+    perspective: 5555rpx;
+    perspective-origin: 80% 2220rpx;
+}
+
+.step-bg-red{
+    background-color:rgba(255, 0, 0, 0.7);
+}
+
+.step-bg-blue{
+    background-color:rgba(0, 0, 255, 0.7);
+}
+
+.step-bg-one{
+    background-color:rgba(255, 0, 255, 0.7);
+}
+
+.step-bg-two{
+    background-color:rgba(255, 123, 0, 0.7);
+}
+
+.step-bg-zero{
+    background-color:rgba(0, 0, 0, 0.7);
+}
+
 .step{
     display:flex;
     flex: none;
-    background-color:#dedede;
     width:76rpx;
     height:76rpx;
-    border:1px solid #999;
     box-shadow:0px 0px 10rpx #666;
     border-radius: 5rpx;
     justify-content:center;
     align-items:center;
     font-weight: bold;
     font-size: 16px;
-    color: #555;
+    color: #eee;
 }
 
 .kata-color{
@@ -378,13 +439,31 @@
 }
 
 .step-active{
-    color: black;
-    box-shadow: 0 0 20rpx rgba(0, 0, 255, 0.6);
+    transform: scale(1.06, 1.06);
+    box-shadow: 0 0 20rpx rgba(0, 0, 255, 0.8);
 }
 
 .kana-active{
     transform: scale(1.02, 1.02);
     box-shadow: 0 0 20rpx rgba(0, 0, 255, 0.3) inset;
+}
+
+.kana-sm{
+    transform: scale(0.92, 0.92);
+}
+
+.abs-hide{
+    position: absolute;
+    left: 44%;
+    top: -111rpx;
+    transition: top 0.2s ease-in;
+}
+
+.kana-abs{
+    position: absolute;
+    top: 15rpx;
+    left: 44%;
+    transition: top 0.3s ease-in;
 }
 
 .kana-max{
@@ -403,36 +482,62 @@
 }
 
 .step-on{
-    animation: ke-on 0.3s ease-in;
-    animation-fill-mode: forwards;
+    animation: ke-on 0.6s ease-in;
 }
 
 .step-off{
-    animation: ke-off 0.3s ease-in;
-    animation-fill-mode: forwards;
+    animation: ke-off 0.6s ease-in;
+}
+
+.omoz-spin{
+    animation: ke-spin 120s linear infinite;
+}
+
+@keyframes ke-spin{
+    0%{
+        transform: rotate(0deg);
+    }
+    100%{
+        transform: rotate(360deg);
+    }
 }
 
 @keyframes ke-on{
     0%{
-        transform: rotateX(60deg);
+        transform: rotate(0deg);
+    }
+    50%{
+        opacity: 0.81;
     }
     100%{
-        transform: rotateX(0deg);
+        transform: rotate(360deg);
     }
 }
 
 @keyframes ke-off{
     0%{
-        transform: rotateX(62deg);
+        transform: rotate(0deg);
+    }
+    50%{
+        opacity: 0.82;
+    }
+    100%{
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes ke-show{
+    0%{
+        transform: rotateX(180deg);
     }
     100%{
         transform: rotateX(0deg);
     }
 }
 
-@keyframes ke-show{
+@keyframes ke-show-1{
     0%{
-        transform: rotateX(90deg);
+        transform: rotateX(179deg);
     }
     100%{
         transform: rotateX(0deg);
@@ -448,12 +553,5 @@
     }
     100%{
         transform: scale(0.2, 0.2) rotateX(180deg);
-    }
-}
-
-@keyframes ke-active{
-    50%{
-        box-shadow: 0 0 30rpx rgba(0, 0, 255, 0.8);
-        color: black;
     }
 }

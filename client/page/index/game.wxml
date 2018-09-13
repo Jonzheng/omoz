@@ -22,11 +22,11 @@
 
                 <view class="cube-view top-pane">卍</view>
                 <view class="cube-view bottom-pane">卍</view>
-                <navigator url="../game_link/link" hover-class="cube-view">
-                    <view class="cube-view left-pane">卍</view>
+                <navigator url="../game_doctor/doctor" hover-class="cube-view">
+                    <view class="cube-view left-pane">假名乐·beta</view>
                 </navigator>
-                <navigator url="../game_link/link" hover-class="cube-view">
-                    <view class="cube-view right-pane">卍</view>
+                <navigator url="../game_doctor/doctor" hover-class="cube-view">
+                    <view class="cube-view right-pane">假名乐·beta</view>
                 </navigator>
                 
             </view>

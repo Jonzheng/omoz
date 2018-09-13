@@ -16,24 +16,39 @@ const kana_n = [["kana_n","n","ん","ン"]]
 
 const max_row = 11
 const max_col = 8
-const max_sed = 10
+const max_sed = 5
 const least_sed = 5
-const valid_sed = 12
-const total_step = 80
+const half_sed = 44
+const total_step = 44
+const step_bg = ["step-bg-red","step-bg-blue","step-bg-zero","step-bg-one","step-bg-two"]
 
 Page({
 
   data: {
     bucket:[],
+    this_lefts:[],
+    this_rights:[],
+    this_ups:[],
+    this_downs:[],
     ks_sed:[],
+    level:1,
     spin_count:0,
+    hita_count:0,
     sed_size:10,
+    st_hint:0,
     rest_count:total_step,
     icon_setting:"../../image/setting.png",
+    icon_omoz: 'https://systems-1256378396.cos.ap-guangzhou.myqcloud.com/omoz_sm.png',
     option: 1,
     top_hide: true,
     rank_hide: true,
     kana_hide: true,
+    kon: true,
+    skon:false,
+    puzon:false,
+    sakki_hira:"",
+    sakki_kata:"",
+    sakki_roma:"",
   },
 
   getKanaRows: function(kana_row){
@@ -63,6 +78,7 @@ Page({
     var ks_n = this.getKanaRows(kana_n)
     var ks_all = []
     ks_all.push(ks_a,ks_ka,ks_sa,ks_ta,ks_na,ks_ha,ks_ma,ks_ya,ks_ra,ks_wa,ks_n)
+    //console.log(ks_all)
     this.setData({
       ks_all,
       ks_a,
@@ -78,34 +94,15 @@ Page({
       ks_n
     })
   },
-
-  initBucket: function(){
-    var bucket = []
-    var ks_ori = this.data.ks_ori
-    var fields = this.data.fields
-    ks_ori.sort(function(){ return (Math.random() - 0.5)})
-    var first = ks_ori[0]
-    var second = ks_ori[1]
-
-    fields[0][3]["word"] = first["hira"]
-    fields[0][3]["roma"] = first["roma"]
-    fields[0][3]["active"] = true
-
-    fields[0][4]["word"] = second["hira"]
-    fields[0][4]["roma"] = second["roma"]
-    fields[0][4]["active"] = true
-    
-    var lebot = fields[0][3]
-    var ritop = fields[0][4]
-    bucket.push(lebot, ritop)
-    this.setData({bucket, fields})
-  },
   
   loadGame: function(new_fields){
     var that = this
     var fields = []
     that.setData({
       fields,
+      sakki_roma: "",
+      bucket: [],
+      puzs: [],
       level:1,
       spin_count:0,
       hita_count:0,
@@ -114,7 +111,6 @@ Page({
     var it = setInterval(function(){
       var row = new_fields.shift()
       if (!row) {
-        console.log("------------")
         clearInterval(it)
         return
       }
@@ -125,16 +121,16 @@ Page({
   },
 
   onLoad: function(){
-    this.setData({loged:App.globalData.hasLogin})
-  },
-
-  onUnload: function(){
-    var doctor = this.data.doctor
-    clearInterval(doctor)
+    var avatar_url = App.globalData.avatarUrl
+    avatar_url = avatar_url ? avatar_url : ""
+    var loged = App.globalData.hasLogin
+    this.setData({
+      loged,
+      avatar_url
+    })
   },
 
   onReady: function () {
-    console.log("onLoad...")
     this.initKanaRows()
     this.initGame()
   },
@@ -142,249 +138,332 @@ Page({
   toLogin: function (e) {
     var that = this
     var userInfo = e.detail.userInfo
-    console.log("toLogin:")
     if(userInfo){
-        App.globalData.hasLogin = true
-        App.globalData.userInfo = userInfo
-        App.globalData.nickName = userInfo.nickName
-        App.globalData.avatarUrl = userInfo.avatarUrl
+        var openid = App.globalData.openid
+        var nickName = userInfo.nickName
+        var avatarUrl = userInfo.avatarUrl
         var gender = 1
         if (userInfo.gender != "" || userInfo.gender != undefined) gender = userInfo.gender
-        App.globalData.gender = gender
-        this.setData({
-            loged: true,
-        })
-        that.updateUser()
+        wx.request({
+            url: urls.updateUser,
+            method: 'POST',
+            data: {
+                openid,
+                nickName,
+                avatarUrl,
+                gender,
+            },
+            success: function (res) {
+                console.log('updateUser:')
+                var user = res.data.data[0]
+                console.log(user)
+                var show_name = user.show_name
+                var nick_name = user.nick_name
+                var avatar_url = user.avatar_url
+                App.globalData.hasLogin = true
+                App.globalData.userInfo = user
+                App.globalData.nickName = nick_name
+                App.globalData.showName = show_name
+                App.globalData.avatarUrl = avatar_url
+                App.globalData.gender = gender
+                that.setData({
+                    loged: true,
+                    avatar_url,
+                    nick_name,
+                    show_name
+                })
+            },
+        });
+
     }else{
         App.globalData.hasLogin = false
         this.setData({
             loged: false,
         })
     }
-  },
-
-  //更新用户到数据库
-  updateUser: () => {
-    var openid = App.globalData.openid
-    var nickName = App.globalData.nickName
-    var showName = App.globalData.showName
-    var avatarUrl = App.globalData.avatarUrl
-    var gender = App.globalData.gender
-    wx.request({
-        url: urls.updateUser,
-        method: 'POST',
-        data: {
-            openid,
-            nickName,
-            showName,
-            avatarUrl,
-            gender,
-        },
-        success: function (res) {
-            console.log('updateUser:')
-            console.log(res)
-        },
-        fail: (res) => {
-            console.log('fail:')
-            console.log(res)
-        }
-    });
-  },
+},
 
 
 //-----------------------------------------------------------------------------
 
-click: function(e){
-  var that = this
-  var fields = that.data.fields
-  var currData = e.currentTarget.dataset
-  var row = currData.row
-  var col = currData.col
-  console.log(row, col)
+  showRoma: function(e){
+    var currData = e.currentTarget.dataset
+    var word = currData.word
+    var st_hint = this.data.st_hint
+    if (word == "" || st_hint != 0) return
+    wx.vibrateLong()
+    var fields = this.data.fields
+    var row = currData.row
+    var col = currData.col
+    var this_step = fields[row][col]
+    this_step["hint"] = true
+    
+    var st_hint = setTimeout(()=>{
+      this_step["hint"] = false
+      this.setData({fields, st_hint:0})
+    },1000)
 
-  if (this.data.doctor > 0){
-    console.log("=========")
-    console.log(fields[row][col])
-  }else{
-    var doctor = setInterval(()=>{
-      var bucket = this.data.bucket
-      fields = that.data.fields
-      if (bucket.length == 2){
-        var right = bucket.pop()
-        var left = bucket.pop()
-        if (left.row < 10 && right.row < 10 && fields[left.row+1][left.col]["word"] == "" && fields[right.row+1][right.col]["word"] == ""){
-          console.log("down...")
-          fields[left.row][left.col]["word"] = ""
-          fields[right.row][right.col]["word"] = ""
-          fields[left.row][left.col]["roma"] = ""
-          fields[right.row][right.col]["roma"] = ""
-          fields[left.row][left.col]["active"] = false
-          fields[right.row][right.col]["active"] = false
-  
-          //移动到目标点
-          fields[left.row+1][left.col]["word"] = left["word"]
-          fields[right.row+1][right.col]["word"] = right["word"]
+    this.setData({fields, st_hint})
+  },
 
-          fields[left.row+1][left.col]["roma"] = left["roma"]
-          fields[right.row+1][right.col]["roma"] = right["roma"]
-          fields[left.row+1][left.col]["active"] = true
-          fields[right.row+1][right.col]["active"] = true
-          fields[left.row+1][left.col]["on"] = !fields[left.row+1][left.col]["on"]
-          fields[right.row+1][right.col]["on"] = !fields[right.row+1][right.col]["on"]
-  
-          left = fields[left.row+1][left.col]
-          right = fields[right.row+1][right.col]
-          bucket.push(left, right)
-          this.setData({bucket, fields})
-        }else{ //触底
-          this.initBucket()
+  sakki: function(){
+    var skon = !this.data.skon
+    this.setData({skon})
+  },
+
+//---------------------------------------------
+
+  initResult: function(){
+    var that = this
+    var fields = this.data.fields
+    var spin_count = this.data.spin_count
+    var hita_count = this.data.hita_count
+    var sed_size = this.data.sed_size
+    sed_size = Math.max(sed_size, 10)
+    var point = Math.round( (spin_count + hita_count * 10) * sed_size/10 )
+    var new_fields = fields
+    new_fields[0][0]["word"] = "旋"
+    new_fields[0][1]["word"] = "转"
+    new_fields[0][2]["word"] = "方"
+    new_fields[0][3]["word"] = "块"
+    
+    new_fields[1][2]["word"] = "" + parseInt(spin_count / 1000 % 10)
+    new_fields[1][3]["word"] = "" + parseInt(spin_count / 100 % 10)
+    new_fields[1][4]["word"] = "" + parseInt(spin_count / 10 % 10)
+    new_fields[1][5]["word"] = "" + spin_count % 10
+
+    new_fields[2][0]["word"] = "异"
+    new_fields[2][1]["word"] = "名"
+    new_fields[2][2]["word"] = "连"
+    new_fields[2][3]["word"] = "接"
+    new_fields[3][2]["word"] = "" + parseInt(hita_count / 10 % 10)
+    new_fields[3][3]["word"] = "" + hita_count % 10
+
+    new_fields[4][0]["word"] = "假"
+    new_fields[4][1]["word"] = "名"
+    new_fields[4][2]["word"] = "数"
+    new_fields[4][3]["word"] = "量"
+    new_fields[5][2]["word"] = "" + parseInt(sed_size / 10 % 10)
+    new_fields[5][3]["word"] = "" + sed_size % 10
+
+    new_fields[6][0]["word"] = "得"
+    new_fields[6][1]["word"] = "分"
+    new_fields[7][2]["word"] = "" + parseInt(point / 1000 % 10)
+    new_fields[7][3]["word"] = "" + parseInt(point / 100 % 10)
+    new_fields[7][4]["word"] = "" + parseInt(point / 10 % 10)
+    new_fields[7][5]["word"] = "" + point % 10
+
+    new_fields[8][0]["word"] = "最"
+    new_fields[8][1]["word"] = "高"
+    var openid = App.globalData.openid
+
+    //解锁假名
+    var puzs = this.data.puzs
+    var puz = ""
+    if (puzs && puzs.size > 0) {
+      puz = Array.from(puzs) + ""
+    }
+    console.log(puz)
+    wx.request({
+        url: urls.saveLinkRank,
+        method: 'POST',
+        data: {
+            openid,
+            point,
+            status: 1,
+            puz,
+        },
+        success: function (res) {
+            console.log('saveLinkRank:')
+            console.log(res)
+            var rank = res.data.data[0]
+            var best = Math.max(point, rank.point)
+            new_fields[9][2]["word"] = "" + parseInt(best / 1000 % 10)
+            new_fields[9][3]["word"] = "" + parseInt(best / 100 % 10)
+            new_fields[9][4]["word"] = "" + parseInt(best / 10 % 10)
+            new_fields[9][5]["word"] = "" + best % 10
+            that.loadGame(new_fields)
         }
+    });
+    
+  },
 
-      }else{ //游戏开始
-        console.log("bucket-no")
-        this.initBucket()
-      }
-    },3000)
-    this.setData({doctor})
-  }
-  
-},
+  loadRank: function(){
+    var that = this
+    wx.request({
+        url: urls.queryLinkRank,
+        method: 'POST',
+        success: function (res) {
+            console.log('queryLinkRank:')
+            var ranks = res.data.data
+            that.setData({ranks})
+        }
+    });
+  },
 
-loadRank: function(){
-  var that = this
-  wx.request({
-      url: urls.queryLinkRank,
-      method: 'POST',
-      success: function (res) {
-          console.log('queryLinkRank:')
-          var ranks = res.data.data
-          console.log(ranks)
-          that.setData({ranks})
-      }
-  });
-},
+  setting:function(e){
+    var currData = e.currentTarget.dataset
+    var option = currData.option
+    if (option == 0){ //icon-setting
+      //toggle
+      var top_hide = !this.data.top_hide
+      var se = this.data.option
+      this.setData({
+        top_hide,
+        puzon: top_hide,
+        rank_hide: se == 1,
+        kana_hide: se == 2,
+      })
+    }else if(option == 1){ //假名设定
+      this.setData({
+        kana_hide: false,
+        rank_hide: true,
+        option:1
+      })
+    }else if(option == 2){ //排行榜
+      this.loadRank()
+      this.setData({
+        kana_hide: true,
+        rank_hide: false,
+        option:2
+      })
+    }
+    
+  },
+  select: function(e){
+    var currData = e.currentTarget.dataset
+    var row = currData.row
+    var col = currData.col
+    var ks_all = this.data.ks_all
+    var ks_sed = this.data.ks_sed
+    if (ks_all[row][col]["roma"] == "") return
+    var se = ks_all[row][col]["selected"]
+    if(se){
+      ks_sed.pop()
+      ks_all[row][col]["selected"] = false
+    }else{
+      ks_sed.push([row,col])
+      ks_all[row][col]["selected"] = true
+    }
+    if (ks_sed.length > max_sed){ //如果点击已选或者大于可选--取消最先选择的
+      var ned = ks_sed.shift()
+      var n_row = ned[0]
+      var n_col = ned[1]
+      ks_all[n_row][n_col]["selected"] = false
+    }
+    
+    var sed_size = ks_sed.length
+    var is_max = sed_size == max_sed
+    this.setData({ks_all,ks_sed,is_max,sed_size})
+  },
 
-setting:function(e){
-  var currData = e.currentTarget.dataset
-  var option = currData.option
-  if (option == 0){ //icon-setting
-    //toggle
-    var top_hide = !this.data.top_hide
-    var se = this.data.option
-    this.setData({
-      top_hide,
-      rank_hide: se == 1,
-      kana_hide: se == 2,
-    })
-  }else if(option == 1){ //假名设定
-    this.setData({
-      kana_hide: false,
-      rank_hide: true,
-      option:1
-    })
-  }else if(option == 2){ //排行榜
-    this.loadRank()
-    this.setData({
-      kana_hide: true,
-      rank_hide: false,
-      option:2
-    })
-  }
-  
-},
-select: function(e){
-  var currData = e.currentTarget.dataset
-  var row = currData.row
-  var col = currData.col
-  var ks_all = this.data.ks_all
-  var ks_sed = this.data.ks_sed
-  if (ks_all[row][col]["roma"] == "") return
-  var se = ks_all[row][col]["selected"]
-  if(se){
-    ks_sed.pop()
-    ks_all[row][col]["selected"] = false
-  }else{
-    ks_sed.push([row,col])
-    ks_all[row][col]["selected"] = true
-  }
-  if (ks_sed.length > max_sed){ //如果点击已选或者大于可选--取消最先选择的
-    var ned = ks_sed.shift()
-    var n_row = ned[0]
-    var n_col = ned[1]
-    ks_all[n_row][n_col]["selected"] = false
-  }
-  
-  var sed_size = ks_sed.length
-  var is_max = sed_size == max_sed
-  this.setData({ks_all,ks_sed,is_max,sed_size})
-},
+  showPuz: function(){
+    var that = this
+    var openid = App.globalData.openid
+    var puzon = !this.data.puzon
+    if (puzon){
+      wx.request({
+        url: urls.queryLinkRank,
+        method: 'POST',
+        data: {openid},
+        success: function (res) {
+            var rank = res.data.data[0]
+            console.log(rank)
+            var re_puz = rank.puz
+            var puz_map = {}
+            if (re_puz && re_puz != ""){
+                var puz_sp = re_puz.split(";")
+                for (let sp of puz_sp){
+                    if (sp == "") continue
+                    var sps = sp.split(",")
+                    var spk = sps[0]
+                    var spv = sps[1]
+                    puz_map[spk] = spv
+                }
+            }
+            that.setData({puz_map, puzon})
+        }
+      });
 
-switchKata: function(){
-  var kata_on = !this.data.kata_on
-  this.setData({kata_on})
-},
+    }else{
+      that.setData({puzon})
+    }
 
-initGame: function(){
-  var ks_ed = []
-  var ks_no = []
-  var ks_all = this.data.ks_all
-  for (let rows of ks_all){
-    for(let step of rows){
-      if(step.selected){
-        ks_ed.push(step)
-      }else if(step["roma"]){
-        ks_no.push(step)
+  },
+
+  switchKata: function(){
+    var kon = !this.data.kon
+    this.setData({kon})
+  },
+
+  initGame: function(){
+    var ks_ed = []
+    var ks_no = []
+    var ks_all = this.data.ks_all
+    for (let rows of ks_all){
+      for(let step of rows){
+        if(step.selected){
+          ks_ed.push(step)
+        }else if(step["roma"]){
+          ks_no.push(step)
+        }
       }
     }
-  }
 
-  ks_no.sort(function(){ return (Math.random() - 0.5)})
+    ks_no.sort(function(){ return (Math.random() - 0.5)})
 
-  var fill_size = least_sed - ks_ed.length
-  fill_size = fill_size > 0 ? fill_size : 0
-  var ks_fill = ks_no.slice(0, fill_size)
-  ks_ed.push(...ks_fill)
-  var ks_ori = ks_ed.concat()
-  while (ks_ed.length < valid_sed){
-    ks_ed = ks_ed.concat(ks_ed)
-  }
-  ks_ed = ks_ed.slice(0, valid_sed)
-  ks_ed.sort(function(){ return (Math.random() - 0.5)})
-  console.log(ks_ed)
-  this.setData({top_hide:true,btn_show:false,ks_ori})
-  this.initFields(ks_ed)
-},
+    var fill_size = least_sed - ks_ed.length
+    fill_size = fill_size > 0 ? fill_size : 0
+    var ks_fill = ks_no.slice(0, fill_size)
+    ks_ed.push(...ks_fill)
 
-initFields: function(kanas){
-  var pos_map = {}
-  var new_fields = []
-  var kata_on = this.data.kata_on
-  for (let row=0;row<max_row;row++){
-    var rows = []
-    for (let col=0;col<max_col;col++){
-      var kana = {}
-      var roma = ""
-      var word = ""
-      var kata = false
-      var valid = (row > 8 && (col < 3 || col > 4))
-      if (valid){
-        kana = kanas.pop()
-        roma = kana["roma"]
-        if((row+col) % 2 == 0){
-          word = kana["hira"]
+    var bgs = step_bg.concat()
+    bgs.sort(function(){ return (Math.random() - 0.5)})
+    for (let i = 0;i<ks_ed.length; i++){
+      ks_ed[i]["bgc"] = bgs.pop()
+    }
+
+    var ks_ori = ks_ed.concat()
+    while (ks_ed.length < half_sed * 2){
+      ks_ed = ks_ed.concat(ks_ed)
+    }
+    ks_ed = ks_ed.slice(0, half_sed * 2)
+    ks_ed.sort(function(){ return (Math.random() - 0.5)})
+
+    this.setData({top_hide:true,btn_show:false, ks_ori})
+    this.initFields(ks_ed)
+  },
+
+  initFields: function(kanas){
+    var new_fields = []
+    var kon = this.data.kon
+    for (let row=0;row<max_row;row++){
+      var rows = []
+      for (let col=0;col<max_col;col++){
+        var kana = kanas.pop()
+        var bgc = kana["bgc"]
+        if(Math.random() > 0){
+          var roma = kana["roma"] ? kana["roma"] : ""
+          var hira = kana["hira"] ? kana["hira"] : ""
+          var kata = kana["kata"] ? kana["kata"] : ""
+          var word = hira
+          var kton = false
         }else{
-          word = kata_on ? kana["kata"] : kana["hira"]
-          kata = true
+          var roma = kana["roma"] ? kana["roma"] : ""
+          var hira = kana["hira"] ? kana["hira"] : ""
+          var kata = kana["kata"] ? kana["kata"] : ""
+          var word = kon ? kata : hira
+          var kton = kon
         }
-      }
-      
-      var step = {row,col,roma,word,kata}
-      rows.push(step)
-    }
-    new_fields.push(rows)
-  }
 
-  this.setData({pos_map})
-  this.loadGame(new_fields)
-},
+        var step = {row,col,roma,hira,kata,word,kton,bgc}
+        rows.push(step)
+      }
+      new_fields.push(rows)
+    }
+
+    this.loadGame(new_fields)
+  },
+
+
 })
