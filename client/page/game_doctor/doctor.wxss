@@ -316,12 +316,12 @@
 }
 
 .show-0{
-    animation: 0.2s ke-show ease-in;
+    animation: 0.3s ke-show ease-in;
     animation-fill-mode: forwards;
 }
 
 .show-1{
-    animation: 0.2s ke-show-1 ease-in;
+    animation: 0.3s ke-show-1 ease-in;
     animation-fill-mode: forwards;
 }
 
@@ -393,22 +393,27 @@
 
 .step-bg-red{
     background-color:rgba(255, 0, 0, 0.7);
+    transition: background-color 0.3s ease-in;
 }
 
 .step-bg-blue{
     background-color:rgba(0, 0, 255, 0.7);
+    transition: background-color 0.3s ease-in;
 }
 
 .step-bg-one{
     background-color:rgba(255, 0, 255, 0.7);
+    transition: background-color 0.3s ease-in;
 }
 
 .step-bg-two{
     background-color:rgba(255, 123, 0, 0.7);
+    transition: background-color 0.3s ease-in;
 }
 
 .step-bg-zero{
     background-color:rgba(0, 0, 0, 0.7);
+    transition: background-color 0.3s ease-in;
 }
 
 .step{
@@ -439,8 +444,8 @@
 }
 
 .step-active{
-    transform: scale(1.06, 1.06);
-    box-shadow: 0 0 20rpx rgba(0, 0, 255, 0.8);
+    border: 3rpx dashed black;
+    box-shadow: 0 0 10rpx rgba(0, 0, 0, 0.6);
 }
 
 .kana-active{
@@ -538,6 +543,9 @@
 @keyframes ke-show-1{
     0%{
         transform: rotateX(179deg);
+    }
+    50%{
+        transform: rotateX(92deg);
     }
     100%{
         transform: rotateX(0deg);

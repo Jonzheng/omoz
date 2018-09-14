@@ -492,7 +492,7 @@ Page({
       },500)
       setTimeout(()=>{
         this.setData({btn_show:true})
-      },4200)
+      },3000)
     }
   },
 

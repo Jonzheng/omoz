@@ -27,7 +27,7 @@
         <view class='box-link' hidden='{{!top_hide}}'>
 
             <block wx:for="{{fields}}" wx:key="mkey" wx:for-index="idx">
-                <template is="level-1" data="{{item,idx}}"/>
+                <template is="level-1" data="{{item,idx,bgc}}"/>
             </block>
             <view class='box-row mg-top' hidden="{{!btn_show}}">
                 <view class='btn-out {{btn_show ? "btn-show":""}}'>
@@ -84,10 +84,10 @@
         <block wx:for="{{item}}" wx:key="mkey" wx:for-index="idx">
             <view class='step-out'
                 data-row="{{item.row}}" data-col="{{item.col}}" data-roma="{{item.roma}}"
-                data-word="{{item.word}}" bindtap="goLink" bindlongpress="showRoma">
-                <view class='step {{item.bgc}} {{item.on ? "step-on":"step-off"}} {{item.word == "" ? "rt-90":""}} {{item.active && item.word != "" ? "step-active":""}}'
+                data-word="{{item.word}}" bindtap="swap" bindlongpress="showRoma">
+                <view class='step {{bgc[item.roma]}} {{item.on ? "step-on":"step-off"}}'
                     hover-class='step-hover'>
-                <view class='step-word step-show {{item.kton ? "kata-black":""}}'>{{item.hint ? item.roma : item.word}}</view>
+                    <view class='step-word {{item.don ? "show-0":"show-1"}} {{item.active ? "step-active":""}}'>{{item.hint ? item.roma : item.word}}</view>
                 </view>
             </view>
         </block>

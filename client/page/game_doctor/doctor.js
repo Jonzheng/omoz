@@ -26,10 +26,6 @@ Page({
 
   data: {
     bucket:[],
-    this_lefts:[],
-    this_rights:[],
-    this_ups:[],
-    this_downs:[],
     ks_sed:[],
     level:1,
     spin_count:0,
@@ -209,6 +205,187 @@ Page({
   sakki: function(){
     var skon = !this.data.skon
     this.setData({skon})
+  },
+
+  sleep: function(d){
+    var t = Date.now();
+    while(Date.now() - t <= d);
+  },
+
+  //下落:down
+  down: function(){
+    var fields = this.data.fields
+    var cols = this.data.cols
+    cols.sort()
+    console.log("down.....")
+    for (let col of cols){
+      this.sleep(16)
+      //从下往上
+      for (let row=max_row-1; row>=0; row--){
+        if (fields[row][col]["word"] == ""){
+          //需要交换的空白方块
+          var empty_step = fields[row][col]
+          var empty_on = empty_step["on"]
+          var empty_don = empty_step["don"]
+          for (let ro=row; ro>=0; ro--){
+            if (fields[ro][col]["word"] != ""){
+              //找到第一个下落的方块
+              var word_step = fields[ro][col]
+              var word_on = word_step["on"]
+              var word_don = word_step["don"]
+              word_step["row"] = row
+              empty_step["row"] = ro
+
+              fields[ro][col] = empty_step
+              fields[ro][col]["on"] = word_on
+              fields[ro][col]["don"] = word_don
+              fields[row][col] = word_step
+              fields[row][col]["on"] = empty_on
+              fields[row][col]["don"] = empty_don
+
+              break
+            }
+          }
+        }
+      }
+      this.setData({fields})
+    }
+    this.fillFields()
+    this.judge()
+    console.log("down end")
+  },
+
+  judge: function(){
+    var fields = this.data.fields
+    console.log("judge:")
+    var desut = []
+
+    //行:row
+    for (let row=0; row<max_row; row++){
+      var desu = []
+      for (let col=0; col<max_col; col++){
+        var step = fields[row][col]
+        var dlen = desu.length
+        if (dlen > 0){
+          var old = desu[dlen-1]
+          if (old["roma"] == step["roma"]){
+            desu.push(step)
+            if (desu.length > 2){
+              desut = desut.concat(desu)
+            }
+          }else{ //!=
+            desu = [step]
+          }
+        }else{ //desu=[]
+          desu.push(step)
+        }
+      }
+    } //for row end
+
+    //列:col
+    for (let col=0; col<max_col; col++){
+      var desu = []
+      for (let row=0; row<max_row; row++){
+        var step = fields[row][col]
+        var dlen = desu.length
+        if (dlen > 0){
+          var old = desu[dlen-1]
+          if (old["roma"] == step["roma"]){
+            desu.push(step)
+            if (desu.length > 2){
+              desut = desut.concat(desu)
+            }
+          }else{ //!=
+            desu = [step]
+          }
+        }else{ //desu=[]
+          desu.push(step)
+        }
+      }
+    } //for col end
+
+    var cols = []
+    var rcst = new Set([])
+    for (step of desut){
+      var row = step["row"]
+      var col = step["col"]
+      var row_col = row+","+col
+      if (rcst.has(row_col)) continue
+      rcst.add(row_col)
+      cols.push(col)
+      fields[row][col]["roma"] = row_col
+      fields[row][col]["word"] = ""
+      fields[row][col]["on"] = !fields[row][col]["on"]
+      fields[row][col]["don"] = !fields[row][col]["don"]
+    }
+    this.setData({fields, cols})
+    setTimeout(()=>{
+      this.down()
+    },500)
+    
+  },
+
+  isNext: function(old_row, old_col, this_row, this_col){
+    if (old_col == this_col && Math.abs(old_row - this_row) == 1){
+        return true
+    }
+    if (old_row == this_row && Math.abs(old_col - this_col) == 1){
+        return true
+    }
+    return false
+  },
+
+  swap: function(e){
+    console.log("-----------")
+    var currData = e.currentTarget.dataset
+    var word = currData.word
+    var st_hint = this.data.st_hint
+    if (word == "" || st_hint != 0) return
+    var bucket = this.data.bucket
+    var fields = this.data.fields
+    var row = currData.row
+    var col = currData.col
+    var this_step = fields[row][col]
+    this_step["active"] = true
+    if (bucket.length > 0){
+        var olds = bucket[0]
+        var old_row = olds[0]
+        var old_col = olds[1]
+        var old_step = fields[old_row][old_col]
+        var old_rc = old_row+""+old_col
+        var rc = row+""+col
+        if (old_rc != rc){
+          old_step["active"] = false
+          bucket.pop()
+          if (this.isNext(old_row, old_col, row, col)){
+            bucket.pop()
+            this_step["active"] = false
+
+            this_step["row"] = old_row
+            this_step["col"] = old_col
+            old_step["row"] = row
+            old_step["col"] = col
+            var old_don = fields[old_row][old_col]["don"]
+            var this_don = fields[row][col]["don"]
+            
+            fields[old_row][old_col]["don"] = !this_don
+            fields[row][col]["don"] = !old_don
+
+            fields[old_row][old_col] = this_step
+            fields[row][col] = old_step
+
+            this.setData({fields,bucket})
+            this.judge()
+          }else{ //not next
+            bucket.push([row,col])
+            this.setData({fields,bucket})
+          }
+        }
+    }else{
+      bucket.push([row,col])
+      this.setData({fields,bucket})
+    }
+    console.log("swap end")
   },
 
 //---------------------------------------------
@@ -417,10 +594,12 @@ Page({
     var ks_fill = ks_no.slice(0, fill_size)
     ks_ed.push(...ks_fill)
 
+    var bgc = {}
     var bgs = step_bg.concat()
     bgs.sort(function(){ return (Math.random() - 0.5)})
     for (let i = 0;i<ks_ed.length; i++){
-      ks_ed[i]["bgc"] = bgs.pop()
+      var roma = ks_ed[i]["roma"]
+      bgc[roma] = bgs.pop()
     }
 
     var ks_ori = ks_ed.concat()
@@ -430,7 +609,7 @@ Page({
     ks_ed = ks_ed.slice(0, half_sed * 2)
     ks_ed.sort(function(){ return (Math.random() - 0.5)})
 
-    this.setData({top_hide:true,btn_show:false, ks_ori})
+    this.setData({top_hide:true,btn_show:false, ks_ori, bgc})
     this.initFields(ks_ed)
   },
 
@@ -441,7 +620,6 @@ Page({
       var rows = []
       for (let col=0;col<max_col;col++){
         var kana = kanas.pop()
-        var bgc = kana["bgc"]
         if(Math.random() > 0){
           var roma = kana["roma"] ? kana["roma"] : ""
           var hira = kana["hira"] ? kana["hira"] : ""
@@ -456,13 +634,36 @@ Page({
           var kton = kon
         }
 
-        var step = {row,col,roma,hira,kata,word,kton,bgc}
+        var step = {row,col,roma,hira,kata,word,kton}
         rows.push(step)
       }
       new_fields.push(rows)
     }
 
     this.loadGame(new_fields)
+  },
+
+  fillFields: function(){
+    var ks_ori = this.data.ks_ori.concat()
+    var fields = this.data.fields
+    for (let row=0;row<max_row;row++){
+      for (let col=0;col<max_col;col++){
+        if(fields[row][col]["word"] == ""){
+          var old_on = fields[row][col]["on"]
+          var old_don = fields[row][col]["don"]
+          var idx = parseInt(Math.random()*10)%5
+          var kana = ks_ori[idx]
+          var roma = kana["roma"] ? kana["roma"] : ""
+          var hira = kana["hira"] ? kana["hira"] : ""
+          var kata = kana["kata"] ? kana["kata"] : ""
+          var word = hira
+          var kton = false
+          var step = {row,col,roma,hira,kata,word,kton,old_on, old_don}
+          fields[row][col] = step
+        }
+      }
+    }
+    this.setData({fields})
   },
 
 
