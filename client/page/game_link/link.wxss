@@ -53,7 +53,7 @@
 .box-point{
     display: flex;
     align-items: center;
-    width: 160px;
+    width: 240rpx;
 }
 
 .top-label{
@@ -75,8 +75,8 @@
 }
 
 .top-setting{
-    position: relative;
-    left: 50rpx;
+    position: absolute;
+    right: 12rpx;
 
     width: 60rpx;
     height: 60rpx;
@@ -119,6 +119,13 @@
     transition: all 0.2s ease-in;
 }
 
+.box-setting{
+    display: flex;
+    flex: none;
+    flex-direction: column;
+    align-items: center;
+}
+
 .box-rank{
     display: flex;
     flex-direction:column;
@@ -133,6 +140,124 @@
     box-shadow:0px 0px 10rpx #fff;
     color: #bbb;
     font-size: 30rpx;
+}
+
+.shop-title{
+    margin: 10rpx 0;
+    color: #337ab7;
+    letter-spacing: 6rpx;
+    font-weight: bold;
+}
+
+.shop-line{
+    margin:6rpx auto;
+    width:728rpx;
+    height:2rpx;
+    background-color:#bbb;
+    box-shadow:0px 0px 10rpx black;
+}   
+
+.box-shop{
+    display: flex;
+    flex: none;
+    flex-direction: column;
+    align-items: center;
+    width: 730rpx;
+    border-top: 1rpx solid #fff;
+    border-bottom: 1rpx solid #fff;
+    box-shadow:0px 0px 10rpx #fff;
+    color: #bbb;
+}
+
+.box-item{
+    display: flex;
+    flex: none;
+    align-items: center;
+    height: 120rpx;
+    width: 728rpx;
+    border-bottom: 1rpx solid #fff;
+    box-shadow:0px 0px 10rpx #fff;
+}
+
+.box-item-det{
+    display: flex;
+    flex-direction: column;
+    flex: none;
+    height: 160rpx;
+    width: 728rpx;
+}
+
+.box-mine{
+    display: flex;
+    flex-direction: column;
+    flex: none;
+    align-items: center;
+    height: 620rpx;
+    width: 728rpx;
+    border-bottom: 1rpx solid #fff;
+    box-shadow:0px 0px 10rpx #fff;
+}
+
+.box-text{
+    margin: 10rpx 0;
+    display: flex;
+    flex: none;
+    height: 60rpx;
+    width: 728rpx;
+    border-bottom: 1rpx solid #eee;
+}
+
+.item-desc{
+    margin: 10rpx 0;
+    display: flex;
+    flex-direction: column;
+    flex: none;
+    width: 728rpx;
+}
+
+.text-sm{
+    font-size: 32rpx;
+}
+
+.label-item{
+    margin: 0 6rpx;
+    color: #337ab7;
+}
+
+.label-gold{
+    position: relative;
+    left: 360rpx;
+    margin: 0 6rpx;
+    color: #337ab7;
+}
+
+.value-gold{
+    display: inline;
+    margin: 0 10rpx;
+    color: rgb(255, 166, 0);
+    font-weight: bold;
+}
+
+.box-cost{
+    display: flex;
+    flex: none;
+    width: 728rpx;
+}
+
+.box-cate{
+    width: 230rpx;
+}
+
+.c-text{
+    display: inline;
+    color: #337ab7;
+}
+
+.content-cate{
+    height: 96rpx;
+    margin-left: 30rpx;
+    padding-left: 12rpx;
+    border-left: 6rpx solid #eee;
 }
 
 .row-kana{
@@ -267,6 +392,11 @@
     margin-top: 10rpx;
 }
 
+.mg-right{
+    margin: 0 12rpx;
+    transition: margin 0.4s ease-in;
+}
+
 .btn-out{
     display:flex;
     flex: none;
@@ -303,6 +433,13 @@
     color: #555;
 }
 
+.step-box{
+    display:flex;
+    flex: none;
+    justify-content:center;
+    align-items:center;
+}
+
 .step-out{
     display:flex;
     flex: none;
@@ -313,6 +450,7 @@
     height:88rpx;
     justify-content:center;
     align-items:center;
+    transition: margin 0.2s ease-out;
 }
 
 .show-0{
@@ -370,7 +508,6 @@
     flex: none;
     justify-content:center;
     align-items:center;
-    background-color:#cdcdcd;
     width:76rpx;
     height:76rpx;
     border:1px solid #fff;
@@ -392,10 +529,45 @@
     perspective-origin: 80% 2220rpx;
 }
 
+.step-bg-ka{
+    color: #eee;
+    background-color:rgba(255, 123, 0, 0.7);
+    transition: background-color 0.3s ease-in;
+}
+
+.step-bg-ki{
+    color: #eee;
+    background-color:rgba(255, 0, 255, 0.7);
+    transition: background-color 0.3s ease-in;
+}
+
+.step-bg-ku{
+    color: #eee;
+    background-color:rgba(0, 0, 255, 0.7);
+    transition: background-color 0.3s ease-in;
+}
+
+.step-bg-ke{
+    color: #eee;
+    background-color:rgba(255, 0, 0, 0.7);
+    transition: background-color 0.3s ease-in;
+}
+
+.step-bg-ko{
+    color: #eee;
+    background-color:rgba(0, 0, 0, 0.7);
+    transition: background-color 0.3s ease-in;
+}
+
+.step-bg-no{
+    background-color:#dedede;
+    color: #555;
+    transition: background-color 0.3s ease-in;
+}
+
 .step{
     display:flex;
     flex: none;
-    background-color:#dedede;
     width:76rpx;
     height:76rpx;
     border:1px solid #999;
@@ -405,7 +577,6 @@
     align-items:center;
     font-weight: bold;
     font-size: 16px;
-    color: #555;
 }
 
 .kata-color{
@@ -419,6 +590,16 @@
 .step-hover{
     transform: scale(1.05, 1.05);
     box-shadow: 0 0 20rpx rgba(0, 0, 255, 0.6);
+}
+
+.co-hover{
+    transform: scale(1.05, 1.05);
+    box-shadow: 0 0 20rpx #fff;
+}
+
+.sp-active{
+    border: 5rpx dashed black;
+    box-shadow: 0 0 10rpx #fff;
 }
 
 .step-active{

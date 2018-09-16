@@ -1,5 +1,5 @@
 <view class='page {{top_hide ? "fixed":""}}'>
-        <button hidden="{{loged}}" open-type="getUserInfo" class="get-user" bindgetuserinfo="toLogin">点击授权</button>
+        <button hidden="{{loged}}" open-type="getUserInfo" class="get-user" bindgetuserinfo="toLogin">点击登录</button>
 
         <view class='top-box'>
             <view class='box-point'>
@@ -7,6 +7,7 @@
                 <view class='top-value {{!top_hide ? "top-hide":""}}'>{{spin_count}}</view>
             </view>
             <view class='top-option {{option != 1 ? "":"option-active"}} {{top_hide ? "top-hide":""}}' bindtap="setting" data-option="1">假名设定</view>
+            <view class='top-option {{option != 3 ? "":"option-active"}} {{top_hide ? "top-hide":""}}' bindtap="setting" data-option="3">颜色设定</view>
             <view class='top-option {{option != 2 ? "":"option-active"}} {{top_hide ? "top-hide":""}}' bindtap="setting" data-option="2">排行榜</view>
             <image class='top-setting {{top_hide ? "rt-90":""}}' src='{{icon_setting}}' bindtap="setting" data-option="0"></image>
         
@@ -27,7 +28,7 @@
         <view class='box-link' hidden='{{!top_hide}}'>
 
             <block wx:for="{{fields}}" wx:key="mkey" wx:for-index="idx">
-                <template is="level-1" data="{{item,idx}}"/>
+                <template is="level-1" data="{{item,idx,cosmap}}"/>
             </block>
             <view class='box-row mg-top' hidden="{{!btn_show}}">
                 <view class='btn-out {{btn_show ? "btn-show":""}}'>
@@ -38,7 +39,7 @@
 
         <view class='box-setting' hidden='{{top_hide}}'>
 
-            <view class='box-kana' hidden='{{kana_hide}}'>
+            <view class='box-kana' hidden='{{option != 1}}'>
                 <block wx:for="{{ks_all}}" wx:key="mkey" wx:for-index="row">
                     <template is="all-kana" data="{{item,row,is_max,puzon,puz_map}}"/>
                 </block>
@@ -61,7 +62,7 @@
                 </view>
             </view><!-- box-kana end-->
 
-            <view class='box-rank' hidden='{{rank_hide}}'>
+            <view class='box-rank' hidden='{{option != 2}}'>
                 <view class="row-title">
                     <view class="rank-value rank-no">排名</view>
                     <view class="rank-value width-player">玩家</view>
@@ -72,6 +73,84 @@
                     <template is="rank-0" data="{{...item,idx}}"/>
                 </block>
             </view><!-- box-rank end-->
+
+
+            <view class="box-shop" hidden='{{option != 3}}'>
+
+                <view class="box-mine">
+                    <view class="shop-title">※我的主题※</view>
+                    <view class="shop-line"></view>
+                    <view class="box-text">
+                        <view class="label-item">我的颜色:</view>
+                        <view class="label-item label-gold">金币:<view class="value-gold">999998</view></view>
+                    </view>
+
+                    <view class="box-item">
+                        <block wx:for="{{mycmap}}" wx:key="mkey" wx:for-index="idx">
+                            <template is="item-bgc" data="{{...item,bgc,stn}}"/>
+                        </block>
+                    </view>
+
+                    <view class="box-text">
+                        <view class="label-item">主题设定:</view>
+                    </view>
+                    <view class="box-cost">
+                        <view class="box-cate">
+                            <view class="paper-label">平假方块:</view>
+                            <view class="content-cate">
+                                <view class='step-out' data-kata="{{key}}" data-stn="1" bindtap="seto">
+                                    <view class='step {{cosmap["hira"]}} {{stn == 1 ? "sp-active":""}}' hover-class='co-hover'>
+                                        <view class='step-word {{cosmap["c1"] ? "show-0":"show-1"}}'>あ</view>
+                                    </view>
+                                </view>
+                            </view>
+                        </view>
+
+                        <view class="box-cate">
+                            <view class="paper-label">片假方块:</view>
+                            <view class="content-cate">
+                                <view class='step-out' data-kata="{{key}}" data-stn="2" bindtap="seto">
+                                    <view class='step {{cosmap["kata"]}} {{stn == 2 ? "sp-active":""}}' hover-class='co-hover'>
+                                        <view class='step-word {{cosmap["c2"] ? "show-0":"show-1"}}'>ア</view>
+                                    </view>
+                                </view>
+                            </view>
+                        </view>
+
+                        <view class="box-cate">
+                            <view class="paper-label">空白方块:</view>
+                            <view class="content-cate">
+                                <view class='step-out' data-kata="{{key}}" data-stn="3" bindtap="seto">
+                                    <view class='step {{cosmap["space"]}} {{stn == 3 ? "sp-active":""}}' hover-class='co-hover'>
+                                        <view class='step-word {{cosmap["c3"] ? "show-0":"show-1"}}'></view>
+                                    </view>
+                                </view>
+                            </view>
+                        </view>
+
+                    </view>
+
+                </view>
+
+
+                <view class="shop-line"></view>
+                <view class="shop-title">※道具商店※</view>
+                <view class="shop-line"></view>
+                <view class="box-item">
+                    <block wx:for="{{bgk}}" wx:key="mkey" wx:for-index="idx">
+                        <template is="item-bgc" data="{{...item,bgc,stn}}"/>
+                    </block>
+                </view>
+
+                <view class="box-item-det">
+                    <view class="item-desc" hidden="{{co_price <= 0}}">
+                        <view class="value-gold">{{co_price}}</view>
+                        <view class="text-sm">※<view class="c-text">长按</view>兑换</view>
+                        <view class="text-sm" hidden="{{co_price != 10000}}">※额外条件: 全假名练习次数不小于10</view>
+                    </view>
+                </view>
+
+            </view> <!-- box-shop end-->
 
         </view><!-- box-setting end-->
 
@@ -84,9 +163,10 @@
         <block wx:for="{{item}}" wx:key="mkey" wx:for-index="idx">
             <view class='step-out' data-row="{{item.row}}" data-col="{{item.col}}" data-roma="{{item.roma}}"
                 data-word="{{item.word}}" bindtap="goLink" bindlongpress="showRoma">
-                <view class='step {{item.on ? "step-on":"step-off"}} {{item.word == "" ? "rt-90":""}} {{item.active && item.word != "" ? "step-active":""}}'
-                hover-class='step-hover'>
-                <view class='step-word step-show {{item.kton ? "kata-black":""}}'>{{item.hint ? item.roma : item.word}}</view>
+                <view class='step-box {{item.word == "" ? "rt-90":""}}' hover-class='step-hover'>
+                    <view class='step {{item.word == "" ? cosmap["space"] : ""}} {{item.word && item.word == item.hira ? cosmap["hira"] :""}} {{item.word && item.word == item.kata ? cosmap["kata"] : ""}} {{item.on ? "step-on":"step-off"}}'>
+                        <view class='step-word step-show {{item.active && item.word != "" ? "sp-active":""}}'>{{item.hint ? item.roma : item.word}}</view>
+                    </view>
                 </view>
             </view>
         </block>
@@ -120,4 +200,17 @@
             </view>
         </block>
     </view>
+</template>
+
+<!-- 颜色设定 -->
+<template name="item-bgc">
+
+    <view class='step-out {{stn != 0 || word != "" ? "mg-right":""}}' data-key="{{key}}" data-word="{{word}}" data-price="{{price}}" bindtap="coco" bindlongpress="buy">
+        <view class='step-box {{word == "" ? "rt-90":""}}' hover-class='step-hover'>
+            <view class='step {{bgc[key]}}'>
+                <view class='step-word show-0 {{active ? "sp-active ":""}}'>{{word}}</view>
+            </view>
+        </view>
+    </view>
+                    
 </template>

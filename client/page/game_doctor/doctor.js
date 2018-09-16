@@ -313,15 +313,18 @@ Page({
       if (rcst.has(row_col)) continue
       rcst.add(row_col)
       cols.push(col)
-      fields[row][col]["roma"] = row_col
+      //fields[row][col]["roma"] = row_col
       fields[row][col]["word"] = ""
-      fields[row][col]["on"] = !fields[row][col]["on"]
-      fields[row][col]["don"] = !fields[row][col]["don"]
+      //fields[row][col]["on"] = !fields[row][col]["on"]
+      //fields[row][col]["don"] = !fields[row][col]["don"]
+      fields[row][col]["active"] = true
     }
     this.setData({fields, cols})
-    setTimeout(()=>{
-      this.down()
-    },500)
+    if (cols.length > 0){
+      setTimeout(()=>{
+        this.down()
+      },500)
+    }
     
   },
 

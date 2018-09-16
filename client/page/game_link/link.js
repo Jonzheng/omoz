@@ -38,6 +38,10 @@ Page({
     rest_count:total_step,
     icon_setting:"../../image/setting.png",
     icon_omoz: 'https://systems-1256378396.cos.ap-guangzhou.myqcloud.com/omoz_sm.png',
+    bgk: [{"key":"ka","word":"か","price":1000},{"key":"ki","word":"き","price":1000},{"key":"ku","word":"く","price":1000},{"key":"ke","word":"け","price":5000},{"key":"ko","word":"こ","price":10000}],
+    mycmap: [{"key":"no","word":""},{"key":"ka","word":""},{"key":"ki","word":""},{"key":"ku","word":""},{"key":"ke","word":""},{"key":"ko","word":""}],
+    bgc: {"no":"step-bg-no","ka":"step-bg-ka","ki":"step-bg-ki","ku":"step-bg-ku","ke":"step-bg-ke","ko":"step-bg-ko"},
+    cosmap: {"hira":"step-bg-ko", "kata":"step-bg-ko", "space":"step-bg-ka"},
     option: 1,
     top_hide: true,
     rank_hide: true,
@@ -48,6 +52,7 @@ Page({
     sakki_hira:"",
     sakki_kata:"",
     sakki_roma:"",
+    co_price:0,
   },
 
   getKanaRows: function(kana_row){
@@ -808,23 +813,19 @@ Page({
       var se = this.data.option
       this.setData({
         top_hide,
+        stn: 0,
         puzon: top_hide,
         rank_hide: se == 1,
         kana_hide: se == 2,
+        color_hide: se == 3,
       })
     }else if(option == 1){ //假名设定
-      this.setData({
-        kana_hide: false,
-        rank_hide: true,
-        option:1
-      })
+      this.setData({ option:1 })
     }else if(option == 2){ //排行榜
       this.loadRank()
-      this.setData({
-        kana_hide: true,
-        rank_hide: false,
-        option:2
-      })
+      this.setData({ option:2 })
+    }else if(option == 3){ //颜色设定
+      this.setData({ option:3 })
     }
     
   },
@@ -972,4 +973,45 @@ Page({
   },
 
 
+  //--------------------------------
+
+  coco: function(e){
+    var currData = e.currentTarget.dataset
+    var key = currData.key
+    var word = currData.word
+    var stn = this.data.stn
+    var cosmap = this.data.cosmap
+    var bgc = this.data.bgc
+    var ck = "c" + stn
+    if ("" == word){ //颜色更换
+      if (stn == 1 ) cosmap["hira"] = bgc[key]
+      if (stn == 2 ) cosmap["kata"] = bgc[key]
+      if (stn == 3 ) cosmap["space"] = bgc[key]
+      cosmap[ck] = !cosmap[ck]
+    }else{ //兑换颜色
+      var bgk = this.data.bgk
+      for (let bgc of bgk){
+        bgc["active"] = false
+        if (key == bgc["key"]) bgc["active"] = true
+      }
+      var co_price = currData.price
+      this.setData({co_price, bgk})
+    }
+    this.setData({
+      cosmap,
+    })
+  },
+
+  seto: function(e){
+    var currData = e.currentTarget.dataset
+    var stn = currData.stn
+    if (stn == this.data.stn) stn = 0
+    this.setData({stn})
+  },
+
+  buy: function(e){
+    var currData = e.currentTarget.dataset
+    var key = currData.key
+    console.log(key)
+  }
 })
