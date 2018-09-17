@@ -238,6 +238,21 @@
     font-weight: bold;
 }
 
+.add-gold{
+    position: relative;
+    left: -90rpx;
+    top: -25rpx;
+    display: inline;
+    color: rgb(255, 166, 0);
+    font-weight: bold;
+    animation: ke-add-coin 1.2s ease-in;
+    animation-fill-mode: forwards;
+}
+
+.my-hide{
+    opacity: 0;
+}
+
 .box-cost{
     display: flex;
     flex: none;
@@ -560,7 +575,7 @@
 }
 
 .step-bg-no{
-    background-color:#dedede;
+    background-color:#ccc;
     color: #555;
     transition: background-color 0.3s ease-in;
 }
@@ -717,5 +732,19 @@
     }
     100%{
         transform: scale(0.2, 0.2) rotateX(180deg);
+    }
+}
+
+@keyframes ke-add-coin{
+    0%{
+        opacity: 1;
+    }
+    20%{
+        opacity: 1;
+        top: -30rpx;
+    }
+    100%{
+        opacity: 0;
+        top:-99rpx;
     }
 }

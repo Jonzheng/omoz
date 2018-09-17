@@ -39,7 +39,7 @@ Page({
     icon_setting:"../../image/setting.png",
     icon_omoz: 'https://systems-1256378396.cos.ap-guangzhou.myqcloud.com/omoz_sm.png',
     bgk: [{"key":"ka","word":"か","price":1000},{"key":"ki","word":"き","price":1000},{"key":"ku","word":"く","price":1000},{"key":"ke","word":"け","price":5000},{"key":"ko","word":"こ","price":10000}],
-    mycmap: [{"key":"no","word":""},{"key":"ka","word":""},{"key":"ki","word":""},{"key":"ku","word":""},{"key":"ke","word":""},{"key":"ko","word":""}],
+    myclst: [{"key":"no","word":""}],
     bgc: {"no":"step-bg-no","ka":"step-bg-ka","ki":"step-bg-ki","ku":"step-bg-ku","ke":"step-bg-ke","ko":"step-bg-ko"},
     cosmap: {"hira":"step-bg-no", "kata":"step-bg-no", "space":"step-bg-no"},
     option: 1,
@@ -53,6 +53,7 @@ Page({
     sakki_kata:"",
     sakki_roma:"",
     co_price:0,
+    old_coin:0,
   },
 
   getKanaRows: function(kana_row){
@@ -824,6 +825,36 @@ Page({
     
   },
 
+  checkRank: function(){
+    var that = this
+    var openid = App.globalData.openid
+    wx.request({
+        url: urls.checkLinkRank,
+        method: 'POST',
+        data: {openid},
+        success: function (res) {
+            var ranks = res.data.data
+            if (ranks.length != 1) return
+            var rank = ranks[0]
+            console.log(rank)
+            var old_coin = rank.old_coin
+            var my_coin = rank.coin
+            var myco = rank.myco
+            var mycos = myco.split(",")
+            var myclst = []
+            for (let kk of mycos){
+              var cod = {"key":kk,"word":""}
+              myclst.push(cod)
+            }
+            that.setData({
+              my_coin,
+              old_coin,
+              myclst
+            })
+        }
+    });
+  },
+
   loadRank: function(){
     var that = this
     wx.request({
@@ -858,8 +889,10 @@ Page({
       this.loadRank()
       this.setData({ option:2 })
     }else if(option == 3){ //颜色设定
+      this.checkRank()
       this.setData({ option:3 })
     }
+    this.setData({old_coin:0})
     
   },
   select: function(e){

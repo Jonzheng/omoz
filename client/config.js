@@ -29,6 +29,7 @@ var urls = {
     updateAnswerHis: `${host}/weapp/updateAnswerHis`,
     saveLinkRank: `${host}/weapp/saveLinkRank`,
     queryLinkRank: `${host}/weapp/queryLinkRank`,
+    checkLinkRank: `${host}/weapp/checkLinkRank`,
     saveAnswer: `${host}/weapp/saveAnswer`,
     queryAnswer: `${host}/weapp/queryAnswer`,
 };

@@ -8,15 +8,17 @@ module.exports = async ctx => {
     var result = []
     if (openid){
         result = await mysql('t_link_rank').select('*').where('openid', openid)
-        if (result.length > 0){
-            old_coin = result.check_coin
+        if (result.length == 1){
+            var t_rank = result[0]
+            old_coin = t_rank.check_coin
             if (old_coin > 0){
                 await mysql.raw('update t_link_rank set coin = coin+?,check_coin=0 where openid = ?', [old_coin, openid]);
                 result = await mysql('t_link_rank').select('*').where('openid', openid)
             }
-            result["old_coin"] = old_coin
+            result[0]["old_coin"] = old_coin
         }
     }
+    console.log(result)
     ctx.state.data = result
     
 }

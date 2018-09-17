@@ -82,11 +82,14 @@
                     <view class="shop-line"></view>
                     <view class="box-text">
                         <view class="label-item">我的颜色:</view>
-                        <view class="label-item label-gold">金币:<view class="value-gold">999998</view></view>
+                        <view class="label-item label-gold">金币:
+                            <view class="value-gold">{{my_coin}}</view>
+                            <view class='add-gold' hidden="{{old_coin==0}}">{{old_coin > 0 ? "+"+old_coin:""}}</view>
+                        </view>
                     </view>
 
                     <view class="box-item">
-                        <block wx:for="{{mycmap}}" wx:key="mkey" wx:for-index="idx">
+                        <block wx:for="{{myclst}}" wx:key="mkey" wx:for-index="idx">
                             <template is="item-bgc" data="{{...item,bgc,stn}}"/>
                         </block>
                     </view>
