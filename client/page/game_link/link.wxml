@@ -164,7 +164,7 @@
             <view class='step-out' data-row="{{item.row}}" data-col="{{item.col}}" data-roma="{{item.roma}}"
                 data-word="{{item.word}}" bindtap="goLink" bindlongpress="showRoma">
                 <view class='step-box {{item.word == "" ? "rt-90":""}}' hover-class='step-hover'>
-                    <view class='step {{item.word == "" ? cosmap["space"] : ""}} {{item.word && item.word == item.hira ? cosmap["hira"] :""}} {{item.word && item.word == item.kata ? cosmap["kata"] : ""}} {{item.on ? "step-on":"step-off"}}'>
+                    <view class='step {{item.word == "" ? cosmap["space"] : item.word == item.hira ? cosmap["hira"] :item.word == item.kata ? cosmap["kata"] : cosmap["hira"]}} {{item.on ? "step-on":"step-off"}}'>
                         <view class='step-word step-show {{item.active && item.word != "" ? "sp-active":""}}'>{{item.hint ? item.roma : item.word}}</view>
                     </view>
                 </view>

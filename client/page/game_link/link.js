@@ -41,7 +41,7 @@ Page({
     bgk: [{"key":"ka","word":"か","price":1000},{"key":"ki","word":"き","price":1000},{"key":"ku","word":"く","price":1000},{"key":"ke","word":"け","price":5000},{"key":"ko","word":"こ","price":10000}],
     mycmap: [{"key":"no","word":""},{"key":"ka","word":""},{"key":"ki","word":""},{"key":"ku","word":""},{"key":"ke","word":""},{"key":"ko","word":""}],
     bgc: {"no":"step-bg-no","ka":"step-bg-ka","ki":"step-bg-ki","ku":"step-bg-ku","ke":"step-bg-ke","ko":"step-bg-ko"},
-    cosmap: {"hira":"step-bg-ko", "kata":"step-bg-ko", "space":"step-bg-ka"},
+    cosmap: {"hira":"step-bg-no", "kata":"step-bg-no", "space":"step-bg-no"},
     option: 1,
     top_hide: true,
     rank_hide: true,
@@ -135,8 +135,31 @@ Page({
   },
 
   onReady: function () {
+    var that = this
     this.initKanaRows()
-    this.initGame()
+    var openid = App.globalData.openid
+    wx.request({
+        url: urls.queryLinkRank,
+        method: 'POST',
+        data: {openid},
+        success: function (res) {
+            var ranks = res.data.data
+            if (ranks.length == 1){
+              var rank = ranks[0]
+              var cosmap = that.data.cosmap
+              var bgc = that.data.bgc
+              var hira = rank.hira
+              var kata = rank.kata
+              var space = rank.space
+              cosmap["hira"] = bgc[hira]
+              cosmap["kata"] = bgc[kata]
+              cosmap["space"] = bgc[space]
+              that.setData({cosmap})
+            }
+            that.initGame()
+        }
+    });
+    
   },
 
   toLogin: function (e) {
@@ -724,6 +747,7 @@ Page({
     var sed_size = this.data.sed_size
     sed_size = Math.max(sed_size, 10)
     var point = Math.round( (spin_count + hita_count * 10) * sed_size/10 )
+    var check_coin = Math.round(point/10)
     var new_fields = fields
     new_fields[0][0]["word"] = "旋"
     new_fields[0][1]["word"] = "转"
@@ -758,6 +782,14 @@ Page({
 
     new_fields[8][0]["word"] = "最"
     new_fields[8][1]["word"] = "高"
+
+    new_fields[10][0]["word"] = "金"
+    new_fields[10][1]["word"] = "币"
+    new_fields[10][2]["word"] = "+"
+    new_fields[10][3]["word"] = "" + parseInt(check_coin / 100 % 10)
+    new_fields[10][4]["word"] = "" + parseInt(check_coin / 10 % 10)
+    new_fields[10][5]["word"] = "" + check_coin % 10
+
     var openid = App.globalData.openid
 
     //解锁假名
@@ -775,6 +807,7 @@ Page({
             point,
             status: 1,
             puz,
+            check_coin,
         },
         success: function (res) {
             console.log('saveLinkRank:')
@@ -797,7 +830,6 @@ Page({
         url: urls.queryLinkRank,
         method: 'POST',
         success: function (res) {
-            console.log('queryLinkRank:')
             var ranks = res.data.data
             that.setData({ranks})
         }
@@ -805,6 +837,7 @@ Page({
   },
 
   setting:function(e){
+    if (!this.data.loged) return
     var currData = e.currentTarget.dataset
     var option = currData.option
     if (option == 0){ //icon-setting
@@ -866,8 +899,9 @@ Page({
         method: 'POST',
         data: {openid},
         success: function (res) {
-            var rank = res.data.data[0]
-            console.log(rank)
+            var ranks = res.data.data
+            if (ranks.length != 1) return
+            var rank = ranks[0]
             var re_puz = rank.puz
             var puz_map = {}
             if (re_puz && re_puz != ""){

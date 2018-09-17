@@ -9,6 +9,7 @@ module.exports = async ctx => {
     var status = body.status
     //例:puz = 'ka,na,tsu,a'
     var puz = body.puz
+    var check_coin = body.check_coin
 
     var puz_map = {}
     var pn_sp = puz.split(",")
@@ -19,8 +20,7 @@ module.exports = async ctx => {
         var re_point = rank.point
         point = point > re_point ? point:re_point
         var re_puz = rank.puz
-        if (re_puz != "" && puz != ""){ //puz已经有记录,例:puz = 'ra,6;ka,12;na,3;ta,10;tsu,2;'
-            console.log(re_puz)
+        if (re_puz != ""){ //puz已经有记录,例:puz = 'ra,6;ka,12;na,3;ta,10;tsu,2;'
             var puz_sp = re_puz.split(";")
             for (let sp of puz_sp){
                 if (sp == "") continue
@@ -38,18 +38,18 @@ module.exports = async ctx => {
         puz_map[p] = pnum
     }
     //puz_map -> puz
-    console.log(puz_map)
     puz = ""
     for (let k in puz_map){
+        if (k == "") continue
         var pu = k + "," + puz_map[k] + ";"
         puz += pu
     }
     console.log(puz)
 
-    var ss = mysql.raw('insert t_link_rank (openid,point,puz,status,latest) values(?,?,?,?,now())on duplicate key update point=?,puz=?,round=round+1,status=?,latest=now()', [openid,point,puz,status, point,puz,status]).toString()
+    var ss = mysql.raw('insert t_link_rank (openid,point,puz,check_coin,status,latest) values(?,?,?,?,?,now())on duplicate key update point=?,puz=?,check_coin=check_coin+?,round=round+1,status=?,latest=now()', [openid,point,puz,check_coin,status, point,puz,check_coin,status]).toString()
     console.log(ss)
     
-    await mysql.raw('insert t_link_rank (openid,point,puz,status,latest) values(?,?,?,?,now())on duplicate key update point=?,puz=?,round=round+1,status=?,latest=now()', [openid,point,puz,status, point,puz,status])
+    await mysql.raw('insert t_link_rank (openid,point,puz,check_coin,status,latest) values(?,?,?,?,?,now())on duplicate key update point=?,puz=?,check_coin=check_coin+?,round=round+1,status=?,latest=now()', [openid,point,puz,check_coin,status, point,puz,check_coin,status])
     var result = await mysql('t_link_rank').select('*').where('openid', openid)
     ctx.state.data = result
 }
