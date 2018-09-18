@@ -27,7 +27,7 @@
                     <view class="content">2.当[片假名]<view class="c-text">(On)</view>时,会有一半方块是片假名</view>
                     <view class="content">3.<view class="c-text">不选定</view>时会随机出现10个平假名</view>
                     <view class="content-desc">※选定<view class="c-text">少于</view>10个假名时,会随机补齐到10个</view>
-                    <view class="content">※此时<view class="c-text">长按</view>方块可以查看假名解锁次数</view>
+                    <view class="content">※此时<view class="c-text">长按</view>方块可以查看假名练习次数</view>
                 </view>
             </view>
 
@@ -43,7 +43,7 @@
                 <view class="content-cate">
                     <view class="content">分数=(旋转数量+异名连接*10)*假名数量/10</view>
                     <view class="content-desc">※异名连接:<view class="c-text">平假名</view>-<view class="c-text">片假名</view>(あ-ア)</view>
-                    <view class="content-desc">※结算时,异名连接的假名<view class="c-text">解锁</view>次数+1</view>
+                    <view class="content-desc">※结算时,异名连接的假名<view class="c-text">练习</view>次数+1</view>
                 </view>
             </view>
             

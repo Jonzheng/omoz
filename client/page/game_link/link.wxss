@@ -31,7 +31,7 @@
     align-items: center;
     flex-direction: column;
     position: absolute;
-    top: 875rpx;
+    top: 860rpx;
     right: 15rpx;
 }
 
@@ -92,6 +92,7 @@
     border: 1rpx solid #fff;
     box-shadow:0px 0px 10rpx #ddd;
     padding: 5rpx 5rpx;
+    height: 1060rpx;
 }
 
 .top-option{
@@ -239,9 +240,9 @@
 }
 
 .add-gold{
-    position: relative;
-    left: -90rpx;
-    top: -25rpx;
+    position: absolute;
+    left: 100rpx;
+    top: -30rpx;
     display: inline;
     color: rgb(255, 166, 0);
     font-weight: bold;
@@ -250,9 +251,9 @@
 }
 
 .sub-gold{
-    position: relative;
-    left: -90rpx;
-    top: 25rpx;
+    position: absolute;
+    left: 90rpx;
+    top: 30rpx;
     display: inline;
     color: rgb(255, 166, 0);
     font-weight: bold;

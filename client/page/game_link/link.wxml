@@ -204,7 +204,7 @@
                 <view class='col-hira {{item.selected ? "kata-color":""}}'>{{item.hira}}</view>
                 <view class="col-kama">
                     <view class="">{{item.kata}}</view>
-                    <view class="">{{puzon ? puz_map[item.roma] ? puz_map[item.roma]: item.roma ? 0:"" :item.roma}}</view>
+                    <view class=''>{{puzon ? puz_map[item.roma] ? puz_map[item.roma]: item.roma ? 0:"" :item.roma}}</view>
                 </view>
             </view>
         </block>

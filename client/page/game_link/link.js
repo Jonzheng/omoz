@@ -38,7 +38,7 @@ Page({
     rest_count:total_step,
     icon_setting:"../../image/setting.png",
     icon_omoz: 'https://systems-1256378396.cos.ap-guangzhou.myqcloud.com/omoz_sm.png',
-    bgk: [{"key":"ka","word":"か","price":1000},{"key":"ki","word":"き","price":1000},{"key":"ku","word":"く","price":1000},{"key":"ke","word":"け","price":5000},{"key":"ko","word":"こ","price":10000}],
+    bgk: [{"key":"ka","word":"か","price":100},{"key":"ki","word":"き","price":1000},{"key":"ku","word":"く","price":1000},{"key":"ke","word":"け","price":1000},{"key":"ko","word":"こ","price":10000}],
     myclst: [{"key":"no","word":""}],
     bgc: {"no":"step-bg-no","ka":"step-bg-ka","ki":"step-bg-ki","ku":"step-bg-ku","ke":"step-bg-ke","ko":"step-bg-ko"},
     cosmap: {"hira":"no", "kata":"no", "space":"no"},
@@ -938,9 +938,10 @@ Page({
     if (puz && puz != ""){
         var puz_sp = puz.split(";")
         for (let sp of puz_sp){
-            if (sp == "") continue
+            sp = sp.trim()
             var sps = sp.split(",")
             var spk = sps[0]
+            if (!spk || spk == "") continue
             var spv = sps[1]
             puz_map[spk] = spv
         }
@@ -1114,10 +1115,9 @@ Page({
     var openid = App.globalData.openid
     var price = currData.price
     var coin = this.data.my_coin
-    console.log(key, coin, ">", price)
     var try_idx = this.data.try_idx
     if (price > coin){
-      var log_lst = ["金币不足!","金币不够啦!","玩游戏&赚金币!","玩游戏&赚金币!!","玩游戏&赚金币!!!","...ん?",".........","...............","(╯°Д°)╯︵ ┻━┻","真的是金币不足了!!!"]
+      var log_lst = ["金币不足!","金币不够啦!","玩游戏&赚金币!","玩游戏&赚金币!!","玩游戏&赚金币!!!","...ん?",".........","...............","(╯°Д°)╯︵ ┻━┻","真的是金币不够了!!!"]
       var buy_log = log_lst[try_idx]
       try_idx += 1
       try_idx = Math.min(log_lst.length - 1, try_idx)
@@ -1135,22 +1135,22 @@ Page({
             var rank = ranks[0]
             var re_puz = rank.puz
             var puz_map = that.setPuzMap(re_puz)
-            console.log(puz_map)
             var canbuy = true
             var roman = 0
             for (let kk in puz_map){
+              if (!kk || kk=="") continue
               if (puz_map[kk] < 10){
                 canbuy = false
                 break
               }
               roman += 1
             }
-            if (roman != 46) canbuy = false
-            console.log("canbuy?", canbuy)
+            if (roman < 46) canbuy = false
+            console.log("canbuy?", canbuy, roman)
             if (canbuy){
-              that.buyColor(key)
+              that.buyColor(key, coin, price)
             }else{ //条件未解锁
-              var buy_log = "不满足兑换条件!"
+              var buy_log = "兑换条件不满足!"
               that.setData({buy_log})
             }
         }
@@ -1165,7 +1165,6 @@ Page({
     var that = this
     var openid = App.globalData.openid
     var balance = coin - price
-    console.log(color, balance)
     var sub_coin = price
     wx.request({
       url: urls.buyLinkColor,
