@@ -60,6 +60,8 @@ router.post('/updateAnswerHis', controllers.updateAnswerHis)
 router.post('/saveLinkRank', controllers.saveLinkRank)
 router.post('/queryLinkRank', controllers.queryLinkRank)
 router.post('/checkLinkRank', controllers.checkLinkRank)
+router.post('/buyLinkColor', controllers.buyLinkColor)
+router.post('/updateColor', controllers.updateColor)
 
 //--跨域--
 router.post('/blackLogin', controllers.blackLogin)

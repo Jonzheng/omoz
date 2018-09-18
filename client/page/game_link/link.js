@@ -41,7 +41,7 @@ Page({
     bgk: [{"key":"ka","word":"か","price":1000},{"key":"ki","word":"き","price":1000},{"key":"ku","word":"く","price":1000},{"key":"ke","word":"け","price":5000},{"key":"ko","word":"こ","price":10000}],
     myclst: [{"key":"no","word":""}],
     bgc: {"no":"step-bg-no","ka":"step-bg-ka","ki":"step-bg-ki","ku":"step-bg-ku","ke":"step-bg-ke","ko":"step-bg-ko"},
-    cosmap: {"hira":"step-bg-no", "kata":"step-bg-no", "space":"step-bg-no"},
+    cosmap: {"hira":"no", "kata":"no", "space":"no"},
     option: 1,
     top_hide: true,
     rank_hide: true,
@@ -52,8 +52,10 @@ Page({
     sakki_hira:"",
     sakki_kata:"",
     sakki_roma:"",
-    co_price:0,
+    show_price:0,
     old_coin:0,
+    sub_coin:0,
+    try_idx:0,
   },
 
   getKanaRows: function(kana_row){
@@ -148,13 +150,12 @@ Page({
             if (ranks.length == 1){
               var rank = ranks[0]
               var cosmap = that.data.cosmap
-              var bgc = that.data.bgc
               var hira = rank.hira
               var kata = rank.kata
               var space = rank.space
-              cosmap["hira"] = bgc[hira]
-              cosmap["kata"] = bgc[kata]
-              cosmap["space"] = bgc[space]
+              cosmap["hira"] = hira
+              cosmap["kata"] = kata
+              cosmap["space"] = space
               that.setData({cosmap})
             }
             that.initGame()
@@ -748,7 +749,7 @@ Page({
     var sed_size = this.data.sed_size
     sed_size = Math.max(sed_size, 10)
     var point = Math.round( (spin_count + hita_count * 10) * sed_size/10 )
-    var check_coin = Math.round(point/10)
+    var check_coin = Math.round(point * 1.2 / 10)
     var new_fields = fields
     new_fields[0][0]["word"] = "旋"
     new_fields[0][1]["word"] = "转"
@@ -825,6 +826,25 @@ Page({
     
   },
 
+  initColor: function(rank){
+    var old_coin = rank.old_coin
+    if (!old_coin) old_coin = 0
+    var my_coin = rank.coin
+    var myco = rank.myco
+    var mycos = myco.split(",")
+    var myclst = []
+    for (let kk of mycos){
+      var cod = {"key":kk,"word":""}
+      myclst.push(cod)
+    }
+    this.setData({
+      my_coin,
+      old_coin,
+      myco,
+      myclst
+    })
+  },
+
   checkRank: function(){
     var that = this
     var openid = App.globalData.openid
@@ -837,20 +857,7 @@ Page({
             if (ranks.length != 1) return
             var rank = ranks[0]
             console.log(rank)
-            var old_coin = rank.old_coin
-            var my_coin = rank.coin
-            var myco = rank.myco
-            var mycos = myco.split(",")
-            var myclst = []
-            for (let kk of mycos){
-              var cod = {"key":kk,"word":""}
-              myclst.push(cod)
-            }
-            that.setData({
-              my_coin,
-              old_coin,
-              myclst
-            })
+            that.initColor(rank)
         }
     });
   },
@@ -876,6 +883,7 @@ Page({
       var top_hide = !this.data.top_hide
       var se = this.data.option
       this.setData({
+        option: 1,
         top_hide,
         stn: 0,
         puzon: top_hide,
@@ -883,6 +891,9 @@ Page({
         kana_hide: se == 2,
         color_hide: se == 3,
       })
+      var ch_color = this.data.ch_color
+      if(ch_color) this.updateColor()
+
     }else if(option == 1){ //假名设定
       this.setData({ option:1 })
     }else if(option == 2){ //排行榜
@@ -892,7 +903,7 @@ Page({
       this.checkRank()
       this.setData({ option:3 })
     }
-    this.setData({old_coin:0})
+    this.setData({old_coin:0, sub_coin:0, buy_log:""})
     
   },
   select: function(e){
@@ -922,6 +933,22 @@ Page({
     this.setData({ks_all,ks_sed,is_max,sed_size})
   },
 
+  setPuzMap: function(puz){
+    var puz_map = {}
+    if (puz && puz != ""){
+        var puz_sp = puz.split(";")
+        for (let sp of puz_sp){
+            if (sp == "") continue
+            var sps = sp.split(",")
+            var spk = sps[0]
+            var spv = sps[1]
+            puz_map[spk] = spv
+        }
+    }
+    this.setData({puz_map})
+    return puz_map
+  },
+
   showPuz: function(){
     var that = this
     var openid = App.globalData.openid
@@ -936,18 +963,8 @@ Page({
             if (ranks.length != 1) return
             var rank = ranks[0]
             var re_puz = rank.puz
-            var puz_map = {}
-            if (re_puz && re_puz != ""){
-                var puz_sp = re_puz.split(";")
-                for (let sp of puz_sp){
-                    if (sp == "") continue
-                    var sps = sp.split(",")
-                    var spk = sps[0]
-                    var spv = sps[1]
-                    puz_map[spk] = spv
-                }
-            }
-            that.setData({puz_map, puzon})
+            that.setPuzMap(re_puz)
+            that.setData({puzon})
         }
       });
 
@@ -1042,34 +1059,44 @@ Page({
 
   //--------------------------------
 
-  coco: function(e){
+  prebuy: function(e){
     var currData = e.currentTarget.dataset
     var key = currData.key
     var word = currData.word
     var stn = this.data.stn
     var cosmap = this.data.cosmap
-    var bgc = this.data.bgc
     var ck = "c" + stn
+
+    //点击我的颜色
     if ("" == word){ //颜色更换
-      if (stn == 1 ) cosmap["hira"] = bgc[key]
-      if (stn == 2 ) cosmap["kata"] = bgc[key]
-      if (stn == 3 ) cosmap["space"] = bgc[key]
+      if (stn == 1 ) cosmap["hira"] = key
+      if (stn == 2 ) cosmap["kata"] = key
+      if (stn == 3 ) cosmap["space"] = key
       cosmap[ck] = !cosmap[ck]
+      if (stn != 0) this.setData({ch_color:true})
+
+    //购买颜色
     }else{ //兑换颜色
       var bgk = this.data.bgk
       for (let bgc of bgk){
         bgc["active"] = false
         if (key == bgc["key"]) bgc["active"] = true
       }
-      var co_price = currData.price
-      this.setData({co_price, bgk})
+      var show_price = currData.price
+      var myco = this.data.myco
+      if (myco.includes(key)) show_price = "已兑换"
+      var try_idx = 0
+      var buy_log = ""
+      var sub_coin = 0
+      var co_key = key
+      this.setData({show_price, bgk, try_idx, buy_log, co_key, sub_coin})
     }
     this.setData({
       cosmap,
     })
   },
 
-  seto: function(e){
+  setColor: function(e){
     var currData = e.currentTarget.dataset
     var stn = currData.stn
     if (stn == this.data.stn) stn = 0
@@ -1077,8 +1104,100 @@ Page({
   },
 
   buy: function(e){
+    var co_key = this.data.co_key
     var currData = e.currentTarget.dataset
     var key = currData.key
-    console.log(key)
-  }
+    var show_price = this.data.show_price
+    if (key != co_key || "已兑换" == show_price) return
+    wx.vibrateLong()
+    var that = this
+    var openid = App.globalData.openid
+    var price = currData.price
+    var coin = this.data.my_coin
+    console.log(key, coin, ">", price)
+    var try_idx = this.data.try_idx
+    if (price > coin){
+      var log_lst = ["金币不足!","金币不够啦!","玩游戏&赚金币!","玩游戏&赚金币!!","玩游戏&赚金币!!!","...ん?",".........","...............","(╯°Д°)╯︵ ┻━┻","真的是金币不足了!!!"]
+      var buy_log = log_lst[try_idx]
+      try_idx += 1
+      try_idx = Math.min(log_lst.length - 1, try_idx)
+      that.setData({buy_log, try_idx})
+      return
+    }
+    if ("ko" == key){ //购买黑色
+      wx.request({
+        url: urls.queryLinkRank,
+        method: 'POST',
+        data: {openid},
+        success: function (res) {
+            var ranks = res.data.data
+            if (ranks.length != 1) return
+            var rank = ranks[0]
+            var re_puz = rank.puz
+            var puz_map = that.setPuzMap(re_puz)
+            console.log(puz_map)
+            var canbuy = true
+            var roman = 0
+            for (let kk in puz_map){
+              if (puz_map[kk] < 10){
+                canbuy = false
+                break
+              }
+              roman += 1
+            }
+            if (roman != 46) canbuy = false
+            console.log("canbuy?", canbuy)
+            if (canbuy){
+              that.buyColor(key)
+            }else{ //条件未解锁
+              var buy_log = "不满足兑换条件!"
+              that.setData({buy_log})
+            }
+        }
+      });
+
+    }else{ //购买非黑色
+      that.buyColor(key, coin, price)
+    }
+  },
+
+  buyColor: function(color, coin, price){
+    var that = this
+    var openid = App.globalData.openid
+    var balance = coin - price
+    console.log(color, balance)
+    var sub_coin = price
+    wx.request({
+      url: urls.buyLinkColor,
+      method: 'POST',
+      data: {openid, color, balance},
+      success: function (res) {
+          var ranks = res.data.data
+          if (ranks.length != 1) return
+          var rank = ranks[0]
+          var show_price = "已兑换"
+          var buy_log = "兑换成功!"
+          that.setData({sub_coin, buy_log, show_price})
+          that.initColor(rank)
+      }
+    });
+  },
+
+  updateColor: function(){
+    var that = this
+    var openid = App.globalData.openid
+    var cosmap = this.data.cosmap
+    var hira = cosmap["hira"]
+    var kata = cosmap["kata"]
+    var space = cosmap["space"]
+    that.setData({ch_color:false})
+    wx.request({
+      url: urls.updateColor,
+      method: 'POST',
+      data: {openid, hira, kata, space},
+      success: function () {
+        that.setData({ch_color:false})
+      }
+    });
+  },
 })

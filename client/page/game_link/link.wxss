@@ -249,6 +249,17 @@
     animation-fill-mode: forwards;
 }
 
+.sub-gold{
+    position: relative;
+    left: -90rpx;
+    top: 25rpx;
+    display: inline;
+    color: rgb(255, 166, 0);
+    font-weight: bold;
+    animation: ke-sub-coin 1.2s ease-in;
+    animation-fill-mode: forwards;
+}
+
 .my-hide{
     opacity: 0;
 }
@@ -266,6 +277,16 @@
 .c-text{
     display: inline;
     color: #337ab7;
+}
+
+.line-text{
+    display: inline;
+}
+
+.buy-log{
+    position: relative;
+    top: -50rpx;
+    left: 220rpx;
 }
 
 .content-cate{
@@ -746,5 +767,19 @@
     100%{
         opacity: 0;
         top:-99rpx;
+    }
+}
+
+@keyframes ke-sub-coin{
+    0%{
+        opacity: 1;
+    }
+    20%{
+        opacity: 1;
+        top: 30rpx;
+    }
+    100%{
+        opacity: 0;
+        top:99rpx;
     }
 }

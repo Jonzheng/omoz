@@ -30,8 +30,10 @@ var urls = {
     saveLinkRank: `${host}/weapp/saveLinkRank`,
     queryLinkRank: `${host}/weapp/queryLinkRank`,
     checkLinkRank: `${host}/weapp/checkLinkRank`,
+    buyLinkColor: `${host}/weapp/buyLinkColor`,
     saveAnswer: `${host}/weapp/saveAnswer`,
     queryAnswer: `${host}/weapp/queryAnswer`,
+    updateColor: `${host}/weapp/updateColor`,
 };
 
 module.exports = urls;
