@@ -18,7 +18,6 @@ module.exports = async ctx => {
             result[0]["old_coin"] = old_coin
         }
     }
-    console.log(result)
     ctx.state.data = result
     
 }

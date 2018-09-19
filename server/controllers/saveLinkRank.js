@@ -3,7 +3,6 @@ const { mysql } = require('../qcloud')
 module.exports = async ctx => {
     
     var body = ctx.request.body
-    console.log(body)
     var openid = body.openid
     var point = body.point
     var status = body.status
@@ -31,7 +30,6 @@ module.exports = async ctx => {
             }
         }
     }
-    console.log(pn_sp)
     for (let p of pn_sp){
         var pnum = puz_map[p]
         pnum = pnum ? parseInt(pnum) + 1 : 1
@@ -44,10 +42,8 @@ module.exports = async ctx => {
         var pu = k + "," + puz_map[k] + ";"
         puz += pu
     }
-    console.log(puz)
 
-    var ss = mysql.raw('insert t_link_rank (openid,point,puz,check_coin,status,latest) values(?,?,?,?,?,now())on duplicate key update point=?,puz=?,check_coin=check_coin+?,round=round+1,status=?,latest=now()', [openid,point,puz,check_coin,status, point,puz,check_coin,status]).toString()
-    console.log(ss)
+    //var ss = mysql.raw('insert t_link_rank (openid,point,puz,check_coin,status,latest) values(?,?,?,?,?,now())on duplicate key update point=?,puz=?,check_coin=check_coin+?,round=round+1,status=?,latest=now()', [openid,point,puz,check_coin,status, point,puz,check_coin,status]).toString()
     
     await mysql.raw('insert t_link_rank (openid,point,puz,check_coin,status,latest) values(?,?,?,?,?,now())on duplicate key update point=?,puz=?,check_coin=check_coin+?,round=round+1,status=?,latest=now()', [openid,point,puz,check_coin,status, point,puz,check_coin,status])
     var result = await mysql('t_link_rank').select('*').where('openid', openid)

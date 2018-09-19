@@ -53,24 +53,38 @@
         <view class="box-attention" hidden="{{type != 0}}">
 
             <view class="box-cate">
-                <view class="paper-label">简介:</view>
+                <view class="paper-label">版本:</view>
                 <view class="content-cate">
-                    <view class="content">我会陆续为大家带来一些<view class="c-text">[假名]</view>为主题的游戏</view>
-                    <view class="content-sm">※下一个游戏已经在计划之中だぜ</view>
+                    <view class="content">v1.0.0</view>
+                    <view class="content">2018-09-03</view>
+                    <view class="content">「假名·连连看」「式神语录」「日语试题」基本功能</view>
+                </view>
+                <view class="content-cate">
+                    <view class="content">v1.0.1</view>
+                    <view class="content">2018-09-10</view>
+                    <view class="content">●「假名·连连看」</view>
+                    <view class="content">●长按提示罗马音</view>
+                    <view class="content">●连接完成时显示假名的平假/片假/罗马音</view>
+                    <view class="content">●记录和显示假名练习次数</view>
+                    <view class="content">※修复昵称不显示的错误</view>
+                    <view class="content">※修复由于'提前渲染'的造成的动画效果丢失的错误</view>
+                </view>
+                <view class="content-cate">
+                    <view class="content">v1.0.2</view>
+                    <view class="content">2018-09-19</view>
+                    <view class="content">●「假名·连连看」</view>
+                    <view class="content">●完成游戏奖励金币</view>
+                    <view class="content">●道具商店(颜色兑换)</view>
+                    <view class="content">●片假/平假/空白方块颜色可以设定</view>
+                    <view class="content">●排行榜显示样式</view>
+                    <view class="content">※修复关闭片假时练习次数记录丢失的错误</view>
                 </view>
             </view>
             <view class="box-cate">
                 <view class="paper-label">预告:</view>
                 <view class="content-cate">
-                    <view class="content">1.连连看,添加一个游戏技能</view>
-                    <view class="content">2.下一个游戏:「假名·医生」</view>
-                </view>
-            </view>
-            <view class="box-cate">
-                <view class="paper-label">感謝:</view>
-                <view class="content-cate">
-                    <view class="content">谢谢<view class="c-text">つき</view>さん帮忙测试以及提出建议,ありがとう</view>
-                    <view class="content">如果你想参与下一个游戏的测试欢迎报名.来い~</view>
+                    <view class="content"></view>
+                    <view class="content"></view>
                 </view>
             </view>
             
