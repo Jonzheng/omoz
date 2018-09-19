@@ -869,6 +869,11 @@ Page({
         method: 'POST',
         success: function (res) {
             var ranks = res.data.data
+            for (let rank of ranks){
+              var myco = rank.myco
+              var colst = myco.split(",")
+              rank["colst"] = colst
+            }
             that.setData({ranks})
         }
     });

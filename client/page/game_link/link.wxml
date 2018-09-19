@@ -1,5 +1,5 @@
 <view class='page {{top_hide ? "fixed":""}}'>
-        <button hidden="{{loged}}" open-type="getUserInfo" class="get-user" bindgetuserinfo="toLogin">点击登录</button>
+        <button hidden="{{loged}}" open-type="getUserInfo" class="get-user" bindgetuserinfo="toLogin">点击授权</button>
 
         <view class='top-box'>
             <view class='box-point'>
@@ -70,7 +70,7 @@
                     <view class="rank-value">通关次数</view>
                 </view>
                 <block wx:for="{{ranks}}" wx:key="mkey" wx:for-index="idx">
-                    <template is="rank-0" data="{{...item,idx}}"/>
+                    <template is="rank-0" data="{{...item,idx,bgc}}"/>
                 </block>
             </view><!-- box-rank end-->
 
@@ -151,11 +151,17 @@
                         <view class="value-gold">{{show_price}}</view>
                         <view class="text-sm">
                             <view hidden='{{show_price == 0 || show_price=="已兑换"}}'>※<view class="c-text">长按</view>兑换</view>
+                            <view hidden='{{show_price != "已兑换"}}'>まいどあり~~~</view>
                         </view>
                         <view class="text-sm" hidden="{{show_price != 10000}}">※兑换条件: 全假名练习次数不小于10</view>
                         <view class="text-sm">
                             <view hidden='{{show_price == 0 || buy_log == ""}}'><view class="c-text">{{buy_log}}</view></view>
                         </view>
+                    </view>
+                    <view class="text-sm" hidden='{{!(show_price == 0 && buy_log == "")}}'>
+                        <view class="mg-left">o(*≧▽≦)ツ</view>
+                        <view class="mg-left">いらっしゃい~~</view>
+                        <view class="mg-left"></view>
                     </view>
                 </view>
 
@@ -188,7 +194,16 @@
         <view class="rank-value rank-no">{{idx+1}}</view>
         <view class="rank-value width-player rank-player">
             <image class='user-avatar' src='{{avatar_url}}'></image>
-            <view class='user-name'>{{show_name ? show_name : nick_name}}</view>
+            <view class='box-user-name'>
+                <view class='user-myco'>
+                    <block wx:for="{{colst}}" wx:key="mkey">
+                        <view class='step-box rt-45'>
+                            <view class='step-sm {{bgc[item]}}'></view>
+                        </view>
+                    </block>
+                </view>
+                <view class='user-name'>{{show_name ? show_name : nick_name}}</view>
+            </view>
         </view>
         <view class="rank-value">{{point}}</view>
         <view class="rank-value">{{round}}</view>
