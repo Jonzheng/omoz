@@ -24,6 +24,7 @@ module.exports = async ctx => {
     
     var title = fields.title
     var serifu = fields.serifu
+    var koner = fields.koner
     var roma = fields.roma
     var stars = fields.stars
 
@@ -63,7 +64,7 @@ module.exports = async ctx => {
         await uploder(params)
     }
 
-    await mysql("t_list").where("file_id", file_id).update({title:title,serifu:serifu,roma:roma,src_image:src_image,stars:stars})
+    await mysql("t_list").where("file_id", file_id).update({title:title,serifu:serifu,koner:koner,roma:roma,src_image:src_image,stars:stars})
 
     await mysql("t_audio").where("file_id", file_id).update({c_name:c_name,shadow:shadow})
 

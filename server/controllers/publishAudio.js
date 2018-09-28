@@ -94,7 +94,7 @@ module.exports = async ctx => {
         title: fields.title,
         serifu: fields.serifu,
         stars: fields.stars,
-        koner: "",
+        koner: fields.koner,
         roma: fields.roma,
         src_image: src_image,
         level: level,
