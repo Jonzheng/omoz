@@ -67,7 +67,7 @@
                     <view class="content">●连接完成时显示假名的平假/片假/罗马音</view>
                     <view class="content">●记录和显示假名练习次数</view>
                     <view class="content">※修复昵称不显示的错误</view>
-                    <view class="content">※修复由于'提前渲染'的造成的动画效果丢失的错误</view>
+                    <view class="content">※修复由于'提前渲染'造成的动画效果丢失的错误</view>
                 </view>
                 <view class="content-cate">
                     <view class="content">v1.0.2</view>
@@ -78,6 +78,15 @@
                     <view class="content">●片假/平假/空白方块颜色可以设定</view>
                     <view class="content">●排行榜显示样式</view>
                     <view class="content">※修复关闭片假时练习次数记录丢失的错误</view>
+                </view>
+                <view class="content-cate">
+                    <view class="content">v1.0.3</view>
+                    <view class="content">2018-10-</view>
+                    <view class="content">▲「式神语录」</view>
+                    <view class="content">▲添加台词平假注音</view>
+                    <view class="content">▲添加台词句译</view>
+                    <view class="content">▲同一式神不同技能台词快速切换</view>
+                    <view class="content">※修复--右划可能退出游戏</view>
                 </view>
             </view>
             <view class="box-cate">

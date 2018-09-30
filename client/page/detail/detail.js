@@ -47,11 +47,8 @@ Page({
         oriPlaying: false,
         show_video: false,
         an_in: false,
-        canIUse: wx.canIUse('button.open-type.getUserInfo'),
         list_master:[],
         record_map:{},
-        icon_play: "../../image/play.png",
-        icon_stop: "../../image/stop.png",
         icon_trash: "../../image/trash.png",
         icon_upload: "../../image/upload.png",
         icon_record: "../../image/record.png",
@@ -194,6 +191,32 @@ Page({
         });
     },
 
+    initSerifu: function(list_element){
+        var serifu = list_element.serifu
+        var koner = list_element.koner
+        var roma = list_element.roma
+
+        var serifu_lst = []
+        serifu = serifu.replace(new RegExp('[)(]+', 'g'),"#")
+        var serifu_sp = serifu.split("#")
+        for (let [idx, word] of serifu_sp.entries()){
+            if (idx % 2 == 0){
+                var cs = ""
+                var sm = {word, cs}
+                serifu_lst.push(sm)
+            }else{ //平假注音
+                var cs = "dc-word left-" + word.length
+                var sm = {word, cs}
+                serifu_lst.push(sm)
+            }
+        }
+        this.setData({
+            serifu_lst,
+            koner,
+            roma,
+        })
+    },
+
     initPageData: function (file_id) {
         var that = this
         var openid = App.globalData.openid
@@ -209,7 +232,7 @@ Page({
                 var list_element = res.data.data.list_result[0]
                 var audio_element = res.data.data.audio_result[0]
                 var record_result = res.data.data.record_result[0]
-                console.log(record_result)
+                that.initSerifu(list_element)
                 for (let record of record_result) {
                     record["listenStatus"] = "listen-off"
                     record["boxStyle"] = "btn-play-box"
@@ -225,7 +248,6 @@ Page({
                     }
                     
                     record["isListen"] = false
-                    console.log(record)
                 }
                 var shadow = audio_element.shadow.split(",").map((item) => { return item + 'rpx' })
                 var video_size = list_element.video_size / 1048576
