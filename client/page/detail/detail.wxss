@@ -6,6 +6,54 @@ video {
     overflow:hidden;
 }
 
+.box-head{
+    padding:20rpx 30rpx;
+    display: flex;
+    flex-direction: column;
+}
+
+.box-curr{
+    padding: 20rpx 0;
+    display: flex;
+    border-bottom: 3rpx solid #bbb;
+}
+
+.curr-title{
+    width: 40%;
+    color:#337ab7;
+    font-weight: bold;
+}
+
+.curr-vsize{
+    width: 55%;
+    color:#999;
+    text-align: right;
+}
+
+.box-other{
+    display: flex;
+    flex-direction: column;
+}
+
+.sk-btn{
+    padding: 10rpx 0;
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1rpx solid #bbb;
+}
+
+.sk-title{
+    color:#337ab7;
+}
+
+.sk-serifu{
+    color:#999;
+    font-size: 22rpx;
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .box-video{
     display: flex;
     align-items: center; /*中轴对齐*/
