@@ -234,7 +234,7 @@ Page({
                 var list_element = res.data.data["list_result"][0]
                 var audio_element = res.data.data["audio_result"][0]
                 var record_result = res.data.data["record_result"][0]
-                var list_other = res.data.data["list_other"]
+                var list_other = res.data.data["list_other"][0]
                 that.initSerifu(list_element)
                 for (let record of record_result) {
                     record["listenStatus"] = "listen-off"
