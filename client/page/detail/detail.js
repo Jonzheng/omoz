@@ -58,7 +58,9 @@ Page({
         hasTmp: false,
         isRecording: false,
         isPlaying: false,
-        tempFile: ''
+        show_other: true,
+        tempFile: '',
+
     },
     onUnload: function () {
         console.log("onUnload")
@@ -227,11 +229,12 @@ Page({
             method: 'POST',
             data: { cate: 'y', file_id, user_id},
             success: function (res) {
-                console.log("initPageData:")
+                console.log("queryDetail:")
                 console.log(res.data.data)
-                var list_element = res.data.data.list_result[0]
-                var audio_element = res.data.data.audio_result[0]
-                var record_result = res.data.data.record_result[0]
+                var list_element = res.data.data["list_result"][0]
+                var audio_element = res.data.data["audio_result"][0]
+                var record_result = res.data.data["record_result"][0]
+                var list_other = res.data.data["list_other"]
                 that.initSerifu(list_element)
                 for (let record of record_result) {
                     record["listenStatus"] = "listen-off"
@@ -249,9 +252,15 @@ Page({
                     
                     record["isListen"] = false
                 }
+                var other_lst = []
+                for (let ot of list_other) {
+                    if (ot.file_id == file_id) continue
+                    other_lst.push(ot)
+                }
                 var shadow = audio_element.shadow.split(",").map((item) => { return item + 'rpx' })
                 var video_size = list_element.video_size / 1048576
                 that.setData({
+                    other_lst,
                     list_element,
                     audio_element,
                     list_master:record_result,
@@ -267,16 +276,13 @@ Page({
 
     onLoad: function (option) {
         //页面初始参数
-        var that = this
-        //console.log(option)
-        //console.log(App.globalData.hasLogin)
         var file_id = option['file_id']
         this.initPageData(file_id)
         this.setData({
             file_id,
             loged:App.globalData.hasLogin,
         })
-        setTimeout(()=>{this.setData({an_in:true})},300)
+        setTimeout(()=>{this.setData({an_in:true,show_other:false})},300)
     },
 
     setOriStop: function(){
@@ -608,6 +614,24 @@ Page({
             fail: function (e) {
                 console.log('fail')
             }
+        })
+    },
+
+    showOther: function(){
+        var show_other = !this.data.show_other
+        this.setData({
+            show_other
+        })
+    },
+
+    reload: function(e){
+        var currData = e.currentTarget.dataset
+        var file_id = currData.fid
+        console.log(file_id)
+
+        var _url = '../detail/detail?file_id=' + file_id
+        wx.redirectTo({
+            url: _url
         })
     },
 

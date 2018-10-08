@@ -19,6 +19,7 @@ video {
 }
 
 .curr-title{
+    display: flex;
     width: 40%;
     color:#337ab7;
     font-weight: bold;
@@ -30,12 +31,37 @@ video {
     text-align: right;
 }
 
+.text-more{
+    position: relative;
+    top: 0;
+    margin-left: 10rpx;
+    opacity: 1;
+    transition: all 0.2s ease-in;
+}
+
+.rt-other{
+    top: 10rpx;
+    transform: rotate(-270deg);
+    transition: all 0.3s ease-in;
+  }
+
 .box-other{
     display: flex;
     flex-direction: column;
+    overflow: hidden;
+    height: 0;
+    opacity: 0;
+    transition: height,opacity 0.2s ease-in;
+}
+
+.other-show{
+    height: auto;
+    opacity: 1;
+    transition: height,opacity 0.2s ease-in;
 }
 
 .sk-btn{
+    margin-left: 30rpx;
     padding: 10rpx 0;
     display: flex;
     flex-direction: column;
@@ -43,7 +69,8 @@ video {
 }
 
 .sk-title{
-    color:#337ab7;
+    color:#666;
+    font-weight: bold;
 }
 
 .sk-serifu{

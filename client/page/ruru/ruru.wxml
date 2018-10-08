@@ -81,12 +81,12 @@
                 </view>
                 <view class="content-cate">
                     <view class="content">v1.0.3</view>
-                    <view class="content">2018-10-</view>
+                    <view class="content">2018-10-08</view>
                     <view class="content">▲「式神语录」</view>
                     <view class="content">▲添加台词平假注音</view>
                     <view class="content">▲添加台词句译</view>
                     <view class="content">▲同一式神不同技能台词快速切换</view>
-                    <view class="content">※修复--右划可能退出游戏</view>
+                    <view class="content">※修复(没有)--右划可能退出游戏</view>
                 </view>
             </view>
             <view class="box-cate">

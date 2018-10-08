@@ -2,21 +2,20 @@
     <view class="box-head">
 
         <view class='box-curr'>
-            <view class="curr-title">{{list_element.title}} 〉</view>
+            <view class="curr-title" bindtap="showOther">
+                <view>{{list_element.title}}</view>
+                <view class='text-more {{show_other ? "rt-other":""}}'>〉</view>
+            </view>
             <view class="curr-vsize">视频大小:{{video_size}}MB</view>
         </view>
 
-        <view class='box-other'>
-            <view class='sk-btn'>
-                <view class='sk-title'>山兔_触碰</view>
-                <view class='sk-serifu'>蛙(かえる)ゴッグ出撃(しゅつげき)、あぁ止(と)まって止(と)まって出撃(しゅつげき)</view>
-            </view>
-
-            <view class='sk-btn'>
-                <view class='sk-title'>山兔_技能贰</view>
-                <view class='sk-serifu'>ほらほら、よいしょっと</view>
-            </view>
-
+        <view class='box-other {{show_other ? "other-show":""}}'>
+            <block wx:for="{{other_lst}}" wx:key="mkey">
+                <view class='sk-btn' data-fid='{{item.file_id}}' bindtap="reload" hover-class="space-hover">
+                    <view class='sk-title'>{{item.title}}</view>
+                    <view class='sk-serifu'>{{item.serifu}}</view>
+                </view>
+            </block>
         </view>
     </view>
 
