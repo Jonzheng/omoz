@@ -64,9 +64,9 @@
 
             <view class='box-rank' hidden='{{option != 2}}'>
                 <view class="row-title">
-                    <view class="rank-value rank-no">排名</view>
+                    <view class="rank-value rank-no">金币↑</view>
                     <view class="rank-value width-player">玩家</view>
-                    <view class="rank-value">分数</view>
+                    <view class="rank-value">最高分</view>
                     <view class="rank-value">通关次数</view>
                 </view>
                 <block wx:for="{{ranks}}" wx:key="mkey" wx:for-index="idx">

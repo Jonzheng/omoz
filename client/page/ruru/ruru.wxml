@@ -86,7 +86,15 @@
                     <view class="content">▲添加台词平假注音</view>
                     <view class="content">▲添加台词句译</view>
                     <view class="content">▲同一式神不同技能台词快速切换</view>
-                    <view class="content">※修复(没有)--右划可能退出游戏</view>
+                    <view class="content">!修复(没有)--右划可能退出游戏</view>
+                </view>
+                <view class="content-cate">
+                    <view class="content">v1.0.4</view>
+                    <view class="content">2018-10-19</view>
+                    <view class="content">●「假名·连连看」</view>
+                    <view class="content">●每日签到+金币(100~666)</view>
+                    <view class="content">●根据获得金币排序</view>
+                    <view class="content">修复进行'0局'时初始化商店的错误</view>
                 </view>
             </view>
             <view class="box-cate">

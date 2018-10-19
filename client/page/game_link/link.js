@@ -38,6 +38,7 @@ Page({
     rest_count:total_step,
     icon_setting:"../../image/setting.png",
     icon_omoz: 'https://systems-1256378396.cos.ap-guangzhou.myqcloud.com/omoz_sm.png',
+    bgk_ori: [{"key":"ka","word":"か","price":100},{"key":"ki","word":"き","price":1000},{"key":"ku","word":"く","price":1000},{"key":"ke","word":"け","price":1000},{"key":"ko","word":"こ","price":10000}],
     bgk: [{"key":"ka","word":"か","price":100},{"key":"ki","word":"き","price":1000},{"key":"ku","word":"く","price":1000},{"key":"ke","word":"け","price":1000},{"key":"ko","word":"こ","price":10000}],
     myclst: [{"key":"no","word":""}],
     bgc: {"no":"step-bg-no","ka":"step-bg-ka","ki":"step-bg-ki","ku":"step-bg-ku","ke":"step-bg-ke","ko":"step-bg-ko"},
@@ -826,6 +827,19 @@ Page({
     
   },
 
+  initBGK: function(sdate, ldate){
+    var bgk = this.data.bgk
+    var bgk_ori = this.data.bgk_ori
+    if (sdate != ldate){
+      for (let kp of bgk){
+        kp["word"] = "签"
+      }
+    }else{
+      bgk = bgk_ori
+    }
+    this.setData({bgk})
+  },
+
   initColor: function(rank){
     var old_coin = rank.old_coin
     if (!old_coin) old_coin = 0
@@ -845,18 +859,22 @@ Page({
     })
   },
 
-  checkRank: function(){
+  checkRank: function(check_coin, ran){
     var that = this
     var openid = App.globalData.openid
     wx.request({
         url: urls.checkLinkRank,
         method: 'POST',
-        data: {openid},
+        data: {openid, check_coin, ran},
         success: function (res) {
             var ranks = res.data.data
+            console.log(ranks)
             if (ranks.length != 1) return
             var rank = ranks[0]
             console.log(rank)
+            var sdate = rank["s_date"].substring(0, 10)
+            var ldate = rank["latest"].substring(0, 10)
+            that.initBGK(sdate, ldate)
             that.initColor(rank)
         }
     });
@@ -905,7 +923,7 @@ Page({
       this.loadRank()
       this.setData({ option:2 })
     }else if(option == 3){ //颜色设定
-      this.checkRank()
+      this.checkRank(0, 0)
       this.setData({ option:3 })
     }
     this.setData({old_coin:0, sub_coin:0, buy_log:""})
@@ -1082,6 +1100,14 @@ Page({
       if (stn != 0) this.setData({ch_color:true})
 
     //购买颜色
+    }else if ("签" == word){ //日签
+      var bgk_ori = this.data.bgk_ori
+      var bgk = bgk_ori
+      this.setData({bgk, old_coin:0, sub_coin:0, buy_log:""})
+      var ran = Math.random()
+      var check_coin = parseInt(ran * 666)
+      check_coin = Math.max(100, check_coin)
+      this.checkRank(check_coin, check_coin)
     }else{ //兑换颜色
       var bgk = this.data.bgk
       for (let bgc of bgk){

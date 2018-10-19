@@ -45,7 +45,7 @@ module.exports = async ctx => {
 
     //var ss = mysql.raw('insert t_link_rank (openid,point,puz,check_coin,status,latest) values(?,?,?,?,?,now())on duplicate key update point=?,puz=?,check_coin=check_coin+?,round=round+1,status=?,latest=now()', [openid,point,puz,check_coin,status, point,puz,check_coin,status]).toString()
     
-    await mysql.raw('insert t_link_rank (openid,point,puz,check_coin,status,latest) values(?,?,?,?,?,now())on duplicate key update point=?,puz=?,check_coin=check_coin+?,round=round+1,status=?,latest=now()', [openid,point,puz,check_coin,status, point,puz,check_coin,status])
+    await mysql.raw('insert t_link_rank (openid,point,puz,check_coin,status,s_date,latest) values(?,?,?,?,?,date_sub(now(), interval -1 day),now())on duplicate key update point=?,puz=?,check_coin=check_coin+?,total_coin=total_coin+?,round=round+1,status=?,latest=now()', [openid,point,puz,check_coin,status, point,puz,check_coin,check_coin,status])
     var result = await mysql('t_link_rank').select('*').where('openid', openid)
     ctx.state.data = result
 }

@@ -8,7 +8,7 @@ module.exports = async ctx => {
     if (openid){
         result = await mysql('t_link_rank').select('*').where('openid', openid)
     }else{
-        result = await mysql('t_link_rank').select('*').orderBy('point', 'desc').leftJoin('t_user', 't_link_rank.openid', 't_user.openid')
+        result = await mysql('t_link_rank').select('*').where('round','>', 0).orderBy('total_coin', 'desc').leftJoin('t_user', 't_link_rank.openid', 't_user.openid')
     }
     ctx.state.data = result
     
