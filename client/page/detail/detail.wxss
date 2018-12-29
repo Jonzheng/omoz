@@ -20,13 +20,13 @@ video {
 
 .curr-title{
     display: flex;
-    width: 40%;
+    width: 60%;
     color:#337ab7;
     font-weight: bold;
 }
 
 .curr-vsize{
-    width: 55%;
+    width: 40%;
     color:#999;
     text-align: right;
 }
