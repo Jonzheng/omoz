@@ -74,6 +74,6 @@ router.post('/savePaper', controllers.savePaper)
 router.post('/updatePaper', controllers.updatePaper)
 router.post('/saveQuestion', controllers.saveQuestion)
 router.post('/updatePublish', controllers.updatePublish)
-
+router.post('/findImage', controllers.findImage)
 
 module.exports = router
