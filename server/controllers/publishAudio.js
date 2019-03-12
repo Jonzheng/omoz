@@ -1,8 +1,8 @@
 const { mysql } = require('../qcloud')
 const cos = require('../qcos')
-const fs = require('fs')
+const { jsonBody } = require('../xbody')
 
-const Bucket = 'image-1256378396'
+const Bucket = 'video-1256378396'
 const Region = 'ap-guangzhou'
 
 const PreAudio = 'https://audio-1256378396.cos.ap-guangzhou.myqcloud.com/'
@@ -17,12 +17,10 @@ module.exports = async ctx => {
         "Access-Control-Allow-Headers": "X-Requested-With",
         "Access-Control-Allow-Methods": "POST",
         "X-Powered-By": "3.2.1",
-        'Content-Type': 'multipart/form-data;charset=utf-8'
+        // 'Content-Type': 'multipart/form-data;charset=utf-8'
     });
-    var body = ctx.request.body
-    console.log(body)
-    var fields = body.fields
-    var file_id = fields.file_id
+    const body = jsonBody(ctx.request.body)
+    var file_id = body.file_id
     var flst = file_id.split("_") //["ssr", "xtz", "0", "1"]
     var level = flst[0]
     var s_name = flst[1]
@@ -30,14 +28,12 @@ module.exports = async ctx => {
     var ver = flst[3]
     var cate = "y"
 
-    var file_src_image = body.files.file_src_image
-
     var src_audio = PreAudio + file_id + SufAudio
     var src_video = PreVideo + file_id + SufVideo
 
     //获得视频文件大小
     var params_get = {
-        Bucket: "video-1256378396",
+        Bucket: Bucket,
         Region: Region,
         Prefix: file_id
     }
@@ -55,47 +51,18 @@ module.exports = async ctx => {
         })
     }
     await getVideoSize(params_get)
-
     //await 在async修饰的函数下,必须是Promise才有效果
-    var src_image = ""
-    function uploder(params) {
-        return new Promise((resolve, reject) => {
-            cos.putObject(params, function (err, data) {
-                if (err) {
-                    console.log(err)
-                } else {
-                    src_image = data['Location']
-                }
-                resolve()
-            })
-        })
-    }
-
-    //没有选择文件的情况可以update
-    if (file_src_image && file_src_image.size > 0){
-        var fileName = file_id + '.png'
-        file_src_image.name = fileName
-
-        var params = {
-            Bucket: Bucket,
-            Region: Region,
-            ContentLength: file_src_image.size,
-            Key: file_src_image.name,
-            Body: fs.createReadStream(file_src_image.path)
-        }
-
-        await uploder(params)
-    }
+    var src_image = body.src_image
 
     await mysql('t_list').insert({
         file_id: file_id,
         src_video: src_video,
         video_size: video_size,
-        title: fields.title,
-        serifu: fields.serifu,
-        stars: fields.stars,
-        koner: fields.koner,
-        roma: fields.roma,
+        title: body.title,
+        serifu: body.serifu,
+        stars: body.stars,
+        koner: body.koner,
+        roma: body.roma,
         src_image: src_image,
         level: level,
         cate: cate,
@@ -105,9 +72,9 @@ module.exports = async ctx => {
     await mysql('t_audio').insert({
         file_id: file_id,
         src_audio: src_audio,
-        c_name: fields.c_name,
+        c_name: body.c_name,
         s_name: s_name,
-        shadow: fields.shadow,
+        shadow: body.shadow,
         level: level,
         ski: ski,
         ver: ver,
@@ -115,5 +82,5 @@ module.exports = async ctx => {
         status: 1
     });
 
-    ctx.state.data = src_image
+    ctx.state.data = body
 }

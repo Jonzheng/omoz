@@ -1,5 +1,5 @@
 const { mysql } = require('../qcloud')
-const { keyBody } = require('../xbody')
+const { jsonBody } = require('../xbody')
 
 module.exports = async ctx => {
     var res = ctx.res
@@ -10,7 +10,7 @@ module.exports = async ctx => {
         "X-Powered-By": "3.2.1",
         'Content-Type': 'application/json;charset=utf-8'
     });
-    const body = keyBody(ctx.request.body)
+    const body = jsonBody(ctx.request.body)
     const file_id = body.file_id
     const pageNo = body.pageNo
     const pageSize = body.pageSize

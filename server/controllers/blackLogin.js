@@ -1,23 +1,23 @@
 const { mysql } = require('../qcloud')
 const crypto = require('crypto')
-const { keyBody } = require('../xbody')
+const { jsonBody } = require('../xbody')
 
 module.exports = async ctx => {
     var res = ctx.res
     res.writeHead(200, {
         "Access-Control-Allow-Origin": "*",
-        // "Access-Control-Allow-Headers": "Origin, Content-Type, Content-Length, Authorization, Accept, X-Requested-With",
+        "Access-Control-Allow-Headers": "*",
         "Access-Control-Allow-Methods": "GET, POST",
-        // "X-Powered-By": "3.2.1",
-        // 'Content-Type': 'application/json; charset=utf-8'
+        "X-Powered-By": "3.2.1",
+        'Content-Type': 'application/json; charset=utf-8'
     });
 
-    const body = keyBody(ctx.request.body)
+    const body = jsonBody(ctx.request.body)
     var auth_name = body.auth_name
     var auth_code = body.auth_code
 
     function getCode() {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             var md5 = crypto.createHash('md5')
             auth_code = md5.update(auth_code).digest('hex')
             resolve()

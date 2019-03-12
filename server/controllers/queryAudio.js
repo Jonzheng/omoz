@@ -1,6 +1,6 @@
 const { mysql } = require('../qcloud')
 const cos = require('../qcos')
-const { keyBody } = require('../xbody')
+const { jsonBody } = require('../xbody')
 
 const Bucket = 'audio-1256378396'
 const Region = 'ap-guangzhou'
@@ -14,7 +14,7 @@ module.exports = async ctx => {
         "X-Powered-By": "3.2.1",
         'Content-Type': 'application/json;charset=utf-8'
     });
-    const body = keyBody(ctx.request.body)
+    const body = jsonBody(ctx.request.body)
     var file_id = body.file_id
 
     var result = []

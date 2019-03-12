@@ -1,13 +1,12 @@
-const keyBody = body => {
-    for (let key in body) {
-        if (key.indexOf(',') != -1 && key.indexOf(':') != -1){
-            body = JSON.parse(key)
-            break;
-        }
+const jsonBody = body => {
+    if (typeof(body) === 'string' && body.startsWith('{') && body.endsWith('}')){
+        var jody = JSON.parse(body)
+        jody["jody"] = true
+        return jody
     }
     return body
 }
 
 module.exports = {
-    keyBody: keyBody
+    jsonBody: jsonBody
   }
