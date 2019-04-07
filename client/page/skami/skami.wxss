@@ -36,6 +36,19 @@
   margin-top: 200px;
 }
 
+.get-user{
+  border: 1rpx solid red;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  width: 750rpx;
+  height: 1260rpx;
+  opacity: 0.8;
+  color: #bbb;
+}
+
 .page-section-spacing{
   margin-top: 60rpx;
 }

@@ -21,6 +21,8 @@ const load_list = [0.5, 0.7, 0.9, 1.1, 1.3, 1.5, 1.7, 1.9, 2.1, 2.3, 2.5, 2.7, 2
 
 const src_heart = "../../image/heart.png"
 const src_heart_full = "../../image/heart_full.png"
+const src_zan_em = "../../image/zan_em.png"
+const src_zan_fu = "../../image/zan_fu.png"
 
 function _next() {
     var that = this;
@@ -52,8 +54,10 @@ Page({
         icon_trash: "../../image/trash.png",
         icon_upload: "../../image/upload.png",
         icon_record: "../../image/record.png",
-        icon_comment: "../../image/comment.png",
+        icon_comm: "../../image/comm.png",
         icon_more: "../../image/more.png",
+        icon_zan_em: src_zan_em,
+        icon_zan_fu: src_zan_fu,
         progress_record: 0,
         hasTmp: false,
         isRecording: false,
@@ -222,7 +226,9 @@ Page({
     initPageData: function (file_id) {
         var that = this
         var openid = App.globalData.openid
-        var user_id = openid
+        var user_id = openid ? openid : ''
+        console.log(file_id, '#', user_id)
+        wx.showLoading({title: '加载中...'})
         //查询阴阳师list
         wx.request({
             url: urls.queryDetail,
@@ -230,11 +236,13 @@ Page({
             data: { cate: 'y', file_id, user_id},
             success: function (res) {
                 console.log("queryDetail:")
-                console.log(res.data.data)
-                var list_element = res.data.data["list_result"][0]
-                var audio_element = res.data.data["audio_result"][0]
-                var record_result = res.data.data["record_result"][0]
-                var list_other = res.data.data["list_other"][0]
+                wx.hideLoading()
+                const data = res.data.data
+                if (!data) return
+                var list_element = data["list_result"][0]
+                var audio_element = data["audio_result"][0]
+                var record_result = data["record_result"][0]
+                var list_other = data["list_other"][0]
                 that.initSerifu(list_element)
                 for (let record of record_result) {
                     record["listenStatus"] = "listen-off"
@@ -242,6 +250,9 @@ Page({
                     record["btnDelStyle"] = "btn-red-hidden"
                     record["btnPoiStyle"] = "btn-red-hidden"
                     record["btnRt"] = ""
+                    record["mon"] = "comment-hide"
+                    record["comm_word"] = record.comm
+                    record["holder"] = "输入文字"
                     if (record.heart_ud){
                         record["heartShape"] = src_heart_full
                         record["heartStatus"] = 1
@@ -267,9 +278,9 @@ Page({
                     video_size: video_size.toFixed(2),
                     shadow
                 })
-                //console.log(list_element)
-                //console.log(audio_element)
-                //console.log(shadow)
+            },
+            error: function(er) {
+                console.log(er)
             }
         })
     },
@@ -283,6 +294,12 @@ Page({
             loged:App.globalData.hasLogin,
         })
         setTimeout(()=>{this.setData({an_in:true,show_other:false})},300)
+    },
+    onPullDownRefresh: function () {
+        const file_id = this.data.file_id
+        const option = {file_id}
+        this.onLoad(option)
+        wx.stopPullDownRefresh()
     },
 
     setOriStop: function(){
@@ -616,6 +633,127 @@ Page({
             }
         })
     },
+    showComment: function(e){
+        var openid = App.globalData.openid
+        var user_id = openid
+        var that = this
+        var currData = e.currentTarget.dataset
+        var index = currData.idx
+        var list_master = this.data.list_master
+        this.clearInput()
+        if (list_master[index]["mon"] == "comment-show"){
+            list_master[index]["mon"] = "comment-hide"
+            list_master[index]["comm_word"] = list_master[index]["comm"]
+            that.setData({list_master})
+        }else{
+            list_master[index]["mon"] = "comment-show"
+            list_master[index]["comm_word"] = "收起"
+            const record_id = list_master[index]["record_id"]
+            wx.showLoading({title: '加载中...'})
+            wx.request({
+                url: urls.queryComment,
+                method: 'POST',
+                data: {
+                    record_id,
+                    user_id
+                },
+                success: function (res) {
+                    const comments = res.data.data[0]
+                    for (let v of comments) {
+                        v["zanShape"] = v.zid ? src_zan_fu : src_zan_em
+                    }
+                    list_master[index]["comments"] = comments
+                    wx.hideLoading()
+                    that.setData({list_master})
+                }
+            });
+        }
+    },
+    addComment: function(e) {
+        var that = this
+        const content = e.detail.value
+        var currData = e.currentTarget.dataset
+        var index = currData.idx
+        var list_master = this.data.list_master
+        for (let v of list_master){
+            v["focus"] = false
+            v["holder"] = "输入文字"
+        }
+        const master = list_master[index]
+        const record_id = master.record_id
+        const master_id = master.master_id
+        const file_id = master.file_id
+        var openid = App.globalData.openid
+        var user_id = openid
+        const comment = {record_id, master_id, file_id, user_id, content}
+        console.log(comment)
+        wx.request({
+            url: urls.saveComment,
+            method: 'POST',
+            data: comment,
+            success: function (res) {
+                console.log(res.data)
+                const comments = res.data.data[0]
+                for (let v of comments) {
+                    v["zanShape"] = v.zid ? src_zan_fu : src_zan_em
+                }
+                console.log(comments)
+                list_master[index]["comments"] = comments
+                list_master[index]["comm"] += 1
+                list_master[index]["inputValue"] = ""
+                that.setData({list_master})
+            }
+        });
+    },
+    reply: function(e) {
+        var that = this
+        var currData = e.currentTarget.dataset
+        const index = currData["idx"]
+        const re_id = currData["cid"]
+        const re_name = currData["name"]
+        const re_content = currData["content"]
+        console.log(currData)
+        var list_master = this.data.list_master
+        this.clearInput()
+        list_master[index]["holder"] = "回复:"+re_name
+        list_master[index]["focus"] = true
+        that.setData({list_master})
+    },
+    clearInput: function(){
+        var list_master = this.data.list_master
+        for (let v of list_master){
+            v["focus"] = false
+            v["holder"] = "输入文字"
+        }
+        this.setData({list_master})
+    },
+
+    //--留言点赞--
+    updateZan: function(e){
+        var that = this
+        var currData = e.currentTarget.dataset
+        const idx = currData["idx"]
+        const midx = currData["midx"]
+        const comm_id = currData["cid"]
+        var list_master = this.data.list_master
+        var stars = list_master[idx]["comments"][midx]["stars"]
+        var zid = list_master[idx]["comments"][midx]["zid"]
+        const url = zid ? urls.cancelZan : urls.updateZan
+        list_master[idx]["comments"][midx]["zanShape"] = zid ? src_zan_em : src_zan_fu
+        list_master[idx]["comments"][midx]["stars"] = zid ? stars -1 : stars +1
+        list_master[idx]["comments"][midx]["zid"] = zid ? '' : 1
+        that.setData({list_master})
+        var openid = App.globalData.openid
+        var user_id = openid
+        wx.request({
+            url: url,
+            method: 'POST',
+            data: {user_id, comm_id},
+            success: function (res) {
+                console.log(res)
+            }
+        });
+    },
 
     showOther: function(){
         var show_other = !this.data.show_other
@@ -634,5 +772,11 @@ Page({
             url: _url
         })
     },
+    onShareAppMessage() {
+        return {
+            title: '阴阳师·式神台词语音',
+            path: '/page/skami/skami',
+        }
+    }
 
 })

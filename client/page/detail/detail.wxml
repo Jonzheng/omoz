@@ -86,7 +86,7 @@
         <view class="weui-cells record-list">
 
             <block wx:for="{{list_master}}" wx:key="mkey">
-                <template is="ele-master" data="{{...item,index,icon_more}}"/>
+                <template is="ele-master" data="{{...item,index,icon_more,icon_comm,icon_zan_em,icon_zan_fu}}"/>
             </block>
 
         </view>
@@ -119,7 +119,7 @@
 </view>
 
 <template name="ele-master">
-    <view class="weui-cell an-fade-in">
+    <view class="weui-cell re-border an-fade-in">
         <view class="re-user weui-cell__hd">
             <view class="re-nickname">{{show_name ? show_name : nick_name}}</view>
             <image src="{{avatar_url}}" class="master-record"></image>
@@ -138,17 +138,50 @@
                     </block>
                 </view>
             </view>
-            <view class="{{btnDelStyle}}" bindtap='delConfirm'
-            data-idx="{{index}}" data-record_id="{{record_id}}" >删除</view>
+            <view class="{{btnDelStyle}}" bindtap='delConfirm' data-idx="{{index}}" data-record_id="{{record_id}}" >删除</view>
 
-            <view class="{{btnPoiStyle}}"
-            data-idx="{{index}}" data-record_id="{{record_id}}" >有毒</view>
+            <view class="{{btnPoiStyle}}" data-idx="{{index}}" data-record_id="{{record_id}}" hidden="{{true}}"></view>
         </view>
         <view class="box-right">
-            <view class="text-heart">({{heart}})</view>
-            <image src="{{heartShape}}" class="sm-icon" bindtap='updateHeart'
-            data-idx="{{index}}" data-status="{{heartStatus}}"></image>
+            <view class="menu-comm" bindtap='showComment' data-idx="{{index}}">
+                <view class="text-heart">{{comm_word}}</view>
+                <image src="{{icon_comm}}" class="icon-comm"></image>
+            </view>
+            <view class="text-heart">{{heart}}</view>
+            <image src="{{heartShape}}" class="sm-icon" bindtap='updateHeart' data-idx="{{index}}" data-status="{{heartStatus}}"></image>
             <image src="{{icon_more}}" class="sm-icon {{btnRt}}" bindtap='showMore' data-idx="{{index}}"></image>
         </view>
     </view>
+    <!-- 评论 -->
+    <view class="{{mon}}">
+        <view class="box-comm-count {{mon}}">
+            <view>评论 {{comm}}</view>
+        </view>
+        <view class="box-input {{mon}}" hidden="{{!true}}">
+            <input class='my-input' placeholder="{{holder}}" placeholder-class="place-holder" value="{{inputValue}}"
+                type='text' confirm-type="send" focus="{{focus}}" data-idx="{{index}}" maxlength="40" bindconfirm="addComment" bindblur="clearInput"/>
+            <image src="{{icon_comm}}" class="icon-comm-input"></image>
+        </view>
+        <block wx:for="{{comments}}" wx:key="mkey" wx:for-index="idx">
+            <template is="ele-comment" data="{{...item,idx,index,mon}}"/>
+        </block>
+    </view>
+</template>
+
+<template name="ele-comment">
+        <view class="re-comment-box {{mon}}">
+            <view class="re-user-comment weui-cell__hd">
+                <image src="{{avatar_url}}" class="master-record"></image>
+                <view class="comm-box">
+                    <view class="re-nickname">{{show_name ? show_name : nick_name}}</view>
+                    <view class="comm-content">{{content}}</view>
+                    <view class="comm-reply" data-cid="{{id}}" data-name="{{show_name ? show_name : nick_name}}"
+                        data-content="{{content}}" data-idx="{{index}}" bindtap="reply">回复</view>
+                </view>
+                <view class="box-comm-zan" bindtap='updateZan' data-midx="{{idx}}" data-idx="{{index}}" data-cid="{{id}}">
+                    <image src="{{zanShape}}" class="icon-zan"></image>
+                    <view>{{stars}}</view>
+                </view>
+            </view>
+        </view>
 </template>

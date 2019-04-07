@@ -374,7 +374,7 @@ video {
     flex-wrap: nowrap;
     justify-content: flex-end;
     align-items: center;
-    width: 248rpx;
+    width: 360rpx;
     height: 105rpx;
     overflow: hidden;
 }
@@ -495,10 +495,11 @@ video {
 }
 
 .re-user{
+    padding: 0 3rpx;
     display: flex;
     flex-wrap: wrap;
     flex-shrink: 0;
-    width: 460rpx;
+    width: 340rpx;
     height: 105rpx;
     overflow: hidden;
 }
@@ -517,9 +518,9 @@ video {
 
 .master-record{
     flex-shrink: 0;
-    margin-right: 8rpx;
+    margin-right: 12rpx;
     vertical-align: middle;
-    width:60rpx;
+    width: 60rpx;
     height: 60rpx;
     border-radius: 2px;
     box-shadow: 0px 0px 1px 1px #ddd;
@@ -561,7 +562,7 @@ video {
     justify-content: center;
     border: 1px #ddd solid; 
     border-radius: 4px;
-    width:350rpx;
+    width:230rpx;
     height:60rpx;
     z-index: 1px;
     transition: width 0.2s ease-in;
@@ -611,6 +612,16 @@ video {
     z-index: 1px;
     opacity: 0;
     transition: all 0.1s;
+}
+
+.comment-show{
+    opacity: 1;
+    transition: all 0.3s;
+}
+
+.comment-hide{
+    height: 0;
+    opacity: 0;
 }
 
 .an-breath{
@@ -668,6 +679,123 @@ video {
     margin-left: 6rpx;
     background-color: #ccc;
     border-radius: 2px;
+}
+
+.box-heart{
+    display: flex;
+    width: 500rpx;
+    border: 1rpx solid rgba(0, 0, 255, 0.1);
+}
+
+.box-comm-count{
+    position: relative;
+    padding: 12rpx 20rpx;
+    display: flex;
+    align-items: center;
+    color: #bbb;
+    width: 725rpx;
+    border-top: 3rpx solid rgba(0, 0, 255, 0.1);
+}
+
+.menu-comm{
+    display: flex;
+    align-items: center;
+    color: #ccc;
+    text-decoration: underline;
+}
+
+.box-comm-zan{
+    display: flex;
+    align-items: center;
+    color: #bbb;
+    width: 120rpx;
+}
+
+.re-comment-box{
+    padding: 6rpx 20rpx;
+    display: flex;
+}
+
+.box-input{
+    padding: 3rpx 0;
+    position: relative;
+}
+
+.comm-menu{
+    position: absolute;
+    left: 590rpx;
+    width: 90rpx;
+    height: 90rpx;
+    opacity: 0.3;
+}
+
+.icon-comm{
+    margin-right: 6rpx;
+    width: 70rpx;
+    height: 70rpx;
+    opacity: 0.4;
+}
+
+.icon-comm-input{
+    position: absolute;
+    top: 3rpx;
+    left: 640rpx;
+    width: 70rpx;
+    height: 70rpx;
+    opacity: 0.2;
+}
+
+.comm-reply{
+    margin-top: 12rpx;
+    flex-shrink: 0;
+    font-size: 22rpx;
+    color: #ccc;
+    width: 180rpx;
+}
+
+.my-input{
+    margin: 0 20rpx;
+    padding: 8rpx 16rpx;
+    font-size: 26rpx;
+    width: 670rpx;
+    color: #888;
+    border: 3rpx solid rgba(0, 0, 255, 0.2);
+    border-radius: 6rpx;
+}
+
+.place-holder{
+    color: #aaa;
+}
+
+.re-border{
+    margin-top: 10rpx;
+    border-top: 3rpx solid rgba(0, 0, 255, 0.3);
+}
+
+.comm-box{
+    width: 510rpx;
+}
+
+.re-user-comment{
+    padding: 10rpx 3rpx;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    overflow: hidden;
+    border-bottom: 1rpx solid rgba(0, 0, 255, 0.1);
+}
+
+.comm-content{
+    flex-shrink: 0;
+    font-size: 24rpx;
+    color: #888;
+}
+
+.icon-zan{
+    flex-shrink: 0;
+    width: 40rpx;
+    height: 40rpx;
+    opacity: 0.6;
 }
 
 .an-listen-on{

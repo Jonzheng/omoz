@@ -1230,4 +1230,10 @@ Page({
       }
     });
   },
+  onShareAppMessage() {
+      return {
+          title: '假名·连连看',
+          path: '/page/index/game',
+      }
+  }
 })

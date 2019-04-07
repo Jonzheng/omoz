@@ -1,5 +1,7 @@
 const urls = require('../../config')
 var sliderWidth = 48; // 需要设置slider的宽度，用于计算中间位置
+import { checkUser } from '../../utils/user'
+const App = new getApp()
 
 Page({
     data: {
@@ -10,7 +12,7 @@ Page({
     },
     
     onLoad: function () {
-        var that = this;
+        var that = this
         //初始化tabs
         wx.getSystemInfo({
             success: function (res) {
@@ -19,13 +21,28 @@ Page({
                     sliderOffset: res.windowWidth / that.data.tabs.length * that.data.activeIndex,
                 });
             }
-        });
-
+        })
+        checkUser().then(user=>{
+            console.log(user)
+            App.globalData.userInfo = user
+            App.globalData.openid = user.openid
+            App.globalData.nickName = user.nick_name
+            App.globalData.showName = user.show_name
+            App.globalData.avatarUrl = user.avatar_url
+            App.globalData.hasLogin = true
+        }).catch(err=>{
+            console.log('err?')
+            console.log(err)
+            App.globalData.hasLogin = false
+            App.globalData.openid = err ? err.openid : ''
+        })
+        wx.showLoading({title: '加载中...'})
         //查询阴阳师list
         wx.request({
             url: urls.queryList,
             method: 'POST',
             success: function (res) {
+                wx.hideLoading()
                 var _list = res.data.data
                 if (!_list) return
                 _list.sort((a,b) => {return b.stars - a.stars})
@@ -63,6 +80,10 @@ Page({
             }
         })
     },
+    onPullDownRefresh: function () {
+        this.onLoad()
+        wx.stopPullDownRefresh()
+    },
 
     tabClick: function (e) {
         //console.log(e.currentTarget)
@@ -70,5 +91,11 @@ Page({
             sliderOffset: e.currentTarget.offsetLeft,
             activeIndex: e.currentTarget.id
         });
+    },
+    onShareAppMessage() {
+        return {
+            title: '阴阳师·式神台词语音',
+            path: '/page/skami/skami',
+        }
     }
 });

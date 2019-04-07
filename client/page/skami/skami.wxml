@@ -13,9 +13,8 @@
             </view>
             <!-- top tab-->
 
-
+<button hidden="{{!loged}}" open-type="getUserInfo" class="get-user" bindgetuserinfo="toLogin">点击授权</button>
             <view class="weui-tab__panel">
-
                 <view class="weui-tab__content" hidden="{{activeIndex != 0}}">
                     <block wx:for="{{_list}}" wx:key="mid">
                         <template is="ele-list" data="{{...item,hina}}"/>

@@ -62,6 +62,11 @@ router.post('/queryLinkRank', controllers.queryLinkRank)
 router.post('/checkLinkRank', controllers.checkLinkRank)
 router.post('/buyLinkColor', controllers.buyLinkColor)
 router.post('/updateColor', controllers.updateColor)
+router.post('/queryComment', controllers.queryComment)
+router.post('/saveComment', controllers.saveComment)
+router.post('/deleteComment', controllers.deleteComment)
+router.post('/updateZan', controllers.updateZan)
+router.post('/cancelZan', controllers.cancelZan)
 
 //--跨域--
 router.post('/blackLogin', controllers.blackLogin)
