@@ -56,6 +56,9 @@ Page({
         icon_record: "../../image/record.png",
         icon_comm: "../../image/comm.png",
         icon_more: "../../image/more.png",
+        re_id: '',
+        re_name: '',
+        re_content: '',
         icon_zan_em: src_zan_em,
         icon_zan_fu: src_zan_fu,
         progress_record: 0,
@@ -466,8 +469,8 @@ Page({
         var record_id = currData.record_id
         var index = currData.idx
         wx.showModal({
-            title: '删除?',
-            content: '不可逆操作,最后的判断',
+            title: '删除录音?',
+            content: '不可逆操作,请再次确认',
             confirmText: "确认",
             cancelText: "取消",
             success: function (res) {
@@ -483,6 +486,28 @@ Page({
             }
         });
     },
+
+    delCommConfirm: function (e) {
+        var that = this
+        var currData = e.currentTarget.dataset
+        var comm_id = currData.cid
+        var index = currData.idx
+        wx.showModal({
+            title: '删除评论?',
+            content: '不可逆操作,请再次确认',
+            confirmText: "确认",
+            cancelText: "取消",
+            success: function (res) {
+                //console.log(res);
+                if (res.confirm) {
+                    that.delComment(index, comm_id)
+                } else {
+                    //console.log('用户点击辅助操作')
+                }
+            }
+        });
+    },
+
 
     listen: function(e){
         var that = this
@@ -569,41 +594,8 @@ Page({
         var recordFile = this.data.recordFile
         console.log("recordFile:")
         console.log(recordFile)
-        console.log("App.globalData.userInfo:")
-
         var openid = App.globalData.openid
         var file_id = this.data.file_id
-        var userInfo = App.globalData.userInfo
-        var showName
-        var avatarUrl
-        if (userInfo){
-            showName = userInfo.showName
-            avatarUrl = userInfo.avatarUrl
-
-        }
-        console.log(userInfo)
-        console.log("data:")
-        console.log(this.data)
-
-        var mine = {
-            heart: 1,
-            show_name: showName,
-            avatar_url: avatarUrl,
-            listenStatus: "listen-off",
-            boxStyle : "btn-play-box",
-            btnDelStyle : "btn-red-hidden",
-            btnPoiStyle : "btn-red-hidden",
-            heartShape : src_heart,
-            heartStatus : 0,
-            master_id: openid,
-            isListen : false,
-            isLoading: load_list
-        }
-        var old_lst = this.data.list_master
-        old_lst.unshift(mine)
-        this.setData({
-            list_master: old_lst
-        })
         wx.uploadFile({
             url: urls.uploadRecord,
             filePath: recordFile,
@@ -616,20 +608,8 @@ Page({
                 'content-type': 'multipart/form-data'
             },
             success: function (res) {
-                console.log('success')
-                var jsonData = JSON.parse(res.data)
-                var src_record = jsonData.data.src_record
-                var list_master = that.data.list_master
-                list_master[0]["isLoading"] = []
-                list_master[0]["src_record"] = src_record
-                that.setData({
-                    list_master
-                })
-                console.log(list_master[0])
-            },
-
-            fail: function (e) {
-                console.log('fail')
+                console.log(res)
+                that.onPullDownRefresh()
             }
         })
     },
@@ -661,6 +641,7 @@ Page({
                     const comments = res.data.data[0]
                     for (let v of comments) {
                         v["zanShape"] = v.zid ? src_zan_fu : src_zan_em
+                        v["self"] = v.user_id === user_id
                     }
                     list_master[index]["comments"] = comments
                     wx.hideLoading()
@@ -685,21 +666,22 @@ Page({
         const file_id = master.file_id
         var openid = App.globalData.openid
         var user_id = openid
-        const comment = {record_id, master_id, file_id, user_id, content}
-        console.log(comment)
+        const re_id = this.data.re_id
+        const re_name = this.data.re_name
+        const re_content = this.data.re_content
+        const comment = {record_id, master_id, file_id, user_id, content, re_id, re_name, re_content}
         wx.request({
             url: urls.saveComment,
             method: 'POST',
             data: comment,
             success: function (res) {
-                console.log(res.data)
                 const comments = res.data.data[0]
                 for (let v of comments) {
                     v["zanShape"] = v.zid ? src_zan_fu : src_zan_em
+                    v["self"] = v.user_id === user_id
                 }
-                console.log(comments)
                 list_master[index]["comments"] = comments
-                list_master[index]["comm"] += 1
+                list_master[index]["comm"] = comments.length
                 list_master[index]["inputValue"] = ""
                 that.setData({list_master})
             }
@@ -712,12 +694,12 @@ Page({
         const re_id = currData["cid"]
         const re_name = currData["name"]
         const re_content = currData["content"]
-        console.log(currData)
         var list_master = this.data.list_master
         this.clearInput()
         list_master[index]["holder"] = "回复:"+re_name
         list_master[index]["focus"] = true
-        that.setData({list_master})
+        that.setData({list_master,re_id,re_name,re_content})
+
     },
     clearInput: function(){
         var list_master = this.data.list_master
@@ -725,7 +707,39 @@ Page({
             v["focus"] = false
             v["holder"] = "输入文字"
         }
-        this.setData({list_master})
+        const re_id = ''
+        const re_name = ''
+        const re_content = ''
+        this.setData({list_master,re_id,re_name,re_content})
+    },
+    delComment: function(index, comm_id){
+        var openid = App.globalData.openid
+        var user_id = openid
+        var that = this
+        var list_master = this.data.list_master
+        this.clearInput()
+        const record_id = list_master[index]["record_id"]
+        wx.showLoading({title: '...'})
+        wx.request({
+            url: urls.deleteComment,
+            method: 'POST',
+            data: {
+                comm_id,
+                record_id,
+                user_id
+            },
+            success: function (res) {
+                const comments = res.data.data[0]
+                for (let v of comments) {
+                    v["zanShape"] = v.zid ? src_zan_fu : src_zan_em
+                    v["self"] = v.user_id === user_id
+                }
+                list_master[index]["comments"] = comments
+                list_master[index]["comm"] = comments.length
+                wx.hideLoading()
+                that.setData({list_master})
+            }
+        });
     },
 
     //--留言点赞--

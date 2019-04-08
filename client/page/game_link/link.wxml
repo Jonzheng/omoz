@@ -170,6 +170,7 @@
         </view><!-- box-setting end-->
 
     </view><!-- box-body end-->
+    <view hidden='{{!top_hide}}' class='tips-label {{tipsClass}}'>※{{tip}}</view>
 
 </view><!-- box-page end-->
 

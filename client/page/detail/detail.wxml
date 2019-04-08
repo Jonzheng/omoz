@@ -173,10 +173,15 @@
             <view class="re-user-comment weui-cell__hd">
                 <image src="{{avatar_url}}" class="master-record"></image>
                 <view class="comm-box">
-                    <view class="re-nickname">{{show_name ? show_name : nick_name}}</view>
+                    <view class="re-nickname">
+                        {{show_name ? show_name : nick_name}}<view class="re-label">{{re_name ? '回复' : ''}}</view>{{re_name ? re_name+":" : ''}} {{re_name ? "「"+re_content+"」" : ''}}
+                    </view>
                     <view class="comm-content">{{content}}</view>
-                    <view class="comm-reply" data-cid="{{id}}" data-name="{{show_name ? show_name : nick_name}}"
-                        data-content="{{content}}" data-idx="{{index}}" bindtap="reply">回复</view>
+                    <view class="box-reply">
+                        <view class="comm-reply" data-cid="{{id}}" data-name="{{show_name ? show_name : nick_name}}"
+                            data-content="{{content}}" data-idx="{{index}}" bindtap="reply">回复</view>
+                        <view hidden="{{!self}}" class="comm-delete" data-cid="{{id}}" data-idx="{{index}}" bindtap="delCommConfirm" >删除</view>
+                    </view>
                 </view>
                 <view class="box-comm-zan" bindtap='updateZan' data-midx="{{idx}}" data-idx="{{index}}" data-cid="{{id}}">
                     <image src="{{zanShape}}" class="icon-zan"></image>

@@ -43,6 +43,10 @@ Page({
     myclst: [{"key":"no","word":""}],
     bgc: {"no":"step-bg-no","ka":"step-bg-ka","ki":"step-bg-ki","ku":"step-bg-ku","ke":"step-bg-ke","ko":"step-bg-ko"},
     cosmap: {"hira":"no", "kata":"no", "space":"no"},
+    tipsClass:'tips-hide',
+    tip:'',
+    spend:0,
+    tips: ['忘记罗马音时可以长按方块查看哦', '方块的颜色和假名都可以自由设定', '觉得难的话可以自选假名和关闭片假名', '某个地方的方块也可以长按', '据说黑色的方块很好看', '说不定以后会有假名发音呢'],
     option: 1,
     top_hide: true,
     rank_hide: true,
@@ -127,8 +131,25 @@ Page({
       that.setData({fields})
     },120)
   },
-
+  onUnload: function () {
+    var count_it = this.data.count_it
+    clearInterval(count_it)
+},
   onLoad: function(){
+    var that = this
+    var tips = that.data.tips
+    var count_it = setInterval(function(){
+      that.data.spend += 3
+      if (that.data.spend > 30 && that.data.tipsClass === 'tips-hide'){
+        var ridx = parseInt(Math.random() * tips.length)
+        ridx = Math.min(ridx, tips.length -1)
+        var tip = tips[ridx]
+        that.setData({tipsClass: 'tips-show', tip})
+      }
+      that.setData({
+        count_it,
+      })
+    },3000)
     var avatar_url = App.globalData.avatarUrl
     avatar_url = avatar_url ? avatar_url : ""
     var loged = App.globalData.hasLogin
@@ -571,6 +592,8 @@ Page({
   },
 
   linkDirect: function(old_row, old_col, this_row, this_col){
+      this.data.spend = 0
+      this.setData({tipsClass: 'tips-hide'})
       var fields = this.data.fields
       var steps = []
       if (this.isNext(old_row, old_col, this_row, this_col)){

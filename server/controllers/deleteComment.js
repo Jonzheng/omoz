@@ -4,7 +4,7 @@ module.exports = async ctx => {
     let body = ctx.request.body
     var record_id = body.record_id
     var comm_id = body.comm_id
-    var user_id = boyd.user_id
+    var user_id = body.user_id
     await mysql.raw('delete from t_comment where id = ? and user_id = ?', [comm_id, user_id]);
     await mysql.raw('update t_record set comm = comm-1 where record_id = ?', record_id);
 

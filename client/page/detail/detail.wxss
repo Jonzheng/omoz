@@ -509,6 +509,15 @@ video {
     font-size: 0.6em;
     color: #999;
     width: 480rpx;
+    height: 30rpx;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+
+.re-label{
+    display: inline;
+    color: #FFA07A;
 }
 
 .btn-center{
@@ -745,12 +754,22 @@ video {
     opacity: 0.2;
 }
 
-.comm-reply{
+.box-reply{
+    display: flex;
     margin-top: 12rpx;
     flex-shrink: 0;
     font-size: 22rpx;
     color: #ccc;
-    width: 180rpx;
+    width: 220rpx;
+}
+
+.comm-reply{
+    width: 50rpx;
+    margin-right: 50rpx;
+}
+
+.comm-delete{
+    width: 50rpx;
 }
 
 .my-input{
