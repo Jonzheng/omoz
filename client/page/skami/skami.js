@@ -5,7 +5,7 @@ const App = new getApp()
 
 Page({
     data: {
-        tabs: ["全部", "SSR", "SR", "R", "N", "阴阳师"],
+        tabs: ["SP", "SSR", "SR", "R", "N", "阴阳师"],
         activeIndex: 0,
         sliderOffset: 0,
         sliderLeft: 0,
@@ -46,13 +46,17 @@ Page({
                 var _list = res.data.data
                 if (!_list) return
                 _list.sort((a,b) => {return b.stars - a.stars})
+                var sp_list = []
                 var ssr_list = []
                 var sr_list = []
                 var r_list = []
                 var n_list = []
                 var m_list = []
                 _list.forEach(ele => {
-                    if (ele.level == 'ssr'){
+                    if (ele.level == 'sp'){
+                        sp_list.push(ele)
+                    }
+                    else if (ele.level == 'ssr') {
                         ssr_list.push(ele)
                     }
                     else if (ele.level == 'sr'){
@@ -69,12 +73,13 @@ Page({
                     }
                 })
                 that.setData({
-                    _list: _list,
-                    ssr_list: ssr_list,
-                    sr_list: sr_list,
-                    r_list: r_list,
-                    n_list: n_list,
-                    m_list: m_list
+                    _list,
+                    sp_list,
+                    ssr_list,
+                    sr_list,
+                    r_list,
+                    n_list,
+                    m_list
                 })
                 console.log(_list)
             }

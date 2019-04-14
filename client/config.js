@@ -3,7 +3,7 @@
  */
 
 // 此处主机域名修改成腾讯云解决方案分配的域名
-// var host = 'https://06mdkod2.qcloud.la';
+// ar host = 'https://06mdkod2.qcloud.la';
 var host = 'https://418980938.omoz.club';
 
 var appId = 'wx2ce3e7794b9393b8';

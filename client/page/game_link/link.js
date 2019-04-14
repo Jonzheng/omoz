@@ -46,7 +46,8 @@ Page({
     tipsClass:'tips-hide',
     tip:'',
     spend:0,
-    tips: ['忘记罗马音时可以长按方块查看哦', '方块的颜色和假名都可以自由设定', '觉得难的话可以自选假名和关闭片假名', '某个地方的方块也可以长按', '据说黑色的方块很好看', '说不定以后会有假名发音呢'],
+    remind:0,
+    tips: ['方块的颜色和假名都可以自由设定', '某个地方的方块也可以长按', '据说黑色的方块很好看', '说不定以后会有假名发音呢'],
     option: 1,
     top_hide: true,
     rank_hide: true,
@@ -140,7 +141,7 @@ Page({
     var tips = that.data.tips
     var count_it = setInterval(function(){
       that.data.spend += 3
-      if (that.data.spend > 30 && that.data.tipsClass === 'tips-hide'){
+      if (that.data.spend % 18 == 0){
         var ridx = parseInt(Math.random() * tips.length)
         ridx = Math.min(ridx, tips.length -1)
         var tip = tips[ridx]
@@ -592,8 +593,6 @@ Page({
   },
 
   linkDirect: function(old_row, old_col, this_row, this_col){
-      this.data.spend = 0
-      this.setData({tipsClass: 'tips-hide'})
       var fields = this.data.fields
       var steps = []
       if (this.isNext(old_row, old_col, this_row, this_col)){
@@ -729,6 +728,17 @@ Page({
           bucket.push([row,col])
           if (old_step["word"] != "" && this_step["roma"]==old_step["roma"]){
             this.linkDirect(old_row, old_col, row, col)
+            // 清空提示
+            this.data.remind = 0
+            this.data.spend = 0
+            this.setData({tipsClass: 'tips-hide'})
+          }else if (old_step["word"] != "" && this_step["word"] != ""){
+            console.log("remind...")
+            this.data.remind += 1
+            if (this.data.remind > 5) {
+              var tip = Math.random() > 0.5 ? '忘记罗马音时可以长按方块查看' : '觉得难的话可以自选假名和关闭片假名哦'
+              this.setData({tipsClass: 'tips-show', tip})
+            }
           }
         }
     }else{
