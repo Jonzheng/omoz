@@ -15,39 +15,39 @@
 
 <button hidden="{{!loged}}" open-type="getUserInfo" class="get-user" bindgetuserinfo="toLogin">点击授权</button>
             <view class="weui-tab__panel">
-                <view class="weui-tab__content" hidden="{{activeIndex != 0}}">
+                <view class="weui-tab__content sp" hidden="{{activeIndex != 0}}">
                     <block wx:for="{{sp_list}}" wx:key="mid">
-                        <template is="ele-list" data="{{...item,hina}}"/>
+                        <template is="ele-list" data="{{...item, icon_loading}}"/>
                     </block>
                 </view>
 
-                <view class="weui-tab__content" hidden="{{activeIndex != 1}}">
+                <view class="weui-tab__content ssr" hidden="{{activeIndex != 1}}">
                     <block wx:for="{{ssr_list}}" wx:key="mid">
-                        <template is="ele-list" data="{{...item}}"/>
+                        <template is="ele-list" data="{{...item, icon_loading}}"/>
                     </block>
                 </view>
 
-                <view class="weui-tab__content" hidden="{{activeIndex != 2}}">
+                <view class="weui-tab__content sr" hidden="{{activeIndex != 2}}">
                     <block wx:for="{{sr_list}}" wx:key="mid">
-                        <template is="ele-list" data="{{...item}}"/>
+                        <template is="ele-list" data="{{...item, icon_loading}}"/>
                     </block>
                 </view>
 
                 <view class="weui-tab__content" hidden="{{activeIndex != 3}}">
                     <block wx:for="{{r_list}}" wx:key="mid">
-                        <template is="ele-list" data="{{...item}}"/>
+                        <template is="ele-list" data="{{...item, icon_loading}}"/>
                     </block>
                 </view>
 
                 <view class="weui-tab__content" hidden="{{activeIndex != 4}}">
                     <block wx:for="{{n_list}}" wx:key="mid">
-                        <template is="ele-list" data="{{...item}}"/>
+                        <template is="ele-list" data="{{...item, icon_loading}}"/>
                     </block>
                 </view>
 
                 <view class="weui-tab__content" hidden="{{activeIndex != 5}}">
                     <block wx:for="{{m_list}}" wx:key="mid">
-                        <template is="ele-list" data="{{...item}}"/>
+                        <template is="ele-list" data="{{...item, icon_loading}}"/>
                     </block>
                 </view>
             </view>
@@ -60,7 +60,7 @@
         <navigator url="../detail/detail?file_id={{file_id}}"
         class="weui-media-box weui-media-box_appmsg" hover-class="weui-cell_active">
             <view class="weui-media-box__hd weui-media-box__hd_in-appmsg">
-                <image class="weui-media-box__thumb" src="{{src_image}}" />
+                <image class="weui-media-box__thumb" src='{{show ? src_image : icon_loading}}' />
             </view>
             <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
                 <view class="weui-media-box__title">{{title}}</view>

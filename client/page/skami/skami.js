@@ -9,6 +9,21 @@ Page({
         activeIndex: 0,
         sliderOffset: 0,
         sliderLeft: 0,
+        icon_loading: "../../image/loading1.gif",
+        height: -1,
+        _list: [],
+        sp_list: [],
+        ssr_list: [],
+        sr_list: [],
+        r_list: [],
+        n_list: [],
+        m_list: [],
+        sp_top: 9,
+        ssr_top: 9,
+        sr_top: 9,
+        r_top: 9,
+        n_top: 9,
+        m_top: 9
     },
     
     onLoad: function () {
@@ -55,21 +70,27 @@ Page({
                 _list.forEach(ele => {
                     if (ele.level == 'sp'){
                         sp_list.push(ele)
+                        if (sp_list.length < 11) ele['show'] = true
                     }
                     else if (ele.level == 'ssr') {
                         ssr_list.push(ele)
+                        if (ssr_list.length < 11) ele['show'] = true
                     }
                     else if (ele.level == 'sr'){
                         sr_list.push(ele)
+                        if (sr_list.length < 11) ele['show'] = true
                     }
                     else if (ele.level == 'r') {
                         r_list.push(ele)
+                        if (r_list.length < 11) ele['show'] = true
                     }
                     else if (ele.level == 'n') {
                         n_list.push(ele)
+                        if (n_list.length < 11) ele['show'] = true
                     }
                     else if (ele.level == 'm') {
                         m_list.push(ele)
+                        if (m_list.length < 11) ele['show'] = true
                     }
                 })
                 that.setData({
@@ -85,6 +106,73 @@ Page({
             }
         })
     },
+
+    onPageScroll(e){ // 滚动事件
+        // console.log(this.data.activeIndex)
+        var top = e.scrollTop
+        if (top > 100) {
+            var bottom = (parseInt(top / 800) + 2) * 10
+            var cate = this.data.activeIndex
+            if (cate == 0) {
+                if (bottom > this.data.sp_top){
+                    this.setData({sp_top: bottom})
+                    var sp_list = this.data.sp_list
+                    for (let [idx, v] of sp_list.entries()) {
+                        if (idx < bottom) v['show'] = true
+                    }
+                    this.setData({sp_list})
+                }
+            }
+            else if (cate == 1) {
+                if (bottom > this.data.ssr_top){
+                    this.setData({ssr_top: bottom})
+                    var ssr_list = this.data.ssr_list
+                    for (let [idx, v] of ssr_list.entries()) {
+                        if (idx < bottom) v['show'] = true
+                    }
+                    this.setData({ssr_list})
+                }
+            }else if (cate == 2) {
+                if (bottom > this.data.sr_top){
+                    this.setData({sr_top: bottom})
+                    var sr_list = this.data.sr_list
+                    for (let [idx, v] of sr_list.entries()) {
+                        if (idx < bottom) v['show'] = true
+                    }
+                    this.setData({sr_list})
+                }
+            }else if (cate == 3) {
+                if (bottom > this.data.r_top){
+                    this.setData({r_top: bottom})
+                    var r_list = this.data.r_list
+                    for (let [idx, v] of r_list.entries()) {
+                        if (idx < bottom) v['show'] = true
+                    }
+                    this.setData({r_list})
+                }
+            }else if (cate == 4) {
+                if (bottom > this.data.n_top){
+                    this.setData({n_top: bottom})
+                    var n_list = this.data.n_list
+                    for (let [idx, v] of n_list.entries()) {
+                        if (idx < bottom) v['show'] = true
+                    }
+                    this.setData({n_list})
+                }
+            }else if (cate == 5) {
+                if (bottom > this.data.m_top){
+                    this.setData({m_top: bottom})
+                    var m_list = this.data.m_list
+                    for (let [idx, v] of m_list.entries()) {
+                        if (idx < bottom) v['show'] = true
+                    }
+                    this.setData({m_list})
+                }
+            }
+
+        }
+    },
+
     onPullDownRefresh: function () {
         this.onLoad()
         wx.stopPullDownRefresh()
